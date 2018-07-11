@@ -21,6 +21,8 @@ public class OrganizationView {
 
     public boolean isActive;
 
+    public String isSuccess;
+
 
     @Override
     public String toString() {
