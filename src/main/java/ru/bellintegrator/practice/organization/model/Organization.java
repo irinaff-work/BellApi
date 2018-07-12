@@ -94,4 +94,10 @@ public class Organization {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "{id:" + id + ";name:" + name + ";fullName" + fullName + ";inn:" + inn + ";kpp:" + kpp +";phone:" +
+                phone + ";address:" + address + ";isActive:" + isActive + "}";
+    }
 }

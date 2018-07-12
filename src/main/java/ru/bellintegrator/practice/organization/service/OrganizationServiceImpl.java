@@ -4,6 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.organization.model.Organization;
+import ru.bellintegrator.practice.organization.view.OrganizationSearch;
+import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.person.model.Person;
 import ru.bellintegrator.practice.person.view.PersonView;
@@ -31,13 +33,13 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@List<OrganizationView>}
      */
     @Override
-    public List<OrganizationView> filteredName(String name, String inn, boolean isActive) {
+    public List<OrganizationView> organizationList(OrganizationSearch organization) {
         List<Organization> filteredOrganization = new ArrayList<Organization>();
 
         for (Organization item: listOrganization) {
-            if ((name.isEmpty() || item.getName().equals(name))
-                    && (inn.isEmpty() || item.getInn().equals(inn))
-                    && (item.isActive() == isActive)
+            if ((organization.name.isEmpty() || item.getName().equals(organization.name))
+                    && (organization.inn.isEmpty() || item.getInn().equals(organization.inn))
+                    && (item.isActive() == organization.isActive)
                     ) {
                 item.setActive(true);
                 filteredOrganization.add(item);
@@ -87,87 +89,50 @@ public class OrganizationServiceImpl implements OrganizationService {
     /**
      * Изменить данные организации
      *
-     * @param id
+     * @param organization
      */
     @Override
-//    public String update(OrganizationView view) {
-//        String isSuccess = "";
-//
-//        for (Organization item: listOrganization) {
-//            if (item.getId().equals(view.id)) {
-//                item.setName(view.name);
-//                item.setFullName(view.fullName);
-//                item.setInn(view.inn);
-//                item.setKpp(view.kpp);
-//                item.setAddress(view.address);
-//                if (!view.phone.isEmpty()) {
-//                    item.setPhone(view.phone);
-//                }
-//                item.setActive(view.isActive);
-//                isSuccess = "success";
-//            }
-//        }
-//        return isSuccess;
-//    }
-
-    public OrganizationView update (Long id, String name, String fullName, String inn, String kpp,
-                    String address, String phone, boolean isActive) {
-        OrganizationView view = new OrganizationView();
-
+    public void update(OrganizationView organization) {
         for (Organization item: listOrganization) {
-            if (item.getId().equals(id)) {
-                item.setName(name);
-                item.setFullName(fullName);
-                item.setInn(inn);
-                item.setKpp(kpp);
-                item.setAddress(address);
-                if (!phone.isEmpty()) {
-                    item.setPhone(phone);
+            if (item.getId().equals(organization.id)) {
+                item.setName(organization.name);
+                item.setFullName(organization.fullName);
+                item.setInn(organization.inn);
+                item.setKpp(organization.kpp);
+                item.setAddress(organization.address);
+                if (!organization.phone.isEmpty()) {
+                    item.setPhone(organization.phone);
                 }
-                item.setActive(true);
-                view.id = item.getId();
-                view.name = item.getName();
-                view.fullName = item.getFullName();
-                view.inn = item.getInn();
-                view.kpp = item.getKpp();
-                view.address = item.getAddress();
-                view.isActive = item.isActive();
+                item.setActive(organization.isActive);
             }
         }
-        return view;
     }
+
 
     /**
      * Добавить новую организацию в БД
      *
-     * @param id
+     * @param organization
      * @return OrganizationView
      */
     @Override
-//    public String save(OrganizationView view) {
-//        String isSuccess = "success";
-//        listOrganization.add(new Organization(view.id, view.name, view.fullName,
-//                view.inn, view.kpp, view.phone, view.address, view.isActive));
-//        return isSuccess;
-//    }
+    public OrganizationView createOrganization (OrganizationToSave organization) {
 
-    public OrganizationView save(Long id, String name, String fullName, String inn, String kpp,
-                       String address, String phone, boolean isActive) {
+        Organization orgSave = new Organization(organization.id, organization.name, organization.fullName,
+                organization.inn, organization.kpp, organization.phone, organization.address, organization.isActive);
 
-        OrganizationView view = new OrganizationView();
-        Organization org = new Organization(id, name, fullName,
-                inn, kpp, phone, address, isActive);
+        //listOrganization.add(orgSave);
 
-        listOrganization.add(org);
+        OrganizationView organizationView = new OrganizationView();
 
-        view.id = org.getId();
-        view.name = org.getName();
-        view.fullName = org.getFullName();
-        view.inn = org.getInn();
-        view.kpp = org.getKpp();
-        view.address = org.getAddress();
-        view.isActive = org.isActive();
+        organizationView.id = orgSave.getId();
+        organizationView.name = orgSave.getName();
+        organizationView.fullName = orgSave.getFullName();
+        organizationView.inn = orgSave.getInn();
+        organizationView.kpp = orgSave.getKpp();
+        organizationView.address = orgSave.getAddress();
+        organizationView.isActive = orgSave.isActive();
 
-        return view;
+        return organizationView;
     }
 }

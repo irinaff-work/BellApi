@@ -2,8 +2,7 @@ package ru.bellintegrator.practice.organization.view;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class OrganizationView {
-
+public class OrganizationToSave {
     @ApiModelProperty(hidden = true)
     public Long id;
 

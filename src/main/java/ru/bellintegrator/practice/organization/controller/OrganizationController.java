@@ -3,6 +3,8 @@ import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.organization.service.OrganizationService;
+import ru.bellintegrator.practice.organization.view.OrganizationSearch;
+import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -22,12 +24,8 @@ public class OrganizationController {
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("/list")
     public @ResponseBody
-    List<OrganizationView> filteredName(
-            @RequestParam(value = "name") @ApiParam(value = "Краткое наименование") String name,
-            @RequestParam(value = "inn") @ApiParam(value = "ИНН, 12 симоволов", required = false) String inn,
-            @RequestParam(value = "isActive") @ApiParam(value = "Действует", required = false) boolean isActive
-    ) {
-        return organizationService.filteredName(name, inn, isActive);
+    List<OrganizationView> organizationList(@RequestBody OrganizationSearch organization) {
+        return organizationService.organizationList(organization);
     }
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
@@ -40,32 +38,16 @@ public class OrganizationController {
 
     @ApiOperation(value = "Редактирование организации по id", nickname = "Organization", httpMethod = "POST")
     @PostMapping("/update")
-    public @ResponseBody OrganizationView update(
-            @RequestParam(value ="id") @ApiParam(value = "Идентификатор организации") Long id,
-            @RequestParam(value = "name") @ApiParam(value = "Краткое наименование") String name,
-            @RequestParam(value = "fullName") @ApiParam(value = "Полное наименование") String fullName,
-            @RequestParam(value = "inn") @ApiParam(value = "ИНН, 12 симоволов") String inn,
-            @RequestParam(value = "kpp") @ApiParam(value = "КПП, 9 симоволов") String kpp,
-            @RequestParam(value = "address") @ApiParam(value = "Адрес") String address,
-            @RequestParam(value = "phone") @ApiParam(value = "Номер телефона") String phone,
-            @RequestParam(value = "isActive", defaultValue = "true") @ApiParam(value = "Действует") boolean isActive
-    ) {
-        return organizationService.update(id, name, fullName, inn, kpp, address, phone, isActive);
+    public @ResponseBody void  updateOrganizationView(@RequestBody OrganizationView organization)
+     {
+        organizationService.update(organization);
     }
 
     @ApiOperation(value = "Сохранение организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("/save")
-    public @ResponseBody OrganizationView save(
-            @RequestParam(value ="id") @ApiParam(value = "Идентификатор организации") Long id,
-            @RequestParam(value = "name") @ApiParam(value = "Краткое наименование") String name,
-            @RequestParam(value = "fullName") @ApiParam(value = "Полное наименование") String fullName,
-            @RequestParam(value = "inn") @ApiParam(value = "ИНН, 12 симоволов") String inn,
-            @RequestParam(value = "kpp") @ApiParam(value = "КПП, 9 симоволов") String kpp,
-            @RequestParam(value = "address") @ApiParam(value = "Адрес") String address,
-            @RequestParam(value = "phone") @ApiParam(value = "Номер телефона") String phone,
-            @RequestParam(value = "isActive", defaultValue = "true") @ApiParam(value = "Действует") boolean isActive)
+    public @ResponseBody OrganizationView createOrganization(@RequestBody OrganizationToSave organization)
     {
-        return organizationService.save(id, name, fullName, inn, kpp, address, phone, isActive);
+        return organizationService.createOrganization(organization);
     }
 }
 

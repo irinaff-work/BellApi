@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.organization.service;
 
+import ru.bellintegrator.practice.organization.view.OrganizationSearch;
+import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 
 import java.util.List;
@@ -11,7 +13,7 @@ public interface OrganizationService {
      *
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationView> filteredName(String name, String inn, boolean isActive);
+    public List<OrganizationView> organizationList(OrganizationSearch organization);
     /**
      * Получить организацию по Id
      *
@@ -22,18 +24,16 @@ public interface OrganizationService {
     /**
      * Изменить данные организации
      *
-     * @param id
+     * @param organization
      */
-    public OrganizationView update (Long id, String name, String fullName, String inn, String kpp,
-    String address, String phone, boolean isActive);
+    public void update(OrganizationView organization);
 
     /**
      * Добавить новую организацию в БД
      *
-     * @param id
+     * @param organization
      * @return OrganizationView
      */
-    public OrganizationView save (Long id, String name, String fullName, String inn, String kpp,
-    String address, String phone, boolean isActive);
+    public OrganizationView createOrganization (OrganizationToSave organization);
 
 }
