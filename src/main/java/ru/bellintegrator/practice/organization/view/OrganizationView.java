@@ -9,21 +9,12 @@ public class OrganizationView {
 
     public String name;
 
-    public String fullName;
-
     public String inn;
-
-    public String kpp;
-
-    public String phone;
-
-    public String address;
 
     public boolean isActive;
 
     @Override
     public String toString() {
-        return "{id:" + id + ";name:" + name + ";fullName" + fullName + ";inn:" + inn + ";kpp:" + kpp +";phone:" +
-                phone + ";address:" + address + ";isActive:" + isActive + "}";
+        return "{id:" + id + ";name:" + name + ";inn:" + inn + ";isActive:" + isActive + "}";
     }
 }

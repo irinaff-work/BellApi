@@ -1,6 +1,5 @@
 package ru.bellintegrator.practice.organization.service;
 
-import ru.bellintegrator.practice.organization.view.OrganizationSearch;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 
@@ -13,20 +12,20 @@ public interface OrganizationService {
      *
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationView> organizationList(OrganizationSearch organization);
+    public List<OrganizationView> organizationList(OrganizationView organization);
     /**
      * Получить организацию по Id
      *
      * @param id
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationView> filteredId( Long id);
+    public List<OrganizationToSave> filteredId( Long id);
     /**
      * Изменить данные организации
      *
      * @param organization
      */
-    public void update(OrganizationView organization);
+    public void update(OrganizationToSave organization);
 
     /**
      * Добавить новую организацию в БД
@@ -34,6 +33,6 @@ public interface OrganizationService {
      * @param organization
      * @return OrganizationView
      */
-    public OrganizationView createOrganization (OrganizationToSave organization);
+    public void createOrganization (OrganizationToSave organization);
 
 }

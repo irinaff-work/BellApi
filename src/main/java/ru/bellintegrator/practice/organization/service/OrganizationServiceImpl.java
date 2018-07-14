@@ -4,11 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.organization.model.Organization;
-import ru.bellintegrator.practice.organization.view.OrganizationSearch;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
-import ru.bellintegrator.practice.person.model.Person;
-import ru.bellintegrator.practice.person.view.PersonView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +30,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@List<OrganizationView>}
      */
     @Override
-    public List<OrganizationView> organizationList(OrganizationSearch organization) {
+    public List<OrganizationView> organizationList(OrganizationView organization) {
         List<Organization> filteredOrganization = new ArrayList<Organization>();
 
         for (Organization item: listOrganization) {
@@ -56,6 +53,39 @@ public class OrganizationServiceImpl implements OrganizationService {
             OrganizationView view = new OrganizationView();
             view.id = p.getId();
             view.name = p.getName();
+            view.inn = p.getInn();
+            view.isActive = p.isActive();
+
+            log.debug(view.toString());
+
+            return view;
+        };
+    }
+    /**
+     * Получить организацию по Id
+     *
+     * @param id
+     * @return {@List<OrganizationToSave>}
+     */
+    @Override
+    public List<OrganizationToSave> filteredId( Long id) {
+        List<Organization> filteredOrganization = new ArrayList<Organization>();
+
+        for (Organization item: listOrganization) {
+            if (item.getId().equals(id)) {
+                filteredOrganization.add(item);
+            }
+        }
+        return filteredOrganization.stream()
+                .map(mapOrganizationSave())
+                .collect(Collectors.toList());
+    }
+
+    private Function<Organization, OrganizationToSave> mapOrganizationSave() {
+        return p -> {
+            OrganizationToSave view = new OrganizationToSave();
+            view.id = p.getId();
+            view.name = p.getName();
             view.fullName = p.getFullName();
             view.inn = p.getInn();
             view.kpp = p.getKpp();
@@ -68,31 +98,12 @@ public class OrganizationServiceImpl implements OrganizationService {
         };
     }
     /**
-     * Получить организацию по Id
-     *
-     * @param id
-     * @return {@List<OrganizationView>}
-     */
-    @Override
-    public List<OrganizationView> filteredId( Long id) {
-        List<Organization> filteredOrganization = new ArrayList<Organization>();
-
-        for (Organization item: listOrganization) {
-            if (item.getId().equals(id)) {
-                filteredOrganization.add(item);
-            }
-        }
-        return filteredOrganization.stream()
-                .map(mapOrganization())
-                .collect(Collectors.toList());
-    }
-    /**
      * Изменить данные организации
      *
      * @param organization
      */
     @Override
-    public void update(OrganizationView organization) {
+    public void update(OrganizationToSave organization) {
         for (Organization item: listOrganization) {
             if (item.getId().equals(organization.id)) {
                 item.setName(organization.name);
@@ -116,23 +127,21 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return OrganizationView
      */
     @Override
-    public OrganizationView createOrganization (OrganizationToSave organization) {
+    public void createOrganization (OrganizationToSave organization) {
 
         Organization orgSave = new Organization(organization.id, organization.name, organization.fullName,
                 organization.inn, organization.kpp, organization.phone, organization.address, organization.isActive);
 
         //listOrganization.add(orgSave);
 
-        OrganizationView organizationView = new OrganizationView();
+        OrganizationToSave organizationToSave = new OrganizationToSave();
 
-        organizationView.id = orgSave.getId();
-        organizationView.name = orgSave.getName();
-        organizationView.fullName = orgSave.getFullName();
-        organizationView.inn = orgSave.getInn();
-        organizationView.kpp = orgSave.getKpp();
-        organizationView.address = orgSave.getAddress();
-        organizationView.isActive = orgSave.isActive();
-
-        return organizationView;
+        organizationToSave.id = orgSave.getId();
+        organizationToSave.name = orgSave.getName();
+        organizationToSave.fullName = orgSave.getFullName();
+        organizationToSave.inn = orgSave.getInn();
+        organizationToSave.kpp = orgSave.getKpp();
+        organizationToSave.address = orgSave.getAddress();
+        organizationToSave.isActive = orgSave.isActive();
     }
 }
