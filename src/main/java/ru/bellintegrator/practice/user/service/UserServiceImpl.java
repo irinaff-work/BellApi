@@ -14,14 +14,14 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService{
 
-    private List<User> listUsers = Arrays.asList(
+    private List<User> listUsers = new ArrayList(Arrays.asList(
             new User(1L, 1L,"Игорь", "Ермолкин", "Игоревич","333-33-33", "менеджер",
                     "10","1","11.2", "12.05.2018",
                     "1234", true),
             new User(2L, 2L,"Дмитрий", "Кулич", "Николаевич","333-33-33", "менеджер",
                     "10","1","11.2", "12.05.2018",
                     "1234", true)
-    );
+    ));
 
     /**
      * Получить список пользователей по Id офиса
@@ -151,5 +151,7 @@ public class UserServiceImpl implements UserService{
         User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
                 userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,
                 userView.docNumber, userView.docDate, userView.citizenshipCode, userView.isIdentified);
+
+        listUsers.add(userSave);
     }
 }

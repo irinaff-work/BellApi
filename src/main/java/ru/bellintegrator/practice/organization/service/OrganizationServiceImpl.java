@@ -3,6 +3,7 @@ package ru.bellintegrator.practice.organization.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
@@ -18,10 +19,10 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    private List<Organization> listOrganization = Arrays.asList(
+    private List<Organization> listOrganization = new ArrayList(Arrays.asList(
             new Organization(1L, "Рога и Копыта", "ООО Рога и Копыта", "123456789012", "123456789","234-34-56", "г. Уфа, ул. Запредельная, д.2",true),
             new Organization(2L, "Салют", "ООО Салют", "123456789012", "123456789" ,"234-34-56", "г. Уфа, ул. Запредельная, д.2", true)
-    );
+    ));
 
 
     /**
@@ -132,7 +133,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization orgSave = new Organization(organization.id, organization.name, organization.fullName,
                 organization.inn, organization.kpp, organization.phone, organization.address, organization.isActive);
 
-        //listOrganization.add(orgSave);
+        listOrganization.add(orgSave);
 
         OrganizationToSave organizationToSave = new OrganizationToSave();
 
@@ -144,4 +145,5 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationToSave.address = orgSave.getAddress();
         organizationToSave.isActive = orgSave.isActive();
     }
+
 }

@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 @Service
 public class OfficeServiceImpl implements OfficeService{
 
-    private List<Office> listOffices = Arrays.asList(
+    private List<Office> listOffices = new ArrayList(Arrays.asList(
             new Office(1L, 3L,"Офис Капитал", "222-22-22", "г. Уфа, ул. Запредельная, д.2",true),
             new Office(2L, 4L,"Салют", "333-33-33", "г. Уфа, ул. Запредельная, д.2", true)
-    );
+    ));
 
     /**
      * Получить список офисов по Id организации
@@ -123,5 +123,6 @@ public class OfficeServiceImpl implements OfficeService{
 
         Office officeSave = new Office(office.id, office.orgId, office.name, office.phone,
                 office.address, office.isActive);
+        listOffices.add(officeSave);
     };
 }
