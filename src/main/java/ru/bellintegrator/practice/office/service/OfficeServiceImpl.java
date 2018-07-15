@@ -3,8 +3,6 @@ package ru.bellintegrator.practice.office.service;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.office.view.*;
-import ru.bellintegrator.practice.organization.model.Organization;
-import ru.bellintegrator.practice.organization.view.OrganizationView;
 
 import java.util.ArrayList;
 import java.util.Arrays;

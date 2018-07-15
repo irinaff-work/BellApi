@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.organization.model.Organization;
-import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
+import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,7 +73,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@List<OrganizationToSave>}
      */
     @Override
-    public List<OrganizationToSave> filteredId( Long id) {
+    public List<OrganizationViewFull> filteredId(Long id) {
         List<Organization> filteredOrganization = new ArrayList<Organization>();
 
         for (Organization item: listOrganization) {
@@ -86,9 +86,9 @@ public class OrganizationServiceImpl implements OrganizationService {
                 .collect(Collectors.toList());
     }
 
-    private Function<Organization, OrganizationToSave> mapOrganizationSave() {
+    private Function<Organization, OrganizationViewFull> mapOrganizationSave() {
         return p -> {
-            OrganizationToSave view = new OrganizationToSave();
+            OrganizationViewFull view = new OrganizationViewFull();
             view.id = p.getId();
             view.name = p.getName();
             view.fullName = p.getFullName();
@@ -108,7 +108,10 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @param organization
      */
     @Override
-    public void update(OrganizationToSave organization) {
+    public void update(OrganizationViewFull organization) throws OrgValidationException {
+
+        validationRequestBody(organization);
+
         for (Organization item: listOrganization) {
             if (item.getId().equals(organization.id)) {
                 item.setName(organization.name);
@@ -132,14 +135,16 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return OrganizationView
      */
     @Override
-    public void createOrganization (OrganizationToSave organization) {
+    public void createOrganization (OrganizationViewFull organization) throws OrgValidationException {
+
+        validationRequestBody(organization);
 
         Organization orgSave = new Organization(organization.id, organization.name, organization.fullName,
                 organization.inn, organization.kpp, organization.phone, organization.address, organization.isActive);
 
         listOrganization.add(orgSave);
 
-        OrganizationToSave organizationToSave = new OrganizationToSave();
+        OrganizationViewFull organizationToSave = new OrganizationViewFull();
 
         organizationToSave.id = orgSave.getId();
         organizationToSave.name = orgSave.getName();
@@ -150,6 +155,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationToSave.isActive = orgSave.isActive();
     }
 
+
     public void validationRequestBody (OrganizationView organization) throws OrgValidationException {
         Pattern numericPattern = Pattern.compile("[^a-zA-Z0-9]");
         if (!organization.inn.isEmpty() && (organization.inn.length() !=12 ||
@@ -157,11 +163,4 @@ public class OrganizationServiceImpl implements OrganizationService {
             throw new OrgValidationException ("Поле ИНН должно содержать 12 цифровыз символов");
         }
     }
-
-    private void validationRequestBodySave (OrganizationToSave organization) throws OrgValidationException {
-        throw new OrgValidationException ("");
-    }
-
-
-
 }

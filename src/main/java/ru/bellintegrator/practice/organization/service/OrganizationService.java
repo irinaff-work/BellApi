@@ -2,7 +2,7 @@ package ru.bellintegrator.practice.organization.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import ru.bellintegrator.practice.organization.view.OrganizationToSave;
+import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 
 import javax.xml.bind.ValidationException;
@@ -15,20 +15,20 @@ public interface OrganizationService {
      *
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationView> organizationList(OrganizationView organization) throws ValidationException;
+    public List<OrganizationView> organizationList(OrganizationView organization) throws OrgValidationException;
     /**
      * Получить организацию по Id
      *
      * @param id
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationToSave> filteredId( Long id);
+    public List<OrganizationViewFull> filteredId(Long id);
     /**
      * Изменить данные организации
      *
      * @param organization
      */
-    public void update(OrganizationToSave organization);
+    public void update(OrganizationViewFull organization) throws OrgValidationException;
 
     /**
      * Добавить новую организацию в БД
@@ -36,7 +36,7 @@ public interface OrganizationService {
      * @param organization
      * @return OrganizationView
      */
-    public void createOrganization (OrganizationToSave organization);
+    public void createOrganization (OrganizationViewFull organization) throws OrgValidationException;
 
     public void validationRequestBody (OrganizationView organization) throws OrgValidationException;
 
