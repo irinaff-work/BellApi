@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.organization.service.OrganizationService;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
+
 import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -20,11 +21,12 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
+
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody
-    List<OrganizationView> organizationList(@RequestBody OrganizationView organization) {
-        return organizationService.organizationList(organization);
+    List<OrganizationView> organizationList(@RequestBody OrganizationView organization) throws Exception {
+            return organizationService.organizationList(organization);
     }
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
@@ -39,7 +41,7 @@ public class OrganizationController {
     @PostMapping("organizations/update")
     public @ResponseBody void  updateOrganizationView(@RequestBody OrganizationToSave organization)
      {
-        organizationService.update(organization);
+             organizationService.update(organization);
     }
 
     @ApiOperation(value = "Сохранение организации", nickname = "Organization", httpMethod = "POST")

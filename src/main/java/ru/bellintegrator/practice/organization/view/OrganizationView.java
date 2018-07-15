@@ -4,9 +4,10 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class OrganizationView {
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty
     public Long id;
 
+    @ApiModelProperty(required  =  true)
     public String name;
 
     public String inn;

@@ -3,7 +3,6 @@ package ru.bellintegrator.practice.organization.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
@@ -12,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,7 +31,10 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@List<OrganizationView>}
      */
     @Override
-    public List<OrganizationView> organizationList(OrganizationView organization) {
+    public List<OrganizationView> organizationList(OrganizationView organization) throws OrgValidationException {
+
+        validationRequestBody (organization);
+
         List<Organization> filteredOrganization = new ArrayList<Organization>();
 
         for (Organization item: listOrganization) {
@@ -62,6 +65,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             return view;
         };
     }
+
     /**
      * Получить организацию по Id
      *
@@ -145,5 +149,19 @@ public class OrganizationServiceImpl implements OrganizationService {
         organizationToSave.address = orgSave.getAddress();
         organizationToSave.isActive = orgSave.isActive();
     }
+
+    public void validationRequestBody (OrganizationView organization) throws OrgValidationException {
+        Pattern numericPattern = Pattern.compile("[^a-zA-Z0-9]");
+        if (!organization.inn.isEmpty() && (organization.inn.length() !=12 ||
+                !numericPattern.matcher(organization.inn).find())) {
+            throw new OrgValidationException ("Поле ИНН должно содержать 12 цифровыз символов");
+        }
+    }
+
+    private void validationRequestBodySave (OrganizationToSave organization) throws OrgValidationException {
+        throw new OrgValidationException ("");
+    }
+
+
 
 }

@@ -1,8 +1,11 @@
 package ru.bellintegrator.practice.organization.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.bellintegrator.practice.organization.view.OrganizationToSave;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 
+import javax.xml.bind.ValidationException;
 import java.util.List;
 
 public interface OrganizationService {
@@ -12,7 +15,7 @@ public interface OrganizationService {
      *
      * @return {@List<OrganizationView>}
      */
-    public List<OrganizationView> organizationList(OrganizationView organization);
+    public List<OrganizationView> organizationList(OrganizationView organization) throws ValidationException;
     /**
      * Получить организацию по Id
      *
@@ -35,4 +38,13 @@ public interface OrganizationService {
      */
     public void createOrganization (OrganizationToSave organization);
 
+    public void validationRequestBody (OrganizationView organization) throws OrgValidationException;
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Неверный формат входных данных" )
+    class OrgValidationException extends ValidationException {
+
+        public OrgValidationException(String message) {
+            super(message);
+        }
+    }
 }

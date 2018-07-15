@@ -3,20 +3,25 @@ package ru.bellintegrator.practice.organization.view;
 import io.swagger.annotations.ApiModelProperty;
 
 public class OrganizationToSave {
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty
     public Long id;
 
+    @ApiModelProperty(required  =  true)
     public String name;
 
+    @ApiModelProperty(required  =  true)
     public String fullName;
 
+    @ApiModelProperty(required  =  true)
     public String inn;
 
+    @ApiModelProperty(required  =  true)
     public String kpp;
 
-    public String phone;
-
+    @ApiModelProperty(required  =  true)
     public String address;
+
+    public String phone;
 
     public boolean isActive;
 
