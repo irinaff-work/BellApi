@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.organization.service.OrganizationService;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.List;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -29,7 +30,7 @@ public class OrganizationController {
     public @ResponseBody
     List<OrganizationView> organizationList(@RequestBody OrganizationView organization)
             throws Exception {
-            return organizationService.organizationList(organization);
+        return organizationService.organizationList(organization);
     }
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
@@ -42,24 +43,18 @@ public class OrganizationController {
 
     @ApiOperation(value = "Редактирование организации по id", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
-    public @ResponseBody void  updateOrganizationView(@RequestBody OrganizationViewFull organization)
-     {
-         try {
-             organizationService.update(organization);
-         } catch ( Exception e) {
-             //что-то сделать
-         }
+    public @ResponseBody
+    SuccessView updateOrganizationView(@RequestBody OrganizationViewFull organization)
+    {
+        return organizationService.update(organization);
     }
 
     @ApiOperation(value = "Сохранение организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/save")
-    public @ResponseBody void createOrganization(@RequestBody OrganizationViewFull organization)
+    public @ResponseBody
+    SuccessView createOrganization(@RequestBody OrganizationViewFull organization)
     {
-        try {
-            organizationService.createOrganization(organization);
-        } catch ( Exception e) {
-            //что-то сделать
-        }
+        return organizationService.save(organization);
     }
 }
 

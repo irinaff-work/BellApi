@@ -6,6 +6,7 @@ import ru.bellintegrator.practice.office.view.OfficeViewAll;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.user.view.UserViewShort;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.*;
 import java.util.function.Function;
@@ -104,7 +105,7 @@ public class UserServiceImpl implements UserService{
      * @param userView
      */
     @Override
-    public void update(UserView userView) {
+    public SuccessView update(UserView userView) {
         for (User item: listUsers) {
             if (item.getId().equals(userView.id)) {
 
@@ -137,6 +138,11 @@ public class UserServiceImpl implements UserService{
                 item.setIdentified(userView.isIdentified);
             }
         }
+
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
+
+        return successView;
     };
 
     /**
@@ -146,12 +152,17 @@ public class UserServiceImpl implements UserService{
      * @return OfficeSave
      */
     @Override
-    public void createUser(UserView userView) {
+    public SuccessView save(UserView userView) {
 
         User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
                 userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,
                 userView.docNumber, userView.docDate, userView.citizenshipCode, userView.isIdentified);
 
         listUsers.add(userSave);
+
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
+
+        return successView;
     }
 }

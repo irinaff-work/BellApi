@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.office.service;
 
 import ru.bellintegrator.practice.office.view.*;
+import ru.bellintegrator.practice.validate.SuccessView;
 //import ru.bellintegrator.practice.office.view.OfficeView;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface OfficeService {
      *
      * @param officeView
      */
-    public void update(OfficeViewAll officeView);
+    public SuccessView update(OfficeViewAll officeView);
 
     /**
      * Добавить новый офис
@@ -36,5 +37,5 @@ public interface OfficeService {
      * @param officeView
      * @return OfficeSave
      */
-    public void createOffice (OfficeViewAll officeView);
+    public SuccessView save (OfficeViewAll officeView);
 }

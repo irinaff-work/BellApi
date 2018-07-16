@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.validate.RequestValidationException;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@List<OrganizationView>}
      */
     @Override
-    public List<OrganizationView> organizationList(OrganizationView organization) throws OrgValidationException {
+    public List<OrganizationView> organizationList(OrganizationView organization) {
 
         validationRequestBody (organization);
 
@@ -108,7 +110,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @param organization
      */
     @Override
-    public void update(OrganizationViewFull organization) throws OrgValidationException {
+    public SuccessView update(OrganizationViewFull organization) {
 
         validationRequestBody(organization);
 
@@ -125,6 +127,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                 item.setActive(organization.isActive);
             }
         }
+
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
+
+        return successView;
     }
 
 
@@ -135,7 +142,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return OrganizationView
      */
     @Override
-    public void createOrganization (OrganizationViewFull organization) throws OrgValidationException {
+    public SuccessView save (OrganizationViewFull organization) {
 
         validationRequestBody(organization);
 
@@ -144,23 +151,17 @@ public class OrganizationServiceImpl implements OrganizationService {
 
         listOrganization.add(orgSave);
 
-        OrganizationViewFull organizationToSave = new OrganizationViewFull();
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
 
-        organizationToSave.id = orgSave.getId();
-        organizationToSave.name = orgSave.getName();
-        organizationToSave.fullName = orgSave.getFullName();
-        organizationToSave.inn = orgSave.getInn();
-        organizationToSave.kpp = orgSave.getKpp();
-        organizationToSave.address = orgSave.getAddress();
-        organizationToSave.isActive = orgSave.isActive();
+        return successView;
     }
 
 
-    public void validationRequestBody (OrganizationView organization) throws OrgValidationException {
-        Pattern numericPattern = Pattern.compile("[^a-zA-Z0-9]");
-        if (!organization.inn.isEmpty() && (organization.inn.length() !=12 ||
-                !numericPattern.matcher(organization.inn).find())) {
-            throw new OrgValidationException ("Поле ИНН должно содержать 12 цифровыз символов");
+    public void validationRequestBody (OrganizationView organization) {
+        Pattern numericPattern = Pattern.compile("[0-9]{12}");
+        if (organization.inn.isEmpty() || !numericPattern.matcher(organization.inn).find()) {
+            throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
         }
     }
 }

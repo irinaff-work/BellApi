@@ -13,6 +13,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import ru.bellintegrator.practice.office.service.OfficeService;
 import ru.bellintegrator.practice.office.view.OfficeView;
 import ru.bellintegrator.practice.office.view.OfficeViewAll;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import javax.websocket.server.PathParam;
 
@@ -56,8 +57,8 @@ public class OfficeController {
      */
     @ApiOperation(value = "Изменить информацию об офисе", nickname = "update", httpMethod = "POST")
     @PostMapping("office/update")
-    public void update(@RequestBody OfficeViewAll officeView) {
-        officeService.update(officeView);
+    public SuccessView update(@RequestBody OfficeViewAll officeView) {
+        return officeService.update(officeView);
     };
 
     /**
@@ -65,7 +66,7 @@ public class OfficeController {
      */
     @ApiOperation(value = "Добавить информацию об офисе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("office/save")
-    public void createOffice (@RequestBody OfficeViewAll officeView) {
-        officeService.createOffice(officeView);
+    public SuccessView createOffice (@RequestBody OfficeViewAll officeView) {
+        return officeService.save(officeView);
     };
 }

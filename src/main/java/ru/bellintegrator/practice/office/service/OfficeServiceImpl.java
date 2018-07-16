@@ -3,6 +3,7 @@ package ru.bellintegrator.practice.office.service;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.office.view.*;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -90,7 +91,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @param office
      */
     @Override
-    public void update(OfficeViewAll office) {
+    public SuccessView update(OfficeViewAll office) {
         for (Office item: listOffices) {
             if (item.getId().equals(office.id)) {
 
@@ -108,6 +109,11 @@ public class OfficeServiceImpl implements OfficeService{
                 item.setActive(office.isActive);
             }
         }
+
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
+
+        return successView;
     }
 
     /**
@@ -117,10 +123,15 @@ public class OfficeServiceImpl implements OfficeService{
      * @return OfficeSave
      */
     @Override
-    public void createOffice (OfficeViewAll office) {
+    public SuccessView save (OfficeViewAll office) {
 
         Office officeSave = new Office(office.id, office.orgId, office.name, office.phone,
                 office.address, office.isActive);
         listOffices.add(officeSave);
+
+        SuccessView successView = new SuccessView();
+        successView.result = "success";
+
+        return successView;
     };
 }

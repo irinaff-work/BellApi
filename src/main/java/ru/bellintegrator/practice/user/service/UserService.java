@@ -2,6 +2,7 @@ package ru.bellintegrator.practice.user.service;
 
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.user.view.UserViewShort;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface UserService {
      *
      * @param userView
      */
-    public void update(UserView userView);
+    public SuccessView update(UserView userView);
 
     /**
      * Добавить нового пользователя
@@ -36,5 +37,5 @@ public interface UserService {
      * @param userView
      * @return OfficeSave
      */
-    public void createUser (UserView userView);
+    public SuccessView save (UserView userView);
 }

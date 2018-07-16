@@ -11,6 +11,7 @@ import ru.bellintegrator.practice.office.view.OfficeViewAll;
 import ru.bellintegrator.practice.user.service.UserService;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.user.view.UserViewShort;
+import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.List;
 
@@ -58,8 +59,8 @@ public class UserController {
      */
     @ApiOperation(value = "Изменить информацию о пользователе", nickname = "update", httpMethod = "POST")
     @PostMapping("user/update")
-    public void update(@RequestBody UserView userView) {
-        userService.update(userView);
+    public SuccessView update(@RequestBody UserView userView) {
+        return userService.update(userView);
     };
 
     /**
@@ -67,7 +68,7 @@ public class UserController {
      */
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("user/save")
-    public void createUser(@RequestBody UserView userView) {
-        userService.createUser(userView);
+    public SuccessView createUser(@RequestBody UserView userView) {
+        return userService.save(userView);
     };
 }
