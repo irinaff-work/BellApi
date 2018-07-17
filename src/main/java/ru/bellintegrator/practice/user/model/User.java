@@ -1,21 +1,69 @@
 package ru.bellintegrator.practice.user.model;
 
-import java.util.Date;
+import ru.bellintegrator.practice.document.model.Document;
 
+import javax.persistence.*;
+
+import java.util.Date;
+import java.util.Set;
+
+/**
+ * Пользователь
+ */
+@Entity
+@Table(name = "User")
 public class User {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "Id")
     private Long id;
 
+    /**
+     * Служебное поле hibernate
+     */
+    @Version
+    private Integer version;
+    /**
+     * Ссылка на Офис
+     */
+    @Column(name = "office_id", nullable = false)
     private Long officeId;
+    /**
+     * Ссылка на страну
+     */
+    @Column(name = "country_id", nullable = false)
+    private Long countryId;
+    /**
+     * Ссылка на документ
+     */
+    @Column(name = "doc_id", nullable = false)
+    private Long docId;
 
+    /**
+     * Имя
+     */
+    @Column(name = "first_name", length = 100, nullable = false)
     private String firstName;
-
+    /**
+     * Фамилия
+     */
+    @Column(name = "last_name", length = 100, nullable = true)
     private String lastName;
-
+    /**
+     * Отчество
+     */
+    @Column(name = "middle_name", length = 100, nullable = true)
     private String middleName;
-
+    /**
+     * Номер телефона
+     */
+    @Column(name = "phone", length = 9, nullable = true)
     private String phone;
-
+    /**
+     * Должность
+     */
+    @Column(name = "position", length = 100, nullable = false)
     private String position;
 
     private String docCode;
@@ -27,10 +75,20 @@ public class User {
     private String docDate;
 
     private String citizenshipCode;
-
+    /**
+     * Запись действительна
+     */
+    @Column(name = "is_active")
     private boolean isIdentified;
 
+    private Set<Document> documents;
 
+    /**
+     * Конструктор для hibernate
+     */
+    public User() {
+
+    }
     public User(Long id, Long officeId, String firstName, String lastName, String middleName,
                 String phone, String position, String docCode, String docName,
                 String docNumber, String docDate, String citizenshipCode, boolean isIdentified) {

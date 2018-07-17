@@ -57,7 +57,7 @@ CREATE INDEX IX_User_Office_Id ON User (office_id);
 ALTER TABLE User ADD FOREIGN KEY (office_id) REFERENCES Office(id);
 
 CREATE INDEX IX_User_Doc_Id ON User (doc_id);
-ALTER TABLE User ADD FOREIGN KEY (doc_id) REFERENCES Document(id);
+ALTER TABLE User ADD FOREIGN KEY (doc_id) REFERENCES Doc(id);
 
 CREATE INDEX IX_User_Country_Id ON User (country_id);
 ALTER TABLE User ADD FOREIGN KEY (country_id) REFERENCES Country(id);

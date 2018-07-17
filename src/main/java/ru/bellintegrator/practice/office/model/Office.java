@@ -1,18 +1,57 @@
 package ru.bellintegrator.practice.office.model;
 
+import javax.persistence.*;
+
+/**
+ * Офис
+ */
+@Entity
+@Table(name = "Office")
 public class Office {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "Id")
     private Long id;
 
+    /**
+     * Служебное поле hibernate
+     */
+    @Version
+    private Integer version;
+
+    /**
+     * Ссылка на Организацию
+     */
+    @Column(name = "org_id", nullable = false)
     private Long orgId;
-
+    /**
+     * Наименование
+     */
+    @Column(name = "name", length = 100, nullable = false)
     private String name;
-
+    /**
+     * Номер телефона
+     */
+    @Column(name = "phone", length = 9, nullable = true)
     private String phone;
-
+    /**
+     * Адрес
+     */
+    @Column(name = "address", length = 1000, nullable = false)
     private String address;
-
+    /**
+     * Запись действительна
+     */
+    @Column(name = "is_active")
     private boolean isActive;
+
+    /**
+     * Конструктор для hibernate
+     */
+    public Office() {
+
+    }
 
     public Office(Long id, Long orgId, String name, String phone,
                         String address, boolean isActive) {
