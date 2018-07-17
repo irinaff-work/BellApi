@@ -22,14 +22,14 @@ public interface OfficeService {
      * @param id
      * @return {@List<OfficeViewAll>}
      */
-    public List<OfficeViewAll> filteredId(Long id);
+    public List<OfficeViewFull> filteredId(Long id);
 
     /**
      * Изменить данные офиса
      *
      * @param officeView
      */
-    public SuccessView update(OfficeViewAll officeView);
+    public SuccessView update(OfficeViewFull officeView);
 
     /**
      * Добавить новый офис
@@ -37,5 +37,5 @@ public interface OfficeService {
      * @param officeView
      * @return OfficeSave
      */
-    public SuccessView save (OfficeViewAll officeView);
+    public SuccessView save (OfficeViewFull officeView);
 }

@@ -1,11 +1,9 @@
 package ru.bellintegrator.practice.user.service;
 
 import org.springframework.stereotype.Service;
-import ru.bellintegrator.practice.office.model.Office;
-import ru.bellintegrator.practice.office.view.OfficeViewAll;
 import ru.bellintegrator.practice.user.model.User;
+import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
-import ru.bellintegrator.practice.user.view.UserViewShort;
 import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.*;
@@ -31,7 +29,7 @@ public class UserServiceImpl implements UserService{
      * @return {@List<OfficeView>}
      */
     @Override
-    public List<UserViewShort> filteredOfficeId(UserViewShort userView) {
+    public List<UserView> filteredOfficeId(UserView userView) {
         List<User> filteredUsers = new ArrayList<User>();
 
         for (User item: listUsers) {
@@ -45,9 +43,9 @@ public class UserServiceImpl implements UserService{
                 .collect(Collectors.toList());
     }
 
-    private Function<User, UserViewShort> mapUserShort() {
+    private Function<User, UserView> mapUserShort() {
         return p -> {
-            UserViewShort view = new UserViewShort();
+            UserView view = new UserView();
             view.id = p.getId();
             view.officeId = p.getOfficeId();
             view.firstName = p.getFirstName();
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService{
      * @return {@List<OfficeViewAll>}
      */
     @Override
-    public List<UserView> filteredId(Long id) {
+    public List<UserViewFull> filteredId(Long id) {
         List<User> filteredUsers = new ArrayList<User>();
 
         for (User item: listUsers) {
@@ -79,9 +77,9 @@ public class UserServiceImpl implements UserService{
                 .collect(Collectors.toList());
     };
 
-    private Function<User, UserView> mapUser() {
+    private Function<User, UserViewFull> mapUser() {
         return p -> {
-            UserView view = new UserView();
+            UserViewFull view = new UserViewFull();
             view.id = p.getId();
             view.officeId = p.getOfficeId();
             view.firstName = p.getFirstName();
@@ -105,7 +103,7 @@ public class UserServiceImpl implements UserService{
      * @param userView
      */
     @Override
-    public SuccessView update(UserView userView) {
+    public SuccessView update(UserViewFull userView) {
         for (User item: listUsers) {
             if (item.getId().equals(userView.id)) {
 
@@ -152,7 +150,7 @@ public class UserServiceImpl implements UserService{
      * @return OfficeSave
      */
     @Override
-    public SuccessView save(UserView userView) {
+    public SuccessView save(UserViewFull userView) {
 
         User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
                 userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,

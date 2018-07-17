@@ -2,20 +2,12 @@ package ru.bellintegrator.practice.office.view;
 
 import io.swagger.annotations.ApiModelProperty;
 
-public class OfficeViewAll {
+public class OfficeViewFull extends OfficeView{
 
-    @ApiModelProperty(hidden = true)
-    public Long id;
-
-    public Long orgId;
-
-    public String name;
-
+    @ApiModelProperty
     public String phone;
 
     public String address;
-
-    public boolean isActive;
 
     @Override
     public String toString() {

@@ -18,19 +18,9 @@ public class UserView {
 
     public String middleName;
 
-    public String phone;
-
     public String position;
 
     public String docCode;
-
-    public String docName;
-
-    public String docNumber;
-
-    public String docDate;
-
-    public String citizenshipCode;
 
     public boolean isIdentified;
 }

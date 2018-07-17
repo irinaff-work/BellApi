@@ -59,7 +59,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @return {@List<OfficeViewAll>}
      */
     @Override
-    public List<OfficeViewAll> filteredId(Long id) {
+    public List<OfficeViewFull> filteredId(Long id) {
         List<Office> filteredOffices = new ArrayList<Office>();
 
         for (Office item: listOffices) {
@@ -73,9 +73,9 @@ public class OfficeServiceImpl implements OfficeService{
                 .collect(Collectors.toList());
     };
 
-    private Function<Office, OfficeViewAll> mapOfficeAll() {
+    private Function<Office, OfficeViewFull> mapOfficeAll() {
         return p -> {
-            OfficeViewAll view = new OfficeViewAll();
+            OfficeViewFull view = new OfficeViewFull();
             view.id = p.getId();
             view.orgId = p.getOrgId();
             view.name = p.getName();
@@ -91,7 +91,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @param office
      */
     @Override
-    public SuccessView update(OfficeViewAll office) {
+    public SuccessView update(OfficeViewFull office) {
         for (Office item: listOffices) {
             if (item.getId().equals(office.id)) {
 
@@ -123,7 +123,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @return OfficeSave
      */
     @Override
-    public SuccessView save (OfficeViewAll office) {
+    public SuccessView save (OfficeViewFull office) {
 
         Office officeSave = new Office(office.id, office.orgId, office.name, office.phone,
                 office.address, office.isActive);

@@ -12,10 +12,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import ru.bellintegrator.practice.office.service.OfficeService;
 import ru.bellintegrator.practice.office.view.OfficeView;
-import ru.bellintegrator.practice.office.view.OfficeViewAll;
+import ru.bellintegrator.practice.office.view.OfficeViewFull;
 import ru.bellintegrator.practice.validate.SuccessView;
-
-import javax.websocket.server.PathParam;
 
 
 @RestController
@@ -47,7 +45,7 @@ public class OfficeController {
     @ApiOperation(value = "Поиск офиса по id офиса", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("office/{id}")
     public @ResponseBody
-    List<OfficeViewAll> filteredId(
+    List<OfficeViewFull> filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
             return officeService.filteredId(id);
     };
@@ -57,7 +55,7 @@ public class OfficeController {
      */
     @ApiOperation(value = "Изменить информацию об офисе", nickname = "update", httpMethod = "POST")
     @PostMapping("office/update")
-    public SuccessView update(@RequestBody OfficeViewAll officeView) {
+    public SuccessView update(@RequestBody OfficeViewFull officeView) {
         return officeService.update(officeView);
     };
 
@@ -66,7 +64,7 @@ public class OfficeController {
      */
     @ApiOperation(value = "Добавить информацию об офисе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("office/save")
-    public SuccessView createOffice (@RequestBody OfficeViewAll officeView) {
+    public SuccessView createOffice (@RequestBody OfficeViewFull officeView) {
         return officeService.save(officeView);
     };
 }
