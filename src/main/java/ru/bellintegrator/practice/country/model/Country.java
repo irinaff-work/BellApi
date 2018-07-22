@@ -1,6 +1,10 @@
 package ru.bellintegrator.practice.country.model;
 
+import ru.bellintegrator.practice.user.model.User;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Справочник стран
@@ -19,6 +23,29 @@ public class Country {
      */
     @Version
     private Integer version;
+
+    @OneToMany(
+            mappedBy="country",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        if (users == null) {
+            users = new HashSet<>();
+        }
+        return users;
+    }
+    public void addUser(User user) {
+        getUsers().add(user);
+        user.setCountry(this);
+    }
+
+    public void removeUser(User user) {
+        getUsers().remove(user);
+        user.setCountry(null);
+    }
 
     /**
      * Код страны

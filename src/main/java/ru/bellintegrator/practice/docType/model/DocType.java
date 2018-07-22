@@ -1,6 +1,10 @@
 package ru.bellintegrator.practice.docType.model;
 
+import ru.bellintegrator.practice.document.model.Document;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Типы документов
@@ -20,6 +24,28 @@ public class DocType {
     @Version
     private Integer version;
 
+    @OneToMany(
+            mappedBy="docType",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<Document> documents;
+
+    public Set<Document> getDocuments() {
+        if (documents == null) {
+            documents = new HashSet<>();
+        }
+        return documents;
+    }
+    public void addDocument(Document document) {
+        getDocuments().add(document);
+        document.setDocType(this);
+    }
+
+    public void removeDocument(Document document) {
+        getDocuments().remove(document);
+        document.setDocType(null);
+    }
     /**
      * Код типа документа
      */

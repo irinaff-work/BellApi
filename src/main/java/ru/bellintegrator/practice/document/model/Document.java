@@ -1,6 +1,11 @@
 package ru.bellintegrator.practice.document.model;
 
+import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.user.model.User;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Офис
@@ -20,11 +25,38 @@ public class Document {
     @Version
     private Integer version;
 
+    @OneToMany(
+            mappedBy="document",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        if (users == null) {
+            users = new HashSet<>();
+        }
+        return users;
+    }
+    public void addUser(User user) {
+        getUsers().add(user);
+        user.setDocument(this);
+    }
+
+    public void removeUser(User user) {
+        getUsers().remove(user);
+        user.setDocument(null);
+    }
+
     /**
      * Ссылка на тип документа
      */
-    @Column(name = "doc_type_id", nullable = false)
-    private Long docTypeId;
+    //@Column(name = "doc_type_id", nullable = false)
+    //private Long docTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doc_type_id")
+    private DocType docType;
+
     /**
      * Номер документа
      */
@@ -34,6 +66,7 @@ public class Document {
      * Дата документа
      */
     @Column(name = "doc_date", nullable = false)
+    @Temporal(TemporalType.DATE)
     private String docDate;
 
     /**
@@ -43,9 +76,9 @@ public class Document {
 
     }
 
-    public Document(Long id, Long docTypeId, String docNumber, String docDate) {
+    public Document(Long id, DocType docType, String docNumber, String docDate) {
         this.id = id;
-        this.docTypeId = docTypeId;
+        this.docType = docType;
         this.docDate = docDate;
     }
 
@@ -53,8 +86,8 @@ public class Document {
         return id;
     }
 
-    public Long getDocTypeId() {
-        return docTypeId;
+    public DocType getDocType() {
+        return this.docType;
     }
 
     public String getDocNumber() {
@@ -69,8 +102,8 @@ public class Document {
         this.id = id;
     }
 
-    public void setDocTypeId(Long docTypeId) {
-        this.docTypeId = docTypeId;
+    public void setDocType(DocType docType) {
+        this.docType = docType;
     }
 
     public void setDocNumber(String docNumber) {

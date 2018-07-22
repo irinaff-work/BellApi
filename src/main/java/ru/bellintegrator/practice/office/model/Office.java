@@ -1,6 +1,11 @@
 package ru.bellintegrator.practice.office.model;
 
+import ru.bellintegrator.practice.organization.model.Organization;
+import ru.bellintegrator.practice.user.model.User;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Офис
@@ -23,8 +28,35 @@ public class Office {
     /**
      * Ссылка на Организацию
      */
-    @Column(name = "org_id", nullable = false)
-    private Long orgId;
+    //@Column(name = "org_id", nullable = false)
+    //private Long orgId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id")
+    private Organization organization;
+
+    @OneToMany(
+            mappedBy="office",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        if (users == null) {
+            users = new HashSet<>();
+        }
+        return users;
+    }
+    public void addUser(User user) {
+        getUsers().add(user);
+        user.setOfficeId(this);
+    }
+
+    public void removeUser(User user) {
+        getUsers().remove(user);
+        user.setOfficeId(null);
+    }
+
     /**
      * Наименование
      */
@@ -53,10 +85,10 @@ public class Office {
 
     }
 
-    public Office(Long id, Long orgId, String name, String phone,
-                        String address, boolean isActive) {
+    public Office(Long id, Organization organization, String name, String phone,
+                  String address, boolean isActive) {
         this.id = id;
-        this.orgId = orgId;
+        this.organization = organization;
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -67,8 +99,8 @@ public class Office {
         return id;
     }
 
-    public Long getOrgId() {
-        return orgId;
+    public Organization getOrganization() {
+        return this.organization;
     }
 
     public String getName() {
@@ -91,8 +123,8 @@ public class Office {
         this.id = id;
     }
 
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
     public void setName(String name) {

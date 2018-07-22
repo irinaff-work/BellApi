@@ -1,6 +1,8 @@
 package ru.bellintegrator.practice.user.model;
 
+import ru.bellintegrator.practice.country.model.Country;
 import ru.bellintegrator.practice.document.model.Document;
+import ru.bellintegrator.practice.office.model.Office;
 
 import javax.persistence.*;
 
@@ -27,18 +29,30 @@ public class User {
     /**
      * Ссылка на Офис
      */
-    @Column(name = "office_id", nullable = false)
-    private Long officeId;
+    //@Column(name = "office_id", nullable = false)
+    //private Long officeId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "office_id")
+    private Office office;
+
     /**
      * Ссылка на страну
      */
-    @Column(name = "country_id", nullable = false)
-    private Long countryId;
+    //@Column(name = "country_id", nullable = false)
+    //private Long countryId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country_id")
+    private Country country;
+
     /**
      * Ссылка на документ
      */
-    @Column(name = "doc_id", nullable = false)
-    private Long docId;
+    //@Column(name = "doc_id", nullable = false)
+    //private Long docId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doc_id")
+    private Document document;
 
     /**
      * Имя
@@ -66,22 +80,12 @@ public class User {
     @Column(name = "position", length = 100, nullable = false)
     private String position;
 
-    private String docCode;
-
-    private String docName;
-
-    private String docNumber;
-
-    private String docDate;
-
-    private String citizenshipCode;
     /**
      * Запись действительна
      */
     @Column(name = "is_active")
     private boolean isIdentified;
 
-    private Set<Document> documents;
 
     /**
      * Конструктор для hibernate
@@ -89,21 +93,17 @@ public class User {
     public User() {
 
     }
-    public User(Long id, Long officeId, String firstName, String lastName, String middleName,
-                String phone, String position, String docCode, String docName,
-                String docNumber, String docDate, String citizenshipCode, boolean isIdentified) {
+    public User(Long id, Office office, Country country, Document document, String firstName, String lastName, String middleName,
+                String phone, String position, boolean isIdentified) {
         this.id = id;
-        this.officeId = officeId;
+        this.office = office;
+        this.country = country;
+        this.document = document;
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
         this.phone = phone;
         this.position = position;
-        this.docCode = docCode;
-        this.docName = docName;
-        this.docNumber = docNumber;
-        this.docDate = docDate;
-        this.citizenshipCode = citizenshipCode;
         this.isIdentified = isIdentified;
     }
 
@@ -111,8 +111,16 @@ public class User {
         return id;
     }
 
-    public Long getOfficeId() {
-        return officeId;
+    public Office getOffice() {
+        return  this.office;
+    }
+
+    public Country getCountry() {
+        return this.country;
+    }
+
+    public Document getDocument() {
+        return this.document;
     }
 
     public String getFirstName() {
@@ -135,26 +143,6 @@ public class User {
         return position;
     }
 
-    public String getDocCode() {
-        return docCode;
-    }
-
-    public String getDocName() {
-        return docName;
-    }
-
-    public String getDocNumber() {
-        return docNumber;
-    }
-
-    public String getDocDate() {
-        return docDate;
-    }
-
-    public String getCitizenshipCode() {
-        return citizenshipCode;
-    }
-
     public boolean isIdentified() {
         return isIdentified;
     }
@@ -163,10 +151,17 @@ public class User {
         this.id = id;
     }
 
-    public void setOfficeId(Long officeId) {
-        this.officeId = officeId;
+    public void setOfficeId(Office office) {
+        this.office = office;
     }
 
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
+    }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -185,26 +180,6 @@ public class User {
 
     public void setPosition(String position) {
         this.position = position;
-    }
-
-    public void setDocCode(String docCode) {
-        this.docCode = docCode;
-    }
-
-    public void setDocName(String docName) {
-        this.docName = docName;
-    }
-
-    public void setDocNumber(String docNumber) {
-        this.docNumber = docNumber;
-    }
-
-    public void setDocDate(String docDate) {
-        this.docDate = docDate;
-    }
-
-    public void setCitizenshipCode(String citizenshipCode) {
-        this.citizenshipCode = citizenshipCode;
     }
 
     public void setIdentified(boolean identified) {

@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS Organization (
     id          INTEGER  PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     name        VARCHAR(100) NOT NULL,
     full_name   VARCHAR(250) NULL,
     inn         VARCHAR(12)  NOT NULL,
@@ -11,6 +12,7 @@ CREATE TABLE IF NOT EXISTS Organization (
 
 CREATE TABLE IF NOT EXISTS Office (
     id          INTEGER  PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     org_id      INTEGER NOT NULL,
     name        VARCHAR(100) NOT NULL,
     address     VARCHAR(1000)  NOT NULL,
@@ -20,6 +22,7 @@ CREATE TABLE IF NOT EXISTS Office (
 
 CREATE TABLE IF NOT EXISTS User (
     id              INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version         INTEGER NOT NULL,
     office_id       INTEGER  NULL,
     doc_id          INTEGER  NULL,
     country_id      INTEGER  NULL,
@@ -33,12 +36,14 @@ CREATE TABLE IF NOT EXISTS User (
 
   CREATE TABLE IF NOT EXISTS Document_Type (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     doc_code    VARCHAR(3) NOT NULL,
     doc_name    VARCHAR(100) NULL
 );
 
 CREATE TABLE IF NOT EXISTS Document (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version     INTEGER NOT NULL,
     doc_type_id INTEGER  NOT NULL,
     doc_number  VARCHAR(10)  NOT NULL,
     doc_date    DATE  NOT NULL
@@ -46,6 +51,7 @@ CREATE TABLE IF NOT EXISTS Document (
 
 CREATE TABLE IF NOT EXISTS Country (
     id                INTEGER PRIMARY KEY AUTO_INCREMENT,
+    version           INTEGER NOT NULL,
     citizenship_code  VARCHAR(100) NOT NULL,
     citizenship_name  VARCHAR(250) NULL
 );

@@ -2,7 +2,9 @@ package ru.bellintegrator.practice.organization.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
@@ -21,6 +23,13 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    private final OrganizationDao dao;
+
+    @Autowired
+    public OrganizationServiceImpl(OrganizationDao dao) {
+        this.dao = dao;
+    }
+
     private List<Organization> listOrganization = new ArrayList(Arrays.asList(
             new Organization(1L, "Рога и Копыта", "ООО Рога и Копыта", "123456789012", "123456789","234-34-56", "г. Уфа, ул. Запредельная, д.2",true),
             new Organization(2L, "Салют", "ООО Салют", "123456789012", "123456789" ,"234-34-56", "г. Уфа, ул. Запредельная, д.2", true)
@@ -36,7 +45,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public List<OrganizationView> organizationList(OrganizationView organization) {
 
         validationRequestBody (organization);
-
+        List<Organization> filteredOrganization = dao.organizationList(String name, String inn);
+        /**
         List<Organization> filteredOrganization = new ArrayList<Organization>();
 
         for (Organization item: listOrganization) {
@@ -48,10 +58,11 @@ public class OrganizationServiceImpl implements OrganizationService {
                 filteredOrganization.add(item);
             }
         }
+
         return filteredOrganization.stream()
                 .map(mapOrganization())
                 .collect(Collectors.toList());
-
+        **/
     }
 
     private Function<Organization, OrganizationView> mapOrganization() {
