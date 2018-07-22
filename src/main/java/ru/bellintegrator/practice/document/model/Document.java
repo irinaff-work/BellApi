@@ -30,23 +30,6 @@ public class Document {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<User> users;
-
-    public Set<User> getUsers() {
-        if (users == null) {
-            users = new HashSet<>();
-        }
-        return users;
-    }
-    public void addUser(User user) {
-        getUsers().add(user);
-        user.setDocument(this);
-    }
-
-    public void removeUser(User user) {
-        getUsers().remove(user);
-        user.setDocument(null);
-    }
 
     /**
      * Ссылка на тип документа

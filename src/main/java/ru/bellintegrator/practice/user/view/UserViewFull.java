@@ -12,7 +12,7 @@ public class UserViewFull extends UserView {
 
     public String docName;
 
-    public String docNumber;
+    //public String docNumber;
 
     public String docDate;
 

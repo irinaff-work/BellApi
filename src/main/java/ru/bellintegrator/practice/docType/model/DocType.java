@@ -29,23 +29,7 @@ public class DocType {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<Document> documents;
 
-    public Set<Document> getDocuments() {
-        if (documents == null) {
-            documents = new HashSet<>();
-        }
-        return documents;
-    }
-    public void addDocument(Document document) {
-        getDocuments().add(document);
-        document.setDocType(this);
-    }
-
-    public void removeDocument(Document document) {
-        getDocuments().remove(document);
-        document.setDocType(null);
-    }
     /**
      * Код типа документа
      */
@@ -76,6 +60,14 @@ public class DocType {
 
     public Integer getVersion() {
         return version;
+    }
+
+    public String getDocCode() {
+        return docCode;
+    }
+
+    public String getDocName() {
+        return docName;
     }
 
     public void setId(Long id) {

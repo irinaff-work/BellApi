@@ -8,28 +8,29 @@ import ru.bellintegrator.practice.validate.SuccessView;
 
 import javax.xml.bind.ValidationException;
 import java.util.List;
+import java.util.Set;
 
 public interface OrganizationService {
 
     /**
      * Получить список организаций по наименованию и ИНН
      *
-     * @return {@List<OrganizationView>}
+     * @return {@Set<OrganizationView>}
      */
-    public List<OrganizationView> organizationList(OrganizationView organization);
+    public Set<OrganizationView> loadByNameAndInn(OrganizationView organization);
     /**
      * Получить организацию по Id
      *
      * @param id
-     * @return {@List<OrganizationView>}
+     * @return {@OrganizationView}
      */
-    public List<OrganizationViewFull> filteredId(Long id);
+    public OrganizationViewFull loadById(Long id);
     /**
      * Изменить данные организации
      *
      * @param organization
      */
-    public SuccessView update(OrganizationViewFull organization);
+    public void update(OrganizationViewFull organization);
 
     /**
      * Добавить новую организацию в БД
@@ -37,8 +38,12 @@ public interface OrganizationService {
      * @param organization
      * @return OrganizationView
      */
-    public SuccessView save (OrganizationViewFull organization);
+    public void save (OrganizationViewFull organization);
 
+    /*
+     * Проверить входящий запрос
+     * @param organization
+     */
     public void validationRequestBody (OrganizationView organization);
 
 

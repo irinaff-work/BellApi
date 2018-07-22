@@ -4,7 +4,7 @@ import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.validate.SuccessView;
 
-import java.util.List;
+import java.util.Set;
 
 public interface UserService {
 
@@ -12,24 +12,24 @@ public interface UserService {
      * Получить список пользователей по Id офиса
      *
      * @param userView
-     * @return {@List<OfficeView>}
+     * @return {@Set<OfficeView>}
      */
-    public List<UserView> filteredOfficeId(UserView userView  );
+    public Set<UserView> loadByOfficeId(UserView userView  );
 
     /**
      * Получить список пользователей по Id пользователя
      *
      * @param id
-     * @return {@List<OfficeViewAll>}
+     * @return {@Set<OfficeViewAll>}
      */
-    public List<UserViewFull> filteredId(Long id);
+    public Set<UserViewFull> loadById(Long id);
 
     /**
      * Изменить данные пользователя
      *
      * @param userView
      */
-    public SuccessView update(UserViewFull userView);
+    public void update(UserViewFull userView);
 
     /**
      * Добавить нового пользователя
@@ -37,5 +37,5 @@ public interface UserService {
      * @param userView
      * @return OfficeSave
      */
-    public SuccessView save (UserViewFull userView);
+    public void save (UserViewFull userView);
 }

@@ -29,23 +29,6 @@ public class Country {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<User> users;
-
-    public Set<User> getUsers() {
-        if (users == null) {
-            users = new HashSet<>();
-        }
-        return users;
-    }
-    public void addUser(User user) {
-        getUsers().add(user);
-        user.setCountry(this);
-    }
-
-    public void removeUser(User user) {
-        getUsers().remove(user);
-        user.setCountry(null);
-    }
 
     /**
      * Код страны

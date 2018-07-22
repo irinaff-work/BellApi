@@ -1,12 +1,18 @@
 package ru.bellintegrator.practice.organization.dao;
 
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.bellintegrator.practice.organization.model.Organization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.List;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.CriteriaUpdate;
+import javax.persistence.criteria.Root;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao{
@@ -23,9 +29,15 @@ public class OrganizationDaoImpl implements OrganizationDao{
      * @return {@List<Organization>}
      */
     @Override
-    public List<Organization> organizationList(String name, String inn) {
-        TypedQuery<Organization> query = em.createQuery("SELECT p FROM Organization p", Organization.class);
-        return query.getResultList();
+    public Set<Organization> loadByNameAndInn(String name, String inn) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<Organization> criteriaQuery = criteriaBuilder.createQuery(Organization.class);
+        Root<Organization> organizationRoot = criteriaQuery.from(Organization.class);
+        criteriaQuery.where(organizationRoot.get("name").in(name));
+        criteriaQuery.where(organizationRoot.get("inn").in(inn));
+        criteriaQuery.orderBy(criteriaBuilder.asc(organizationRoot.get("name")));
+        TypedQuery<Organization> query = em.createQuery(criteriaQuery);
+        return query.getResultList().stream().collect(Collectors.toSet());
     };
     /**
      * Получить организацию по Id
@@ -34,8 +46,8 @@ public class OrganizationDaoImpl implements OrganizationDao{
      * @return {@List<Organization>}
      */
     @Override
-    public List<Organization> filteredId(Long id) {
-
+    public Organization loadById(Long id) {
+        return em.find(Organization.class, id);
     };
     /**
      * Изменить данные организации
@@ -44,7 +56,30 @@ public class OrganizationDaoImpl implements OrganizationDao{
      */
     @Override
     public void update(Organization organization) {
+        Long id = organization.getId();
+        Organization updateOrganization = loadById(id);
+        String name = organization.getName();
+        String inn = organization.getInn();
+        String fullName = organization.getFullName();
+        String kpp = organization.getKpp();
+        String address = organization.getAddress();
+        String phone = organization.getPhone();
 
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaUpdate<Organization> criteriaUpdate = criteriaBuilder.
+                createCriteriaUpdate(Organization.class);
+        Root<Organization> organizationRoot = criteriaUpdate.from(Organization.class);
+        criteriaUpdate.set("name", organization.getName());
+        criteriaUpdate.set("inn", organization.getInn());
+        criteriaUpdate.set("fullName", organization.getFullName());
+        criteriaUpdate.set("kpp", organization.getKpp());
+        criteriaUpdate.set("address", organization.getAddress());
+        if (!Strings.isNullOrEmpty(phone)) {
+            criteriaUpdate.set("phone", organization.getPhone());
+        }
+        criteriaUpdate.set("is_active", "true");
+        criteriaUpdate.where(criteriaBuilder.equal(organizationRoot.get("id"), id));
+        this.em.createQuery(criteriaUpdate).executeUpdate();
     };
 
     /**
@@ -55,6 +90,6 @@ public class OrganizationDaoImpl implements OrganizationDao{
      */
     @Override
     public void save (Organization organization) {
-
+        em.persist(organization);
     };
 }

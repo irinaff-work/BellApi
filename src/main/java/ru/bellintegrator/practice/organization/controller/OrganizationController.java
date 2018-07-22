@@ -10,6 +10,8 @@ import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
 import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.List;
+import java.util.Set;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -28,14 +30,14 @@ public class OrganizationController {
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody
-    List<OrganizationView> organizationList(@RequestBody OrganizationView organization)
+    Set<OrganizationView> organizationList(@RequestBody OrganizationView organization)
             throws Exception {
-        return organizationService.organizationList(organization);
+        return organizationService.loadByNameAndInn(organization);
     }
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
     @GetMapping("organizations/{id}")
-    public @ResponseBody List<OrganizationViewFull> filteredId(
+    public @ResponseBody Set<OrganizationViewFull> filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id
     ) {
         return organizationService.filteredId(id);
@@ -44,17 +46,17 @@ public class OrganizationController {
     @ApiOperation(value = "Редактирование организации по id", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
     public @ResponseBody
-    SuccessView updateOrganizationView(@RequestBody OrganizationViewFull organization)
+    void updateOrganizationView(@RequestBody OrganizationViewFull organization)
     {
-        return organizationService.update(organization);
+        organizationService.update(organization);
     }
 
     @ApiOperation(value = "Сохранение организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/save")
     public @ResponseBody
-    SuccessView createOrganization(@RequestBody OrganizationViewFull organization)
+    void createOrganization(@RequestBody OrganizationViewFull organization)
     {
-        return organizationService.save(organization);
+        organizationService.save(organization);
     }
 }
 

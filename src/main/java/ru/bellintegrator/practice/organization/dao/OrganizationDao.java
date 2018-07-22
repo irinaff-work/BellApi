@@ -3,21 +3,22 @@ package ru.bellintegrator.practice.organization.dao;
 import ru.bellintegrator.practice.organization.model.Organization;
 
 import java.util.List;
+import java.util.Set;
 
 public interface OrganizationDao {
     /**
      * Получить список организаций по наименованию и ИНН
      *
-     * @return {@List<OrganizationView>}
+     * @return {@Set<OrganizationView>}
      */
-    public List<Organization> organizationList(String name, String inn);
+    public Set<Organization> loadByNameAndInn(String name, String inn);
     /**
      * Получить организацию по Id
      *
      * @param id
-     * @return {@List<OrganizationView>}
+     * @return {@Set<OrganizationView>}
      */
-    public List<Organization> filteredId(Long id);
+    public Organization loadById(Long id);
     /**
      * Изменить данные организации
      *

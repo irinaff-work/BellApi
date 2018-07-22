@@ -29,9 +29,6 @@ public class User {
     /**
      * Ссылка на Офис
      */
-    //@Column(name = "office_id", nullable = false)
-    //private Long officeId;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "office_id")
     private Office office;
@@ -39,8 +36,6 @@ public class User {
     /**
      * Ссылка на страну
      */
-    //@Column(name = "country_id", nullable = false)
-    //private Long countryId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
@@ -48,8 +43,6 @@ public class User {
     /**
      * Ссылка на документ
      */
-    //@Column(name = "doc_id", nullable = false)
-    //private Long docId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_id")
     private Document document;
@@ -115,6 +108,10 @@ public class User {
         return  this.office;
     }
 
+    public Long getOfficeId() {
+        return this.office.getId();
+    }
+
     public Country getCountry() {
         return this.country;
     }
@@ -143,6 +140,25 @@ public class User {
         return position;
     }
 
+    public String getDocNumber() {
+        return this.document.getDocNumber();
+    };
+    public String getDocName() {
+        return this.document.getDocType().getDocName();
+    };
+
+    public String getDocDate() {
+        return this.document.getDocDate();
+    };
+
+    public String getCitizenshipCode() {
+        return this.country.getCitizenshipCode();
+    };
+
+    public String getCitizenshipName() {
+        return this.country.getCitizenshipName();
+    };
+
     public boolean isIdentified() {
         return isIdentified;
     }
@@ -151,9 +167,9 @@ public class User {
         this.id = id;
     }
 
-    public void setOfficeId(Office office) {
-        this.office = office;
-    }
+//    public void setOfficeId(Office office) {
+//        this.office = office;
+//    }
 
     public void setCountry(Country country) {
         this.country = country;

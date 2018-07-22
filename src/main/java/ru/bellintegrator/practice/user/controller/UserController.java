@@ -8,9 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.user.service.UserService;
 import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
-import ru.bellintegrator.practice.validate.SuccessView;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -30,14 +29,14 @@ public class UserController {
      * Получить список пользователей по Id офиса
      *
      * @param userView
-     * @return {@List<OfficeView>}
+     * @return {@Set<OfficeView>}
      */
 
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")
     @PostMapping("user/list/")
     public @ResponseBody
-    List<UserView> filteredOfficeId(@RequestBody UserView userView) {
-        return userService.filteredOfficeId(userView);
+    Set<UserView> loadByIdOfficeId(@RequestBody UserView userView) {
+        return userService.loadByOfficeId(userView);
     };
 
     /**
@@ -46,9 +45,9 @@ public class UserController {
      */
     @ApiOperation(value = "Поиск пользователя по id пользователя", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("user/{id}")
-    public @ResponseBody List<UserViewFull> filteredId(
+    public @ResponseBody Set<UserViewFull> filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
-            return userService.filteredId(id);
+            return userService.loadById(id);
     };
 
     /**
@@ -56,8 +55,8 @@ public class UserController {
      */
     @ApiOperation(value = "Изменить информацию о пользователе", nickname = "update", httpMethod = "POST")
     @PostMapping("user/update")
-    public SuccessView update(@RequestBody UserViewFull userView) {
-        return userService.update(userView);
+    public void update(@RequestBody UserViewFull userView) {
+        userService.update(userView);
     };
 
     /**
@@ -65,7 +64,7 @@ public class UserController {
      */
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("user/save")
-    public SuccessView createUser(@RequestBody UserViewFull userView) {
-        return userService.save(userView);
+    public void createUser(@RequestBody UserViewFull userView) {
+        userService.save(userView);
     };
 }

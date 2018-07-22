@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService{
 
-    private List<User> listUsers = new ArrayList(Arrays.asList(
+    private Set<User> listUsers = new HashSet<>(Arrays.asList(
             new User(1L, 1L,"Игорь", "Ермолкин", "Игоревич","333-33-33", "менеджер",
                     "10","1","11.2", "12.05.2018",
                     "1234", true),
@@ -26,11 +26,11 @@ public class UserServiceImpl implements UserService{
      * Получить список пользователей по Id офиса
      *
      * @param userView
-     * @return {@List<OfficeView>}
+     * @return {@Set<OfficeView>}
      */
     @Override
-    public List<UserView> filteredOfficeId(UserView userView) {
-        List<User> filteredUsers = new ArrayList<User>();
+    public Set<UserView> loadByOfficeId(UserView userView) {
+        Set<User> filteredUsers = new HashSet<>();
 
         for (User item: listUsers) {
             if ((item.getOfficeId().equals(userView.officeId))) {
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService{
         }
         return filteredUsers.stream()
                 .map(mapUserShort())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     }
 
     private Function<User, UserView> mapUserShort() {
@@ -60,11 +60,11 @@ public class UserServiceImpl implements UserService{
      * Получить список пользователей по Id пользователя
      *
      * @param id
-     * @return {@List<OfficeViewAll>}
+     * @return {@Set<OfficeViewAll>}
      */
     @Override
-    public List<UserViewFull> filteredId(Long id) {
-        List<User> filteredUsers = new ArrayList<User>();
+    public Set<UserViewFull> loadById(Long id) {
+        Set<User> filteredUsers = new HashSet<>();
 
         for (User item: listUsers) {
             if ((item.getId()).equals(id)) {
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService{
         }
         return filteredUsers.stream()
                 .map(mapUser())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
     };
 
     private Function<User, UserViewFull> mapUser() {
@@ -87,7 +87,6 @@ public class UserServiceImpl implements UserService{
             view.middleName = p.getMiddleName();
             view.phone = p.getPhone();
             view.position = p.getPosition();
-            view.docCode = p.getDocCode();
             view.docName = p.getDocName();
             view.docNumber = p.getDocNumber();
             view.docDate = p.getDocDate();
@@ -103,7 +102,7 @@ public class UserServiceImpl implements UserService{
      * @param userView
      */
     @Override
-    public SuccessView update(UserViewFull userView) {
+    public void update(UserViewFull userView) {
         for (User item: listUsers) {
             if (item.getId().equals(userView.id)) {
 
@@ -136,11 +135,6 @@ public class UserServiceImpl implements UserService{
                 item.setIdentified(userView.isIdentified);
             }
         }
-
-        SuccessView successView = new SuccessView();
-        successView.result = "success";
-
-        return successView;
     };
 
     /**
@@ -150,17 +144,12 @@ public class UserServiceImpl implements UserService{
      * @return OfficeSave
      */
     @Override
-    public SuccessView save(UserViewFull userView) {
+    public void save(UserViewFull userView) {
 
         User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
                 userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,
                 userView.docNumber, userView.docDate, userView.citizenshipCode, userView.isIdentified);
 
         listUsers.add(userSave);
-
-        SuccessView successView = new SuccessView();
-        successView.result = "success";
-
-        return successView;
     }
 }
