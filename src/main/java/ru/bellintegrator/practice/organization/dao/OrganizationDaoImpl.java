@@ -33,10 +33,13 @@ public class OrganizationDaoImpl implements OrganizationDao{
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Organization> criteriaQuery = criteriaBuilder.createQuery(Organization.class);
         Root<Organization> organizationRoot = criteriaQuery.from(Organization.class);
+
         criteriaQuery.where(organizationRoot.get("name").in(name));
         criteriaQuery.where(organizationRoot.get("inn").in(inn));
         criteriaQuery.orderBy(criteriaBuilder.asc(organizationRoot.get("name")));
+
         TypedQuery<Organization> query = em.createQuery(criteriaQuery);
+
         return query.getResultList().stream().collect(Collectors.toSet());
     };
     /**
@@ -56,14 +59,6 @@ public class OrganizationDaoImpl implements OrganizationDao{
      */
     @Override
     public void update(Organization organization) {
-        Long id = organization.getId();
-        Organization updateOrganization = loadById(id);
-        String name = organization.getName();
-        String inn = organization.getInn();
-        String fullName = organization.getFullName();
-        String kpp = organization.getKpp();
-        String address = organization.getAddress();
-        String phone = organization.getPhone();
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaUpdate<Organization> criteriaUpdate = criteriaBuilder.
@@ -74,11 +69,12 @@ public class OrganizationDaoImpl implements OrganizationDao{
         criteriaUpdate.set("fullName", organization.getFullName());
         criteriaUpdate.set("kpp", organization.getKpp());
         criteriaUpdate.set("address", organization.getAddress());
-        if (!Strings.isNullOrEmpty(phone)) {
+        if (!Strings.isNullOrEmpty(organization.getPhone())) {
             criteriaUpdate.set("phone", organization.getPhone());
         }
         criteriaUpdate.set("is_active", "true");
-        criteriaUpdate.where(criteriaBuilder.equal(organizationRoot.get("id"), id));
+        criteriaUpdate.where(criteriaBuilder.equal(organizationRoot.get("id"),
+                organization.getId()));
         this.em.createQuery(criteriaUpdate).executeUpdate();
     };
 

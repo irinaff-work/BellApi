@@ -59,9 +59,9 @@ public class Document {
 
     }
 
-    public Document(Long id, DocType docType, String docNumber, String docDate) {
-        this.id = id;
+    public Document(DocType docType, String docNumber, String docDate) {
         this.docType = docType;
+        this.docDate = docNumber;
         this.docDate = docDate;
     }
 
@@ -71,6 +71,10 @@ public class Document {
 
     public DocType getDocType() {
         return this.docType;
+    }
+
+    public Long getDocTypeId() {
+        return this.docType.getId();
     }
 
     public String getDocNumber() {

@@ -22,7 +22,7 @@ public interface UserService {
      * @param id
      * @return {@Set<OfficeViewAll>}
      */
-    public Set<UserViewFull> loadById(Long id);
+    public UserViewFull loadById(Long id);
 
     /**
      * Изменить данные пользователя
@@ -38,4 +38,5 @@ public interface UserService {
      * @return OfficeSave
      */
     public void save (UserViewFull userView);
+
 }

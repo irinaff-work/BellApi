@@ -1,26 +1,42 @@
 package ru.bellintegrator.practice.user.service;
 
+import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bellintegrator.practice.country.dao.CountryDao;
+import ru.bellintegrator.practice.docType.dao.DocTypeDao;
+import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.document.dao.DocumentDao;
+import ru.bellintegrator.practice.document.model.Document;
+import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
-import ru.bellintegrator.practice.validate.SuccessView;
 
+import javax.persistence.NoResultException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
-    private Set<User> listUsers = new HashSet<>(Arrays.asList(
-            new User(1L, 1L,"Игорь", "Ермолкин", "Игоревич","333-33-33", "менеджер",
-                    "10","1","11.2", "12.05.2018",
-                    "1234", true),
-            new User(2L, 2L,"Дмитрий", "Кулич", "Николаевич","333-33-33", "менеджер",
-                    "10","1","11.2", "12.05.2018",
-                    "1234", true)
-    ));
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final UserDao dao;
+    private final DocTypeDao docTypeDao;
+    private final CountryDao countryDao;
+    private final DocumentDao documentDao;
+
+    @Autowired
+    public UserServiceImpl(UserDao dao, DocTypeDao docTypeDao, CountryDao countryDao, DocumentDao documentDao) {
+        this.dao = dao;
+        this.docTypeDao = docTypeDao;
+        this.countryDao = countryDao;
+        this.documentDao = documentDao;
+    }
 
     /**
      * Получить список пользователей по Id офиса
@@ -30,14 +46,17 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public Set<UserView> loadByOfficeId(UserView userView) {
-        Set<User> filteredUsers = new HashSet<>();
 
-        for (User item: listUsers) {
-            if ((item.getOfficeId().equals(userView.officeId))) {
-                item.setIdentified(true);
-                filteredUsers.add(item);
-            }
-        }
+        Long officeId = userView.officeId;
+        String firstName = userView.firstName;
+        String lastName = userView.lastName;
+        String middleName = userView.middleName;
+        String position = userView.position;
+        String docNumber = userView.docNumber;
+        String citizenshipCode = userView.citizenshipCode;
+
+        Set<User> filteredUsers = dao.loadByOfficeId(officeId, firstName, lastName, middleName,
+                position, docNumber, citizenshipCode);
         return filteredUsers.stream()
                 .map(mapUserShort())
                 .collect(Collectors.toSet());
@@ -63,37 +82,25 @@ public class UserServiceImpl implements UserService{
      * @return {@Set<OfficeViewAll>}
      */
     @Override
-    public Set<UserViewFull> loadById(Long id) {
-        Set<User> filteredUsers = new HashSet<>();
+    public UserViewFull loadById(Long id) {
 
-        for (User item: listUsers) {
-            if ((item.getId()).equals(id)) {
-                item.setIdentified(true);
-                filteredUsers.add(item);
-            }
-        }
-        return filteredUsers.stream()
-                .map(mapUser())
-                .collect(Collectors.toSet());
-    };
+        User user = dao.loadById(id);
 
-    private Function<User, UserViewFull> mapUser() {
-        return p -> {
-            UserViewFull view = new UserViewFull();
-            view.id = p.getId();
-            view.officeId = p.getOfficeId();
-            view.firstName = p.getFirstName();
-            view.lastName = p.getLastName();
-            view.middleName = p.getMiddleName();
-            view.phone = p.getPhone();
-            view.position = p.getPosition();
-            view.docName = p.getDocName();
-            view.docNumber = p.getDocNumber();
-            view.docDate = p.getDocDate();
-            view.citizenshipCode = p.getCitizenshipCode();
-            view.isIdentified = p.isIdentified();
-            return view;
-        };
+        UserViewFull view = new UserViewFull();
+        view.id = user.getId();
+        view.officeId = user.getOfficeId();
+        view.firstName = user.getFirstName();
+        view.lastName = user.getLastName();
+        view.middleName = user.getMiddleName();
+        view.phone = user.getPhone();
+        view.position = user.getPosition();
+        view.docName = user.getDocName();
+        view.docNumber = user.getDocNumber();
+        view.docDate = user.getDocDate();
+        view.citizenshipCode = user.getCitizenshipCode();
+        view.isIdentified = user.isIdentified();
+
+        return view;
     }
 
     /**
@@ -103,6 +110,37 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public void update(UserViewFull userView) {
+
+        //получить ссылку на тип документа по docName
+        DocType docType;
+        Long document;
+        if (!Strings.isNullOrEmpty(userView.docName)) {
+            try {
+                docType = docTypeDao.findByDocName(userView.docName);
+            } catch ( NoResultException e) {
+                //запись в лог
+            }
+        }
+        //получить ссылку на документ или добавить его по docNumber и docDate
+        if (!Strings.isNullOrEmpty(userView.docNumber)) {
+            try {
+                document = documentDao.findDocument(docType, userView.docNumber, userView.docDate);
+            } catch (NoResultException e) {
+                //добавление
+                Document document = new Document()
+            }
+        }
+
+        //получить ссылку на страну citizenshipCode
+        if (!Strings.isNullOrEmpty(userView.citizenshipCode)) {
+            try {
+                Long countryId = countryDao.findByСitizenshipCode(userView.citizenshipCode);
+            } catch ( NoResultException e) {
+                //запись в лог
+            }
+        }
+        //проапдейтить пользователя
+
         for (User item: listUsers) {
             if (item.getId().equals(userView.id)) {
 
@@ -145,6 +183,10 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public void save(UserViewFull userView) {
+        //получить ссылку на страну citizenshipCode
+        //получить ссылку на тип документа по docCode и docName
+        //получить ссылку на документ или добавить его по docNumber и docDate
+        //добавить пользователя со всеми ссылками
 
         User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
                 userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,

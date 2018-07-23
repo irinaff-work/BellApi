@@ -22,5 +22,7 @@ public class UserView {
 
     public String position;
 
+    public String citizenshipCode;
+
     public boolean isIdentified;
 }

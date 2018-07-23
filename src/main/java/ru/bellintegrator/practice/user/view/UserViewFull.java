@@ -16,6 +16,4 @@ public class UserViewFull extends UserView {
 
     public String docDate;
 
-    public String citizenshipCode;
-
 }
