@@ -37,6 +37,6 @@ public interface UserService {
      * @param userView
      * @return OfficeSave
      */
-    public void save (UserViewFull userView);
+    public void add (UserViewFull userView);
 
 }

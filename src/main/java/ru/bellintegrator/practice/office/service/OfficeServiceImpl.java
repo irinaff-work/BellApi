@@ -1,45 +1,47 @@
 package ru.bellintegrator.practice.office.service;
 
+import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.bellintegrator.practice.office.dao.OfficeDao;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.office.view.*;
-import ru.bellintegrator.practice.validate.SuccessView;
+import ru.bellintegrator.practice.user.model.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
 public class OfficeServiceImpl implements OfficeService{
 
-    private List<Office> listOffices = new ArrayList(Arrays.asList(
-            new Office(1L, 3L,"Офис Капитал", "222-22-22", "г. Уфа, ул. Запредельная, д.2",true),
-            new Office(2L, 4L,"Салют", "333-33-33", "г. Уфа, ул. Запредельная, д.2", true)
-    ));
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final OfficeDao dao;
+
+    @Autowired
+    public OfficeServiceImpl(OfficeDao dao) {
+        this.dao = dao;
+    }
 
     /**
      * Получить список офисов по Id организации
      *
-     * @param office
-     * @return {@List<OfficeView>}
+     * @param officeView
+     * @return {@Set<OfficeView>}
      */
     @Override
-    public List<OfficeView> filteredOrgId(OfficeView office) {
+    public Set<OfficeView> loadByOrgId (OfficeViewFull officeView) {
 
-            List<Office> filteredOffices = new ArrayList<Office>();
+        Set<Office> offices = dao.loadByOrgId(officeView.orgId, officeView.name, officeView.phone);
 
-            for (Office item: listOffices) {
-                if ((item.getOrgId().equals(office.orgId))) {
-                    item.setActive(true);
-                    filteredOffices.add(item);
-                }
-            }
-            return filteredOffices.stream()
+            return offices.stream()
                     .map(mapOffice())
-                    .collect(Collectors.toList());
-
+                    .collect(Collectors.toSet());
         }
 
     private Function<Office, OfficeView> mapOffice() {
@@ -53,24 +55,23 @@ public class OfficeServiceImpl implements OfficeService{
         };
     }
     /**
-     * Получить список офисов по Id офиса
+     * Получить офис по Id
      *
      * @param id
      * @return {@List<OfficeViewAll>}
      */
     @Override
-    public List<OfficeViewFull> filteredId(Long id) {
-        List<Office> filteredOffices = new ArrayList<Office>();
+    public OfficeViewFull loadById(Long id) {
+        Office office = dao.loadById(id);
 
-        for (Office item: listOffices) {
-            if (item.getId().equals(id)) {
-                item.setActive(true);
-                filteredOffices.add(item);
-            }
-        }
-        return filteredOffices.stream()
-                .map(mapOfficeAll())
-                .collect(Collectors.toList());
+        OfficeViewFull view = new OfficeViewFull();
+        view.id = office.getId();
+        view.orgId = office.getOrgId();
+        view.name = office.getName();
+        view.phone = office.getPhone();
+        view.address = office.getAddress();
+        view.isActive = office.isActive();
+        return view;
     };
 
     private Function<Office, OfficeViewFull> mapOfficeAll() {
@@ -88,50 +89,43 @@ public class OfficeServiceImpl implements OfficeService{
     /**
      * Изменить данные офиса
      *
-     * @param office
+     * @param view
      */
     @Override
-    public SuccessView update(OfficeViewFull office) {
-        for (Office item: listOffices) {
-            if (item.getId().equals(office.id)) {
+    public void update(OfficeViewFull view) {
+        Office office = dao.loadById(view.id);
+        office.setName(view.name);
+        office.setAddress(view.address);
 
-                if (!office.name.isEmpty()) {
-                    item.setName(office.name);
-                }
-
-                if (!office.phone.isEmpty()) {
-                    item.setPhone(office.phone);
-                }
-
-                if (!office.address.isEmpty()) {
-                    item.setAddress(office.address);
-                }
-                item.setActive(office.isActive);
-            }
+        if (!Strings.isNullOrEmpty(view.phone)) {
+            office.setPhone(view.phone);
         }
 
-        SuccessView successView = new SuccessView();
-        successView.result = "success";
-
-        return successView;
+        office.setActive(true);
     }
 
     /**
      * Добавить новый офис
      *
-     * @param office
+     * @param view
      * @return OfficeSave
      */
     @Override
-    public SuccessView save (OfficeViewFull office) {
+    public void add (OfficeViewFull view) {
+        Office office = new Office();
 
-        Office officeSave = new Office(office.id, office.orgId, office.name, office.phone,
-                office.address, office.isActive);
-        listOffices.add(officeSave);
+        office.setName(view.name);
 
-        SuccessView successView = new SuccessView();
-        successView.result = "success";
+        if (!Strings.isNullOrEmpty(view.address)) {
+            office.setAddress(view.address);
+        }
 
-        return successView;
+        if (!Strings.isNullOrEmpty(view.phone)) {
+            office.setPhone(view.phone);
+        }
+
+        office.setActive(true);
+
+        dao.add(office);
     };
 }

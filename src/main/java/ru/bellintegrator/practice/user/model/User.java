@@ -84,17 +84,19 @@ public class User {
      * Конструктор для hibernate
      */
     public User() {
-
     }
-    public User(Long id, Office office, Country country, Document document, String firstName, String lastName, String middleName,
+
+    public User(Office office, Country country, Document document,
+                String firstName, String lastName, String middleName,
                 String phone, String position, boolean isIdentified) {
-        this.id = id;
         this.office = office;
         this.country = country;
         this.document = document;
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
+
         this.phone = phone;
         this.position = position;
         this.isIdentified = isIdentified;
@@ -143,6 +145,7 @@ public class User {
     public String getDocNumber() {
         return this.document.getDocNumber();
     };
+
     public String getDocName() {
         return this.document.getDocType().getDocName();
     };
@@ -167,9 +170,6 @@ public class User {
         this.id = id;
     }
 
-//    public void setOfficeId(Office office) {
-//        this.office = office;
-//    }
 
     public void setCountry(Country country) {
         this.country = country;
@@ -178,6 +178,7 @@ public class User {
     public void setDocument(Document document) {
         this.document = document;
     }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -200,5 +201,9 @@ public class User {
 
     public void setIdentified(boolean identified) {
         isIdentified = identified;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
     }
 }

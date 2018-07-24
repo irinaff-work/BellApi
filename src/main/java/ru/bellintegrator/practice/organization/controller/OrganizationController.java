@@ -37,10 +37,10 @@ public class OrganizationController {
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
     @GetMapping("organizations/{id}")
-    public @ResponseBody Set<OrganizationViewFull> filteredId(
+    public @ResponseBody OrganizationViewFull filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id
     ) {
-        return organizationService.filteredId(id);
+        return organizationService.loadById(id);
     }
 
     @ApiOperation(value = "Редактирование организации по id", nickname = "Organization", httpMethod = "POST")

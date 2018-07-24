@@ -8,9 +8,12 @@ import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.user.model.User;
+import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 import ru.bellintegrator.practice.validate.SuccessView;
 
+import javax.persistence.NoResultException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -37,7 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public Set<OrganizationView> loadByNameAndInn(OrganizationView organization) {
 
-        validationRequestBody (organization);
+        validationOrgAll (organization);
         Set<Organization> listOrganization = dao.loadByNameAndInn(organization.name, organization.inn);
 
         return listOrganization.stream()
@@ -90,7 +93,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void update(OrganizationViewFull view) {
 
-        validationRequestBody(view);
+        validationOrgAll(view);
+        validationOrgUdate(view);
 
         Organization organization = new Organization (view.id, view.name, view.fullName,
                 view.inn, view.kpp, view.phone, view.address, true);
@@ -108,7 +112,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     public void save (OrganizationViewFull view) {
 
-        validationRequestBody(view);
+        validationOrgAll(view);
         Organization organization = new Organization (view.id, view.name, view.fullName,
                 view.inn, view.kpp, view.phone, view.address, true);
         dao.save(organization);
@@ -118,10 +122,19 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Проверить входящий запрос
      * @param organization
      */
-    public void validationRequestBody (OrganizationView organization) {
+    public void validationOrgAll (OrganizationView organization) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
         if (organization.inn.isEmpty() || !numericPattern.matcher(organization.inn).find()) {
             throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
+        }
+    }
+
+    public void validationOrgUdate(OrganizationView view) {
+        //проверим, есть ли организация
+        try {
+            Organization organization = dao.loadById(view.id);
+        } catch (NoResultException e) {
+            throw new RequestValidationException("Нет организации с таким идентификатором");
         }
     }
 }

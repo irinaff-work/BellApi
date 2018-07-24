@@ -1,5 +1,7 @@
 package ru.bellintegrator.practice.user.dao;
 
+import ru.bellintegrator.practice.country.model.Country;
+import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.Set;

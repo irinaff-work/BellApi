@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.document.dao;
 
+import ru.bellintegrator.practice.docType.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
 
 public interface DocumentDao {
@@ -10,7 +11,7 @@ public interface DocumentDao {
      * @param docNumber
      * @return {Long}
      */
-    public Long findDocument(Long docType, String docNumber, String docDate);
+    public Document findDocument(DocType docType, String docNumber, String docDate);
 
     /**
      * добавить документ по docNumber и docDate
@@ -18,5 +19,5 @@ public interface DocumentDao {
      * @param document
      * @return {Long}
      */
-    public Long add (Document document);
+    public void add (Document document);
 }

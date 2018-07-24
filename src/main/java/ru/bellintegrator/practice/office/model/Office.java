@@ -39,23 +39,6 @@ public class Office {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    private Set<User> users;
-
-    public Set<User> getUsers() {
-        if (users == null) {
-            users = new HashSet<>();
-        }
-        return users;
-    }
-    public void addUser(User user) {
-        getUsers().add(user);
-        user.setOfficeId(this);
-    }
-
-    public void removeUser(User user) {
-        getUsers().remove(user);
-        user.setOfficeId(null);
-    }
 
     /**
      * Наименование
@@ -85,10 +68,8 @@ public class Office {
 
     }
 
-    public Office(Long id, Organization organization, String name, String phone,
+    public Office(String name, String phone,
                   String address, boolean isActive) {
-        this.id = id;
-        this.organization = organization;
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -101,6 +82,10 @@ public class Office {
 
     public Organization getOrganization() {
         return this.organization;
+    }
+
+    public Long getOrgId() {
+        return this.organization.getId();
     }
 
     public String getName() {

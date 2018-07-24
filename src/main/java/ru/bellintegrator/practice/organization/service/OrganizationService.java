@@ -40,11 +40,7 @@ public interface OrganizationService {
      */
     public void save (OrganizationViewFull organization);
 
-    /*
-     * Проверить входящий запрос
-     * @param organization
-     */
-    public void validationRequestBody (OrganizationView organization);
+
 
 
 }

@@ -6,14 +6,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.country.dao.CountryDao;
+import ru.bellintegrator.practice.country.model.Country;
 import ru.bellintegrator.practice.docType.dao.DocTypeDao;
 import ru.bellintegrator.practice.docType.model.DocType;
 import ru.bellintegrator.practice.document.dao.DocumentDao;
 import ru.bellintegrator.practice.document.model.Document;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
+import ru.bellintegrator.practice.validate.RequestValidationException;
 
 import javax.persistence.NoResultException;
 import java.util.*;
@@ -47,16 +50,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<UserView> loadByOfficeId(UserView userView) {
 
-        Long officeId = userView.officeId;
-        String firstName = userView.firstName;
-        String lastName = userView.lastName;
-        String middleName = userView.middleName;
-        String position = userView.position;
-        String docNumber = userView.docNumber;
-        String citizenshipCode = userView.citizenshipCode;
-
-        Set<User> filteredUsers = dao.loadByOfficeId(officeId, firstName, lastName, middleName,
-                position, docNumber, citizenshipCode);
+        Set<User> filteredUsers = dao.loadByOfficeId(userView.officeId, userView.firstName,
+                userView.lastName, userView.middleName, userView.position,
+                userView.docNumber, userView.citizenshipCode);
         return filteredUsers.stream()
                 .map(mapUserShort())
                 .collect(Collectors.toSet());
@@ -75,6 +71,7 @@ public class UserServiceImpl implements UserService {
             return view;
         };
     }
+
     /**
      * Получить список пользователей по Id пользователя
      *
@@ -111,69 +108,53 @@ public class UserServiceImpl implements UserService {
     @Override
     public void update(UserViewFull userView) {
 
-        //получить ссылку на тип документа по docName
+        validationUserUdate(userView);
+
+        //обновляем информацию о пользователе
+        dao.update(userCreate(userView));
+    }
+
+    private User userCreate (UserViewFull userView) {
         DocType docType;
-        Long document;
-        if (!Strings.isNullOrEmpty(userView.docName)) {
-            try {
-                docType = docTypeDao.findByDocName(userView.docName);
-            } catch ( NoResultException e) {
-                //запись в лог
-            }
-        }
-        //получить ссылку на документ или добавить его по docNumber и docDate
-        if (!Strings.isNullOrEmpty(userView.docNumber)) {
-            try {
-                document = documentDao.findDocument(docType, userView.docNumber, userView.docDate);
-            } catch (NoResultException e) {
-                //добавление
-                Document document = new Document()
-            }
-        }
+        Document document = new Document();
+        Country country = new Country();
 
         //получить ссылку на страну citizenshipCode
         if (!Strings.isNullOrEmpty(userView.citizenshipCode)) {
             try {
-                Long countryId = countryDao.findByСitizenshipCode(userView.citizenshipCode);
-            } catch ( NoResultException e) {
-                //запись в лог
+                country = countryDao.findByCode(userView.citizenshipCode);
+            } catch (NoResultException e) {
+
+                throw new RequestValidationException("Нет страны с таким кодом");
             }
         }
-        //проапдейтить пользователя
 
-        for (User item: listUsers) {
-            if (item.getId().equals(userView.id)) {
+        //проверим, есть ли тип документа
+        if (!Strings.isNullOrEmpty(userView.docName)) {
+            try {
+                docType = docTypeDao.findByDocName(userView.docName);
 
-                if (!userView.firstName.isEmpty()) {
-                    item.setFirstName(userView.firstName);
+                //получить ссылку на документ или добавить его по docNumber и docDate
+                if (!Strings.isNullOrEmpty(userView.docNumber)) {
+                    try {
+                        document = documentDao.findDocument(docType, userView.docNumber, userView.docDate);
+                    } catch (NoResultException e) {
+                        //добавление
+                        document = new Document(docType, userView.docNumber, userView.docDate);
+                        documentDao.add(document);
+                    }
                 }
+            } catch (NoResultException e) {
 
-                if (!userView.lastName.isEmpty()) {
-                    item.setFirstName(userView.lastName);
-                }
-                if (!userView.middleName.isEmpty()) {
-                    item.setFirstName(userView.middleName);
-                }
-                if (!userView.position.isEmpty()) {
-                    item.setFirstName(userView.position);
-                }
-                if (!userView.phone.isEmpty()) {
-                    item.setFirstName(userView.phone);
-                }
-                if (!userView.docName.isEmpty()) {
-                    item.setFirstName(userView.docName);
-                }
-                if (!userView.docDate.isEmpty()) {
-                    item.setFirstName(userView.docDate);
-                }
-                if (!userView.citizenshipCode.isEmpty()) {
-                    item.setFirstName(userView.citizenshipCode);
-                }
-
-                item.setIdentified(userView.isIdentified);
+                throw new RequestValidationException("Нет типа документа с таким наименованием");
             }
         }
-    };
+
+        User user = new User(new Office(), country, document, userView.firstName, userView.lastName, userView.middleName,
+                userView.position, userView.phone, true);
+
+        return user;
+    }
 
     /**
      * Добавить нового пользователя
@@ -182,16 +163,26 @@ public class UserServiceImpl implements UserService {
      * @return OfficeSave
      */
     @Override
-    public void save(UserViewFull userView) {
-        //получить ссылку на страну citizenshipCode
-        //получить ссылку на тип документа по docCode и docName
-        //получить ссылку на документ или добавить его по docNumber и docDate
-        //добавить пользователя со всеми ссылками
+    public void add(UserViewFull userView) {
+        validationUserAdd(userView);
+        dao.save(userCreate(userView));
+    }
 
-        User userSave = new User(userView.id, userView.officeId, userView.firstName, userView.lastName,
-                userView.middleName, userView.phone, userView.position, userView.docCode, userView.docName,
-                userView.docNumber, userView.docDate, userView.citizenshipCode, userView.isIdentified);
 
-        listUsers.add(userSave);
+    public void validationUserUdate(UserViewFull view) {
+        validationUserAdd(view);
+        //проверим, есть ли пользователь
+        try {
+            User user = dao.loadById(view.id);
+        } catch (NoResultException e) {
+            throw new RequestValidationException("Нет пользователя с таким идентификатором");
+        }
+    }
+
+    public void validationUserAdd(UserViewFull view) {
+        if (view.id == 0 || view.firstName.isEmpty() ||
+                view.position.isEmpty() || !view.isIdentified) {
+            throw new RequestValidationException("Не заполнены обязательные для заполнения поля");
+        }
     }
 }

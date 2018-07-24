@@ -1,10 +1,8 @@
 package ru.bellintegrator.practice.office.service;
 
 import ru.bellintegrator.practice.office.view.*;
-import ru.bellintegrator.practice.validate.SuccessView;
-//import ru.bellintegrator.practice.office.view.OfficeView;
 
-import java.util.List;
+import java.util.Set;
 
 public interface OfficeService {
 
@@ -12,30 +10,30 @@ public interface OfficeService {
      * Получить список офисов по Id организации
      *
      * @param officeView
-     * @return {@List<OfficeView>}
+     * @return {@Set<OfficeView>}
      */
-    public List<OfficeView> filteredOrgId(OfficeView officeView );
+    public Set<OfficeView> loadByOrgId (OfficeViewFull officeView);
 
     /**
-     * Получить список офисов по Id офиса
+     * Получить офис по Id
      *
      * @param id
-     * @return {@List<OfficeViewAll>}
+     * @return {@OfficeViewAll}
      */
-    public List<OfficeViewFull> filteredId(Long id);
+    public OfficeViewFull loadById(Long id);
 
     /**
      * Изменить данные офиса
      *
-     * @param officeView
+     * @param view
      */
-    public SuccessView update(OfficeViewFull officeView);
+    public void update(OfficeViewFull view);
 
     /**
      * Добавить новый офис
      *
-     * @param officeView
+     * @param view
      * @return OfficeSave
      */
-    public SuccessView save (OfficeViewFull officeView);
+    public void add (OfficeViewFull view);
 }

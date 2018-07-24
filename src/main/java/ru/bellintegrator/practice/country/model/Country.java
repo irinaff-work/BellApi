@@ -1,10 +1,7 @@
 package ru.bellintegrator.practice.country.model;
 
-import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Справочник стран
@@ -73,5 +70,13 @@ public class Country {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public void setCitizenshipCode(String citizenshipCode) {
+        this.citizenshipCode = citizenshipCode;
+    }
+
+    public void setCitizenshipName(String citizenshipName) {
+        this.citizenshipName = citizenshipName;
     }
 }

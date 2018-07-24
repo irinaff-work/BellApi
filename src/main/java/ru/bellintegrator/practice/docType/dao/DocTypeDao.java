@@ -2,6 +2,7 @@ package ru.bellintegrator.practice.docType.dao;
 
 import ru.bellintegrator.practice.docType.model.DocType;
 
+//справочник, только получаем данные
 public interface DocTypeDao {
 
     /**

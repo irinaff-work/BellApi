@@ -45,7 +45,7 @@ public class UserController {
      */
     @ApiOperation(value = "Поиск пользователя по id пользователя", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("user/{id}")
-    public @ResponseBody Set<UserViewFull> filteredId(
+    public @ResponseBody UserViewFull filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
             return userService.loadById(id);
     };
@@ -65,6 +65,6 @@ public class UserController {
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("user/save")
     public void createUser(@RequestBody UserViewFull userView) {
-        userService.save(userView);
+        userService.add(userView);
     };
 }

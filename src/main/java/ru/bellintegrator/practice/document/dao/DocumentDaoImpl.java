@@ -3,6 +3,7 @@ package ru.bellintegrator.practice.document.dao;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.bellintegrator.practice.docType.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.organization.model.Organization;
 
@@ -32,13 +33,13 @@ public class DocumentDaoImpl implements DocumentDao {
      * @return {Long}
      */
     @Override
-    public Long findDocument(Long docType, String docNumber, String docDate) {
+    public Document findDocument(DocType docType, String docNumber, String docDate) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Document> criteriaQuery = criteriaBuilder.createQuery(Document.class);
         Root<Document> documentRoot = criteriaQuery.from(Document.class);
 
-        criteriaQuery.where(documentRoot.get("doc_type_id").in(docType));
+        criteriaQuery.where(documentRoot.get("doc_type_id").in(docType.getId()));
 
         if (!Strings.isNullOrEmpty(docNumber)) {
             criteriaQuery.where(documentRoot.get("doc_number").in(docNumber));
@@ -49,9 +50,7 @@ public class DocumentDaoImpl implements DocumentDao {
         }
 
         TypedQuery<Document> query = em.createQuery(criteriaQuery);
-
-        Document document = query.getSingleResult();
-        return document.getId();
+        return query.getSingleResult();
     };
 
     /**
@@ -60,8 +59,7 @@ public class DocumentDaoImpl implements DocumentDao {
      * @param document
      */
     @Override
-    public Long add (Document document) {
+    public void add (Document document) {
         em.persist(document);
-        return document.getId();
     };
 }

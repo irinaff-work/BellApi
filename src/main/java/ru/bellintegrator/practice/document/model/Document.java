@@ -1,11 +1,8 @@
 package ru.bellintegrator.practice.document.model;
 
 import ru.bellintegrator.practice.docType.model.DocType;
-import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Офис
@@ -34,8 +31,6 @@ public class Document {
     /**
      * Ссылка на тип документа
      */
-    //@Column(name = "doc_type_id", nullable = false)
-    //private Long docTypeId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_type_id")
     private DocType docType;

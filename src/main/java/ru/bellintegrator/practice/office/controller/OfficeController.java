@@ -6,15 +6,13 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 import ru.bellintegrator.practice.office.service.OfficeService;
 import ru.bellintegrator.practice.office.view.OfficeView;
 import ru.bellintegrator.practice.office.view.OfficeViewFull;
-import ru.bellintegrator.practice.validate.SuccessView;
-
 
 @RestController
 @RequestMapping(value = "practice", produces = APPLICATION_JSON_VALUE)
@@ -33,9 +31,8 @@ public class OfficeController {
     @ApiOperation(value = "Поиск офиса по id организации", nickname = "filteredOrgId", httpMethod = "POST")
     @PostMapping("office/list/")
     public @ResponseBody
-    List<OfficeView> filteredOrgId(@RequestBody OfficeView officeView ) {
-        //@PathVariable("idOrg") Long idOrg = officeView.orgId;
-        return officeService.filteredOrgId(officeView);
+    Set<OfficeView> filteredOrgId(@RequestBody OfficeViewFull officeView ) {
+        return officeService.loadByOrgId(officeView);
     };
 
     /**
@@ -45,9 +42,9 @@ public class OfficeController {
     @ApiOperation(value = "Поиск офиса по id офиса", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("office/{id}")
     public @ResponseBody
-    List<OfficeViewFull> filteredId(
+    OfficeViewFull filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
-            return officeService.filteredId(id);
+            return officeService.loadById(id);
     };
 
     /**
@@ -55,8 +52,8 @@ public class OfficeController {
      */
     @ApiOperation(value = "Изменить информацию об офисе", nickname = "update", httpMethod = "POST")
     @PostMapping("office/update")
-    public SuccessView update(@RequestBody OfficeViewFull officeView) {
-        return officeService.update(officeView);
+    public void update(@RequestBody OfficeViewFull officeView) {
+        officeService.update(officeView);
     };
 
     /**
@@ -64,7 +61,7 @@ public class OfficeController {
      */
     @ApiOperation(value = "Добавить информацию об офисе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("office/save")
-    public SuccessView createOffice (@RequestBody OfficeViewFull officeView) {
-        return officeService.save(officeView);
+    public void createOffice (@RequestBody OfficeViewFull officeView) {
+        officeService.add(officeView);
     };
 }

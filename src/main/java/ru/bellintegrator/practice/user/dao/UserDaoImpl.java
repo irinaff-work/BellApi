@@ -3,7 +3,6 @@ package ru.bellintegrator.practice.user.dao;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.EntityManager;
@@ -32,7 +31,7 @@ public class UserDaoImpl implements UserDao {
      * @return {@Set<User>}
      */
     @Override
-    public Set<User> loadByOfficeId(Long officeId, String firstName, String lastName,
+    public Set<User> loadByOfficeId (Long officeId, String firstName, String lastName,
                                     String middleName, String position, String docNumber,
                                     String citizenshipCode) {
 
@@ -91,6 +90,40 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void update(User user) {
 
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+
+        CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.
+                createCriteriaUpdate(User.class);
+
+        Root<User> userRoot = criteriaUpdate.from(User.class);
+        criteriaUpdate.set("first_name", user.getFirstName());
+
+        if (!Strings.isNullOrEmpty(user.getLastName())) {
+            criteriaUpdate.set("last_name", user.getLastName());
+        }
+
+        if (!Strings.isNullOrEmpty(user.getMiddleName())) {
+            criteriaUpdate.set("middle_name", user.getMiddleName());
+        }
+
+        criteriaUpdate.set("position", user.getPosition());
+
+        if ( user.getDocument().getId() != 0) {
+            criteriaUpdate.set("doc_id", user.getDocument().getId());
+        }
+
+        if (user.getCountry().getId() != 0) {
+            criteriaUpdate.set("country_id", user.getCountry().getId());
+        }
+
+        if (!Strings.isNullOrEmpty(user.getPhone())) {
+            criteriaUpdate.set("phone", user.getPhone());
+        }
+        criteriaUpdate.set("is_active", "true");
+
+        criteriaUpdate.where(criteriaBuilder.equal(userRoot.get("id"),
+                user.getId()));
+        this.em.createQuery(criteriaUpdate).executeUpdate();
     };
 
     /**
@@ -100,7 +133,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void save (User user) {
-
+            em.persist(user);
     };
 
 }
