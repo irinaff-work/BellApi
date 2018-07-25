@@ -1,15 +1,11 @@
 package ru.bellintegrator.practice.organization.controller;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.organization.service.OrganizationService;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
-import ru.bellintegrator.practice.validate.SuccessView;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -26,7 +22,14 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
-
+    /**
+     * Получить список всех организаций
+     */
+    @ApiOperation(value = "Все организации", nickname = "all", httpMethod = "GET")
+    @GetMapping("organizations/list/all")
+    public Set<OrganizationViewFull> all() {
+        return organizationService.all();
+    }
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody

@@ -7,6 +7,14 @@ import java.util.Set;
 public interface OfficeDao {
 
     /**
+     * Получить все объекты Офис
+     *
+     * @param
+     * @return {@Set<OfficeViewFull>}
+     */
+    public Set<Office> all ();
+
+    /**
      * Получить список офисов по Id организации
      *
      * @param organizationId

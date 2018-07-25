@@ -1,17 +1,20 @@
 package ru.bellintegrator.practice.organization.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
-import ru.bellintegrator.practice.validate.SuccessView;
 
-import javax.xml.bind.ValidationException;
-import java.util.List;
+
 import java.util.Set;
 
 public interface OrganizationService {
 
+    /**
+     * Получить список всех организаций
+     *
+     * @param
+     * @return {@Set<OrganizationViewFull>}
+     */
+    public Set<OrganizationViewFull> all ();
     /**
      * Получить список организаций по наименованию и ИНН
      *

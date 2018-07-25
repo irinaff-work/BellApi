@@ -7,6 +7,14 @@ import java.util.Set;
 public interface OfficeService {
 
     /**
+     * Получить список всех офисов
+     *
+     * @param
+     * @return {@Set<mapOfficeAll>}
+     */
+    public Set<OfficeViewFull> all ();
+
+    /**
      * Получить список офисов по Id организации
      *
      * @param officeView

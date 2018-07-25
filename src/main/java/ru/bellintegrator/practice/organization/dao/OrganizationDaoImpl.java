@@ -23,6 +23,20 @@ public class OrganizationDaoImpl implements OrganizationDao{
     public OrganizationDaoImpl (EntityManager em) {
         this.em = em;
     }
+
+
+    /**
+     * Получить список всех офисов
+     *
+     * @param
+     * @return {@Set<Organization>}
+     */
+    @Override
+    public Set<Organization> all () {
+        TypedQuery<Organization> query = em.createQuery("SELECT p FROM organization p", Organization.class);
+        return query.getResultList().stream().collect(Collectors.toSet());
+    };
+
     /**
      * Получить список организаций по наименованию и ИНН
      *

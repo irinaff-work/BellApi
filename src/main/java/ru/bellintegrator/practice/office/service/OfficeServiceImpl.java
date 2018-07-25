@@ -29,6 +29,21 @@ public class OfficeServiceImpl implements OfficeService{
     }
 
     /**
+     * Получить список офисов
+     *
+     * @param
+     * @return {@Set<OfficeView>}
+     */
+    @Override
+    public Set<OfficeViewFull> all () {
+        Set<Office> offices = dao.all();
+
+        return offices.stream()
+                .map(mapOfficeAll())
+                .collect(Collectors.toSet());
+    };
+
+    /**
      * Получить список офисов по Id организации
      *
      * @param officeView
@@ -40,7 +55,7 @@ public class OfficeServiceImpl implements OfficeService{
         Set<Office> offices = dao.loadByOrgId(officeView.orgId, officeView.name, officeView.phone);
 
             return offices.stream()
-                    .map(mapOffice())
+                    .map(mapOfficeAll())
                     .collect(Collectors.toSet());
         }
 

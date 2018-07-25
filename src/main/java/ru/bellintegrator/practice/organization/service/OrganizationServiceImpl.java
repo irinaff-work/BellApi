@@ -8,10 +8,7 @@ import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
-import ru.bellintegrator.practice.user.model.User;
-import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.validate.RequestValidationException;
-import ru.bellintegrator.practice.validate.SuccessView;
 
 import javax.persistence.NoResultException;
 import java.util.*;
@@ -33,6 +30,19 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 
     /**
+     * Получить список всех организаций
+     *
+     * @param
+     * @return {@Set<OrganizationViewFull>}
+     */
+    public Set<OrganizationViewFull> all () {
+        Set<Organization> organizations = dao.all();
+
+        return organizations.stream()
+                .map(mapOrganizationAll())
+                .collect(Collectors.toSet());
+    };
+    /**
      * Получить список организаций по наименованию и ИНН
      *
      * @return {@Set<OrganizationView>}
@@ -41,9 +51,9 @@ public class OrganizationServiceImpl implements OrganizationService {
     public Set<OrganizationView> loadByNameAndInn(OrganizationView organization) {
 
         validationOrgAll (organization);
-        Set<Organization> listOrganization = dao.loadByNameAndInn(organization.name, organization.inn);
+        Set<Organization> organizations = dao.loadByNameAndInn(organization.name, organization.inn);
 
-        return listOrganization.stream()
+        return organizations.stream()
                 .map(mapOrganization())
                 .collect(Collectors.toSet());
 
@@ -55,6 +65,24 @@ public class OrganizationServiceImpl implements OrganizationService {
             view.id = p.getId();
             view.name = p.getName();
             view.inn = p.getInn();
+            view.isActive = p.isActive();
+
+            log.debug(view.toString());
+
+            return view;
+        };
+    }
+
+    private Function<Organization, OrganizationViewFull> mapOrganizationAll() {
+        return p -> {
+            OrganizationViewFull view = new OrganizationViewFull();
+            view.id = p.getId();
+            view.name = p.getName();
+            view.fullName = p.getFullName();
+            view.inn = p.getInn();
+            view.kpp = p.getKpp();
+            view.address = p.getAddress();
+            view.phone = p.getPhone();
             view.isActive = p.isActive();
 
             log.debug(view.toString());

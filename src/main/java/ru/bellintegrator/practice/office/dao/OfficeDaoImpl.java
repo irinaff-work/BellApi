@@ -25,6 +25,18 @@ public class OfficeDaoImpl implements OfficeDao {
     }
 
     /**
+     * Получить все объекты Офис
+     *
+     * @param
+     * @return {@Set<OfficeView>}
+     */
+    @Override
+    public Set<Office> all () {
+        TypedQuery<Office> query = em.createQuery("SELECT p FROM Office p", Office.class);
+        return query.getResultList().stream().collect(Collectors.toSet());
+    };
+
+    /**
      * Получить список офисов по Id организации
      *
      * @param organizationId

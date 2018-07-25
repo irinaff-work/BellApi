@@ -1,11 +1,20 @@
 package ru.bellintegrator.practice.organization.dao;
 
+
 import ru.bellintegrator.practice.organization.model.Organization;
 
-import java.util.List;
 import java.util.Set;
 
 public interface OrganizationDao {
+
+    /**
+     * Получить список всех офисов
+     *
+     * @param
+     * @return {@Set<Organization>}
+     */
+    public Set<Organization> all ();
+
     /**
      * Получить список организаций по наименованию и ИНН
      *

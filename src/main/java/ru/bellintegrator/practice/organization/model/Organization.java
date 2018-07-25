@@ -61,6 +61,8 @@ public class Organization {
     @Column(name = "is_active")
     private boolean isActive;
 
+    public Organization () {}
+
     public Organization(Long id, String name, String fullName,
                          String inn, String kpp, String phone,
                         String address, boolean isActive) {
