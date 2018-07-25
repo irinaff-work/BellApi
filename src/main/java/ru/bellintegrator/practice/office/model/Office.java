@@ -15,7 +15,7 @@ import java.util.Set;
 public class Office {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
     private Long id;
 
@@ -34,11 +34,11 @@ public class Office {
     @JoinColumn(name = "org_id")
     private Organization organization;
 
-    @OneToMany(
-            mappedBy="office",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+//    @OneToMany(
+//            mappedBy="office",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
 
     /**
      * Наименование

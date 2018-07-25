@@ -17,7 +17,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
     private Long id;
 
@@ -36,7 +36,7 @@ public class User {
     /**
      * Ссылка на страну
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
 
@@ -150,16 +150,16 @@ public class User {
         return this.document.getDocType().getDocName();
     };
 
-    public String getDocDate() {
+    public Date getDocDate() {
         return this.document.getDocDate();
     };
 
     public String getCitizenshipCode() {
-        return this.country.getCitizenshipCode();
+        return this.country.getCode();
     };
 
     public String getCitizenshipName() {
-        return this.country.getCitizenshipName();
+        return this.country.getName();
     };
 
     public boolean isIdentified() {

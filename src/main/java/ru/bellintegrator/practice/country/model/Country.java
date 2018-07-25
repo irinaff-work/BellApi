@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Country {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
     private Long id;
 
@@ -21,22 +21,23 @@ public class Country {
     @Version
     private Integer version;
 
-    @OneToMany(
-            mappedBy="country",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+//    @OneToMany(
+//            mappedBy="country"
+//            //fetch = FetchType.LAZY,
+//            //cascade = CascadeType.ALL,
+//            //orphanRemoval = true
+//    )
 
     /**
      * Код страны
      */
-    @Column(name = "citizenship_code", length = 100, nullable = false)
-    private String citizenshipCode;
+    @Column(name = "code", length = 3, nullable = false)
+    private String code;
     /**
      * Название страны
      */
-    @Column(name = "citizenship_name", length = 250, nullable = true)
-    private String citizenshipName;
+    @Column(name = "name", length = 250, nullable = true)
+    private String name;
 
 
     /**
@@ -46,22 +47,21 @@ public class Country {
 
     }
 
-    public Country(Long id, String citizenshipCode, String citizenshipName) {
-        this.id = id;
-        this.citizenshipCode = citizenshipCode;
-        this.citizenshipName = citizenshipName;
+    public Country(String code, String name) {
+        this.code = code;
+        this.name = name;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getCitizenshipCode() {
-        return citizenshipCode;
+    public String getCode() {
+        return code;
     }
 
-    public String getCitizenshipName() {
-        return citizenshipName;
+    public String getName() {
+        return name;
     }
 
     public void setId(Long id) {
@@ -72,11 +72,11 @@ public class Country {
         this.version = version;
     }
 
-    public void setCitizenshipCode(String citizenshipCode) {
-        this.citizenshipCode = citizenshipCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setCitizenshipName(String citizenshipName) {
-        this.citizenshipName = citizenshipName;
+    public void setName(String name) {
+        this.name = name;
     }
 }

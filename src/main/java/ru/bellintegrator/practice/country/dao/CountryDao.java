@@ -8,9 +8,9 @@ public interface CountryDao {
     /**
      * получить ссылку на страну  по citizenshipCode
      *
-     * @param citizenshipCode
+     * @param code
      * @return {@Country}
      */
-    public Country findByCode(String citizenshipCode);
+    public Country findByCode(String code);
 
 }

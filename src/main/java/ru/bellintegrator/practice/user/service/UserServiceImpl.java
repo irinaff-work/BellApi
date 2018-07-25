@@ -93,7 +93,7 @@ public class UserServiceImpl implements UserService {
         view.position = user.getPosition();
         view.docName = user.getDocName();
         view.docNumber = user.getDocNumber();
-        view.docDate = user.getDocDate();
+        view.docDate = user.getDocDate().toString();
         view.citizenshipCode = user.getCitizenshipCode();
         view.isIdentified = user.isIdentified();
 
@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
     public void update(UserViewFull userView) {
 
         validationUserUdate(userView);
+        User user = dao.loadById(userView.id);
 
         //обновляем информацию о пользователе
         dao.update(userCreate(userView));
@@ -140,7 +141,7 @@ public class UserServiceImpl implements UserService {
                         document = documentDao.findDocument(docType, userView.docNumber, userView.docDate);
                     } catch (NoResultException e) {
                         //добавление
-                        document = new Document(docType, userView.docNumber, userView.docDate);
+                        document = new Document(docType, userView.docNumber, new Date());
                         documentDao.add(document);
                     }
                 }

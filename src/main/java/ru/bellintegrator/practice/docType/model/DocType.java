@@ -14,7 +14,7 @@ import java.util.Set;
 public class DocType {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
     private Long id;
 
@@ -24,11 +24,11 @@ public class DocType {
     @Version
     private Integer version;
 
-    @OneToMany(
-            mappedBy="docType",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+//    @OneToMany(
+//            mappedBy="docType",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
 
     /**
      * Код типа документа

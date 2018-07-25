@@ -3,6 +3,7 @@ package ru.bellintegrator.practice.document.model;
 import ru.bellintegrator.practice.docType.model.DocType;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Офис
@@ -12,7 +13,7 @@ import javax.persistence.*;
 public class Document {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id")
     private Long id;
 
@@ -22,11 +23,11 @@ public class Document {
     @Version
     private Integer version;
 
-    @OneToMany(
-            mappedBy="document",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
+//    @OneToMany(
+//            mappedBy="document",
+//            cascade = CascadeType.ALL,
+//            orphanRemoval = true
+//    )
 
     /**
      * Ссылка на тип документа
@@ -45,7 +46,7 @@ public class Document {
      */
     @Column(name = "doc_date", nullable = false)
     @Temporal(TemporalType.DATE)
-    private String docDate;
+    private Date docDate;
 
     /**
      * Конструктор для hibernate
@@ -54,9 +55,9 @@ public class Document {
 
     }
 
-    public Document(DocType docType, String docNumber, String docDate) {
+    public Document(DocType docType, String docNumber, Date docDate) {
         this.docType = docType;
-        this.docDate = docNumber;
+        this.docNumber = docNumber;
         this.docDate = docDate;
     }
 
@@ -76,7 +77,7 @@ public class Document {
         return docNumber;
     }
 
-    public String getDocDate() {
+    public Date getDocDate() {
         return docDate;
     }
 
@@ -92,7 +93,7 @@ public class Document {
         this.docNumber = docNumber;
     }
 
-    public void setDocDate(String docDate) {
+    public void setDocDate(Date docDate) {
         this.docDate = docDate;
     }
 }

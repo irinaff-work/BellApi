@@ -23,17 +23,17 @@ public class CountryDaoImpl implements CountryDao {
     /**
      * получить ссылку на страну  по citizenshipCode
      *
-     * @param citizenshipCode
+     * @param code
      * @return {@Country}
      */
     @Override
-    public Country findByCode(String citizenshipCode) {
+    public Country findByCode(String code) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
         Root<Country> сountryRoot = criteriaQuery.from(Country.class);
 
-        criteriaQuery.where(сountryRoot.get("citizenship_сode").in(citizenshipCode));
+        criteriaQuery.where(сountryRoot.get("сode").in(code));
         TypedQuery<Country> query = em.createQuery(criteriaQuery);
 
         return query.getSingleResult();

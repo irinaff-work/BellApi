@@ -52,8 +52,8 @@ CREATE TABLE IF NOT EXISTS Document (
 CREATE TABLE IF NOT EXISTS Country (
     id                INTEGER PRIMARY KEY AUTO_INCREMENT,
     version           INTEGER NOT NULL,
-    citizenship_code  VARCHAR(100) NOT NULL,
-    citizenship_name  VARCHAR(250) NULL
+    code  VARCHAR(100) NOT NULL,
+    name  VARCHAR(250) NULL
 );
 
 CREATE INDEX IX_Office_Org_Id ON Office (org_id);
@@ -70,7 +70,7 @@ ALTER TABLE User ADD FOREIGN KEY (country_id) REFERENCES Country(id);
 
 CREATE UNIQUE INDEX UX_Document_Type_Doc_Code ON Document_Type (doc_code);
 
-CREATE UNIQUE INDEX UX_Country_Citizenship_code ON Country (citizenship_code);
+CREATE UNIQUE INDEX UX_Country_Code ON Country (code);
 
 CREATE INDEX IX_Document_Doc_Type_Id ON Document (doc_type_id);
 ALTER TABLE Document ADD FOREIGN KEY (doc_type_id) REFERENCES Document_Type(id);

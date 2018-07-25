@@ -1,8 +1,8 @@
 
 
-INSERT INTO Country ( id, version, citizenship_code, citizenship_name) VALUES (1, 0, '643','Российская Федерация');
+INSERT INTO Country ( id, version, code, name) VALUES (1, 0, '643','Российская Федерация');
 
-INSERT INTO Country ( id, version, citizenship_code, citizenship_name) VALUES (2, 0, '112','Республика Беларусь');
+INSERT INTO Country ( id, version, code, name) VALUES (2, 0, '112','Республика Беларусь');
 
 INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (1, 0, '21','Паспорт гражданина РФ');
 
