@@ -16,7 +16,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(value = "practice", produces = APPLICATION_JSON_VALUE)
-@Api(value = "Пользователи", description = "Список полльзователей")
+@Api(value = "Пользователи", description = "Список пользователей")
 public class UserController {
 
     private final UserService userService;
@@ -26,10 +26,16 @@ public class UserController {
         this.userService = userService;
     }
     /**
+     * Получить список всех пользователей
+     */
+    @ApiOperation(value = "Все пользователи", nickname = "all", httpMethod = "GET")
+    @GetMapping("user/list/all")
+    public Set<UserViewFull> all() {
+        return userService.all();
+    }
+
+    /**
      * Получить список пользователей по Id офиса
-     *
-     * @param userView
-     * @return {@Set<OfficeView>}
      */
 
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")

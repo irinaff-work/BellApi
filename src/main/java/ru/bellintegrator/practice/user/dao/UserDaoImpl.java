@@ -25,7 +25,17 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить все объекты Пользователь
+     *
+     * @return {@Set<User>}
+     */
+    public Set<User> all () {
+        TypedQuery<User> query = em.createQuery("SELECT p FROM User p", User.class);
+        return query.getResultList().stream().collect(Collectors.toSet());
+    };
+
+    /**
+     * Получить список пользователей по фильтрам
      *
      * @param officeId
      * @return {@Set<User>}
@@ -72,7 +82,7 @@ public class UserDaoImpl implements UserDao {
     };
 
     /**
-     * Получить список пользователей по Id пользователя
+     * Найти пользователя по Id
      *
      * @param id
      * @return {@Set<User>}
@@ -82,49 +92,6 @@ public class UserDaoImpl implements UserDao {
         return em.find(User.class, id);
     };
 
-    /**
-     * Изменить данные пользователя
-     *
-     * @param user
-     */
-    @Override
-    public void update(User user) {
-
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-
-        CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.
-                createCriteriaUpdate(User.class);
-
-        Root<User> userRoot = criteriaUpdate.from(User.class);
-        criteriaUpdate.set("first_name", user.getFirstName());
-
-        if (!Strings.isNullOrEmpty(user.getLastName())) {
-            criteriaUpdate.set("last_name", user.getLastName());
-        }
-
-        if (!Strings.isNullOrEmpty(user.getMiddleName())) {
-            criteriaUpdate.set("middle_name", user.getMiddleName());
-        }
-
-        criteriaUpdate.set("position", user.getPosition());
-
-        if ( user.getDocument().getId() != 0) {
-            criteriaUpdate.set("doc_id", user.getDocument().getId());
-        }
-
-        if (user.getCountry().getId() != 0) {
-            criteriaUpdate.set("country_id", user.getCountry().getId());
-        }
-
-        if (!Strings.isNullOrEmpty(user.getPhone())) {
-            criteriaUpdate.set("phone", user.getPhone());
-        }
-        criteriaUpdate.set("is_active", "true");
-
-        criteriaUpdate.where(criteriaBuilder.equal(userRoot.get("id"),
-                user.getId()));
-        this.em.createQuery(criteriaUpdate).executeUpdate();
-    };
 
     /**
      * Добавить нового пользователя

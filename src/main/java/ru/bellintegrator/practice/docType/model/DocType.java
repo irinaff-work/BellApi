@@ -48,8 +48,7 @@ public class DocType {
 
     }
 
-    public DocType(Long id, String docCode, String docName) {
-        this.id = id;
+    public DocType(String docCode, String docName) {
         this.docCode = docCode;
         this.docName = docName;
     }

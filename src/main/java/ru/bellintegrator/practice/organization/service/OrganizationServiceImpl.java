@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.organization.service;
 
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -124,10 +125,15 @@ public class OrganizationServiceImpl implements OrganizationService {
         validationOrgAll(view);
         validationOrgUdate(view);
 
-        Organization organization = new Organization (view.id, view.name, view.fullName,
-                view.inn, view.kpp, view.phone, view.address, true);
-        dao.update(organization);
-
+        Organization organization = dao.loadById(view.id);
+        organization.setName(view.name);
+        organization.setKpp(view.kpp);
+        organization.setInn(view.inn);
+        organization.setAddress(view.address);
+        if (Strings.isNullOrEmpty(view.phone)) {
+            organization.setPhone(view.phone);
+        }
+        organization.setActive(true);
     }
 
 
@@ -152,7 +158,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     public void validationOrgAll (OrganizationView organization) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
-        if (organization.inn.isEmpty() || !numericPattern.matcher(organization.inn).find()) {
+        if (Strings.isNullOrEmpty(organization.inn) || !numericPattern.matcher(organization.inn).find()) {
             throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
         }
     }

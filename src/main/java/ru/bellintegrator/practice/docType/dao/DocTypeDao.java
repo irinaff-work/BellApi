@@ -6,10 +6,18 @@ import ru.bellintegrator.practice.docType.model.DocType;
 public interface DocTypeDao {
 
     /**
-     * получить ссылку на тип документа по docName
+     * получить тип документа по docName
      *
      * @param docName
      * @return {@Set<User>}
      */
     public DocType findByDocName(String docName);
+
+    /**
+     * получить тип документа по docCode и docName
+     *
+     * @param docName
+     * @return {@Set<User>}
+     */
+    public DocType find (String docCode, String docName);
 }

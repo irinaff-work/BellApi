@@ -33,7 +33,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
      */
     @Override
     public Set<Organization> all () {
-        TypedQuery<Organization> query = em.createQuery("SELECT p FROM organization p", Organization.class);
+        TypedQuery<Organization> query = em.createQuery("SELECT p FROM Organization p", Organization.class);
         return query.getResultList().stream().collect(Collectors.toSet());
     };
 

@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Set;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -35,6 +34,7 @@ public class OfficeController {
     public Set<OfficeViewFull> all() {
         return officeService.all();
     }
+
     /**
      * Получить список офисов по Id организации
      */

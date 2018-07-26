@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.user.service;
 
 import com.google.common.base.Strings;
+import org.hibernate.NonUniqueResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,38 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Получить список всех пользователей
+     *
+     * @return {@Set<User>}
+     */
+    public Set<UserViewFull> all () {
+        Set<User> users = dao.all();
+
+        return users.stream()
+                .map(mapUserFull())
+                .collect(Collectors.toSet());
+    };
+
+    private Function<User, UserViewFull> mapUserFull() {
+        return p -> {
+            UserViewFull view = new UserViewFull();
+            view.id = p.getId();
+            view.officeId = p.getOfficeId();
+            view.firstName = p.getFirstName();
+            view.lastName = p.getLastName();
+            view.middleName = p.getMiddleName();
+            view.position = p.getPosition();
+            view.phone = p.getPhone();
+            view.docName = p.getDocName();
+            view.docCode= p.getDocCode();
+            view.docNumber = p.getDocNumber();
+            view.docDate = p.getDocDate().toString();
+            view.citizenshipCode = p.getCitizenshipCode();
+            view.isIdentified = p.isIdentified();
+            return view;
+        };
+    }
+    /**
      * Получить список пользователей по Id офиса
      *
      * @param userView
@@ -66,6 +99,8 @@ public class UserServiceImpl implements UserService {
             view.firstName = p.getFirstName();
             view.lastName = p.getLastName();
             view.middleName = p.getMiddleName();
+            view.docNumber = p.getDocNumber();
+            view.citizenshipCode = p.getCitizenshipCode();
             view.position = p.getPosition();
             view.isIdentified = p.isIdentified();
             return view;
@@ -103,77 +138,78 @@ public class UserServiceImpl implements UserService {
     /**
      * Изменить данные пользователя
      *
-     * @param userView
+     * @param view
      */
     @Override
-    public void update(UserViewFull userView) {
+    public void update(UserViewFull view) {
 
-        validationUserUdate(userView);
-        User user = dao.loadById(userView.id);
+        validationUserUdate(view);
+        User user = dao.loadById(view.id);
 
         //обновляем информацию о пользователе
-        dao.update(userCreate(userView));
+        user.setFirstName(view.firstName);
+        user.setLastName(view.lastName);
+        user.setMiddleName(view.middleName);
+        user.setPosition(view.position);
+        user.setPhone(view.phone);
+        //updateUserDocument(user,view);
+        //updateUserCity(user,view);
+        user.setIdentified(true);
     }
 
-    private User userCreate (UserViewFull userView) {
-        DocType docType;
-        Document document = new Document();
-        Country country = new Country();
-
-        //получить ссылку на страну citizenshipCode
-        if (!Strings.isNullOrEmpty(userView.citizenshipCode)) {
+    private boolean updateUserDocument (User user, UserViewFull view) {
+        if (!Strings.isNullOrEmpty(view.docCode) || !Strings.isNullOrEmpty(view.docName)) {
             try {
-                country = countryDao.findByCode(userView.citizenshipCode);
-            } catch (NoResultException e) {
-
-                throw new RequestValidationException("Нет страны с таким кодом");
-            }
-        }
-
-        //проверим, есть ли тип документа
-        if (!Strings.isNullOrEmpty(userView.docName)) {
-            try {
-                docType = docTypeDao.findByDocName(userView.docName);
-
-                //получить ссылку на документ или добавить его по docNumber и docDate
-                if (!Strings.isNullOrEmpty(userView.docNumber)) {
+                DocType docType = docTypeDao.find(view.docCode, view.docName);
+                if (!Strings.isNullOrEmpty(view.docNumber) || !Strings.isNullOrEmpty(view.docDate)) {
                     try {
-                        document = documentDao.findDocument(docType, userView.docNumber, userView.docDate);
-                    } catch (NoResultException e) {
-                        //добавление
-                        document = new Document(docType, userView.docNumber, new Date());
-                        documentDao.add(document);
+                        Document document = documentDao.findDocument(docType, view.docNumber, view.docDate);
+                        user.setDocument(document);
+                    }
+                    catch (NoResultException|NonUniqueResultException e) {
+                        return false;
                     }
                 }
-            } catch (NoResultException e) {
-
-                throw new RequestValidationException("Нет типа документа с таким наименованием");
+            }
+            catch (NoResultException e) {
+                return false;
             }
         }
-
-        User user = new User(new Office(), country, document, userView.firstName, userView.lastName, userView.middleName,
-                userView.position, userView.phone, true);
-
-        return user;
+        return true;
     }
 
+    private boolean updateUserCity (User user, UserViewFull view) {
+        if (!Strings.isNullOrEmpty(view.citizenshipCode)) {
+            try {
+                Country country = countryDao.findByCode(view.citizenshipCode);
+                user.setCountry(country);
+            } catch (NoResultException e) {
+                return false;
+                //throw new RequestValidationException("Нет страны с таким кодом");
+            }
+        }
+        return true;
+    }
     /**
      * Добавить нового пользователя
      *
-     * @param userView
+     * @param view
      * @return OfficeSave
      */
     @Override
-    public void add(UserViewFull userView) {
-        validationUserAdd(userView);
-        dao.save(userCreate(userView));
+    public void add(UserViewFull view) {
+        //validationUserAdd(view);
+        User user = new User(view.firstName, view.lastName, view.middleName, view.phone, view.position, view.isIdentified);
+        updateUserDocument(user,view);
+        updateUserCity(user,view);
     }
 
 
     public void validationUserUdate(UserViewFull view) {
-        validationUserAdd(view);
+        //validationUserAdd(view);
         //проверим, есть ли пользователь
         try {
+            log.debug("view.id="+ view.id);
             User user = dao.loadById(view.id);
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет пользователя с таким идентификатором");

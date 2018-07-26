@@ -6,7 +6,7 @@ import java.util.Date;
 
 public class UserView {
 
-    @ApiModelProperty(hidden = true)
+    @ApiModelProperty
 
     public Long id;
 

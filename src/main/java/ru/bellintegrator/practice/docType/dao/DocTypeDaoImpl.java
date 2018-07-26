@@ -42,4 +42,27 @@ public class DocTypeDaoImpl implements DocTypeDao {
 
         return query.getSingleResult();
     };
+
+    /**
+     * получить тип документа по docCode и docName
+     *
+     * @param docName
+     * @return {@Set<User>}
+     */
+    public DocType find (String docCode, String docName) {
+
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<DocType> criteriaQuery = criteriaBuilder.createQuery(DocType.class);
+        Root<DocType> docTypeRoot = criteriaQuery.from(DocType.class);
+
+        if (!Strings.isNullOrEmpty(docName)) {
+            criteriaQuery.where(docTypeRoot.get("doc_code").in(docName));
+        }
+        if (!Strings.isNullOrEmpty(docCode)) {
+            criteriaQuery.where(docTypeRoot.get("doc_name").in(docCode));
+        }
+        TypedQuery<DocType> query = em.createQuery(criteriaQuery);
+
+        return query.getSingleResult();
+    };
 }

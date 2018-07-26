@@ -76,7 +76,7 @@ public class User {
     /**
      * Запись действительна
      */
-    @Column(name = "is_active")
+    @Column(name = "is_identified")
     private boolean isIdentified;
 
 
@@ -86,17 +86,11 @@ public class User {
     public User() {
     }
 
-    public User(Office office, Country country, Document document,
-                String firstName, String lastName, String middleName,
+    public User(String firstName, String lastName, String middleName,
                 String phone, String position, boolean isIdentified) {
-        this.office = office;
-        this.country = country;
-        this.document = document;
-
         this.firstName = firstName;
         this.lastName = lastName;
         this.middleName = middleName;
-
         this.phone = phone;
         this.position = position;
         this.isIdentified = isIdentified;
@@ -150,6 +144,10 @@ public class User {
         return this.document.getDocType().getDocName();
     };
 
+    public String getDocCode() {
+        return this.document.getDocType().getDocCode();
+    };
+
     public Date getDocDate() {
         return this.document.getDocDate();
     };
@@ -165,6 +163,7 @@ public class User {
     public boolean isIdentified() {
         return isIdentified;
     }
+
 
     public void setId(Long id) {
         this.id = id;

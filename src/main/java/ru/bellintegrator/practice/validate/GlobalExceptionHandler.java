@@ -15,14 +15,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(RequestValidationException.class)
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Неверный формат входных данных")
     public String validationException (RequestValidationException e) {
         log.debug(e.getMessage());
         return e.getMessage();
     }
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Неверный формат входных данных")
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Ошибка сервера")
     public String unhandleException (Exception e) {
+        e.printStackTrace();
         log.debug(e.getMessage());
         return e.getMessage();
     }

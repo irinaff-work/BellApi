@@ -2,6 +2,7 @@ package ru.bellintegrator.practice.user.dao;
 
 import ru.bellintegrator.practice.country.model.Country;
 import ru.bellintegrator.practice.document.model.Document;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.Set;
@@ -9,7 +10,14 @@ import java.util.Set;
 public interface UserDao {
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить все объекты Пользователь
+     *
+     * @return {@Set<User>}
+     */
+    public Set<User> all ();
+
+    /**
+     * Получить список пользователей по фильтрам
      *
      * @param officeId
      * @return {@Set<User>}
@@ -19,19 +27,12 @@ public interface UserDao {
                                     String citizenshipCode);
 
     /**
-     * Получить список пользователей по Id пользователя
+     * Найти пользователя по Id
      *
      * @param id
      * @return {@Set<User>}
      */
     public User loadById(Long id);
-
-    /**
-     * Изменить данные пользователя
-     *
-     * @param user
-     */
-    public void update(User user);
 
     /**
      * Добавить нового пользователя
