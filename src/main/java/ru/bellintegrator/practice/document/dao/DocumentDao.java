@@ -19,5 +19,5 @@ public interface DocumentDao {
      * @param document
      * @return {Long}
      */
-    public void add (Document document);
+    public void save (Document document);
 }

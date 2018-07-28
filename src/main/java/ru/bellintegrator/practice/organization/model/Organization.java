@@ -63,10 +63,9 @@ public class Organization {
 
     public Organization () {}
 
-    public Organization(Long id, String name, String fullName,
+    public Organization(String name, String fullName,
                          String inn, String kpp, String phone,
                         String address, boolean isActive) {
-        this.id = id;
         this.name = name;
         this.fullName = fullName;
         this.inn = inn;

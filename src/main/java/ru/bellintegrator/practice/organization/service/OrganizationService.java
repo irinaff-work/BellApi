@@ -41,7 +41,7 @@ public interface OrganizationService {
      * @param organization
      * @return OrganizationView
      */
-    public void save (OrganizationViewFull organization);
+    public void add (OrganizationViewFull organization);
 
 
 

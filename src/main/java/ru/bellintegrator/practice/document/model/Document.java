@@ -70,6 +70,9 @@ public class Document {
     }
 
     public Long getDocTypeId() {
+        if (this.docType == null) {
+            return Long.valueOf(0);
+        }
         return this.docType.getId();
     }
 

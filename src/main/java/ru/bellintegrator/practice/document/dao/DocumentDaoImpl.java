@@ -59,7 +59,7 @@ public class DocumentDaoImpl implements DocumentDao {
      * @param document
      */
     @Override
-    public void add (Document document) {
+    public void save (Document document) {
         em.persist(document);
     };
 }

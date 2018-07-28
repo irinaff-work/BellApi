@@ -75,6 +75,7 @@ public class OfficeDaoImpl implements OfficeDao {
      * @param id
      * @return {@Office>}
      */
+    @Override
     public Office loadById(Long id) {
         return em.find(Office.class, id);
     };
@@ -84,6 +85,7 @@ public class OfficeDaoImpl implements OfficeDao {
      *
      * @param office
      */
+    @Override
     public void update(Office office) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
@@ -114,7 +116,8 @@ public class OfficeDaoImpl implements OfficeDao {
      * @param office
      * @return OfficeSave
      */
-    public void add (Office office) {
+    @Override
+    public void save (Office office) {
         em.persist(office);
     };
 }

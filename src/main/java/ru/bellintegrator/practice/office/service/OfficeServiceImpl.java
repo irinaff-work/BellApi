@@ -5,9 +5,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.office.dao.OfficeDao;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.office.view.*;
+import ru.bellintegrator.practice.organization.dao.OrganizationDao;
+import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.ArrayList;
@@ -22,10 +25,12 @@ public class OfficeServiceImpl implements OfficeService{
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final OfficeDao dao;
+    private final OrganizationDao organizationDao;
 
     @Autowired
-    public OfficeServiceImpl(OfficeDao dao) {
+    public OfficeServiceImpl(OfficeDao dao, OrganizationDao organizationDao) {
         this.dao = dao;
+        this.organizationDao = organizationDao;
     }
 
     /**
@@ -35,6 +40,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @return {@Set<OfficeView>}
      */
     @Override
+    @Transactional(readOnly = true)
     public Set<OfficeViewFull> all () {
         Set<Office> offices = dao.all();
 
@@ -50,6 +56,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @return {@Set<OfficeView>}
      */
     @Override
+    @Transactional(readOnly = true)
     public Set<OfficeView> loadByOrgId (OfficeViewFull officeView) {
 
         Set<Office> offices = dao.loadByOrgId(officeView.orgId, officeView.name, officeView.phone);
@@ -76,6 +83,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @return {@List<OfficeViewAll>}
      */
     @Override
+    @Transactional(readOnly = true)
     public OfficeViewFull loadById(Long id) {
         Office office = dao.loadById(id);
 
@@ -107,6 +115,7 @@ public class OfficeServiceImpl implements OfficeService{
      * @param view
      */
     @Override
+    @Transactional
     public void update(OfficeViewFull view) {
         Office office = dao.loadById(view.id);
         office.setName(view.name);
@@ -117,6 +126,7 @@ public class OfficeServiceImpl implements OfficeService{
         }
 
         office.setActive(true);
+        dao.save(office);
     }
 
     /**
@@ -126,8 +136,11 @@ public class OfficeServiceImpl implements OfficeService{
      * @return OfficeSave
      */
     @Override
+    @Transactional
     public void add (OfficeViewFull view) {
         Office office = new Office();
+        Organization organization = organizationDao.loadById(view.orgId);
+        office.setOrganization(organization);
 
         office.setName(view.name);
 
@@ -141,6 +154,6 @@ public class OfficeServiceImpl implements OfficeService{
 
         office.setActive(true);
 
-        dao.add(office);
+        dao.save(office);
     };
 }

@@ -43,5 +43,5 @@ public interface OfficeDao {
      * @param office
      * @return OfficeSave
      */
-    public void add (Office office);
+    public void save (Office office);
 }

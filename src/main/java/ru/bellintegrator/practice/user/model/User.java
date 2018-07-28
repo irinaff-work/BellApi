@@ -101,10 +101,13 @@ public class User {
     }
 
     public Office getOffice() {
-        return  this.office;
+        return this.office;
     }
 
     public Long getOfficeId() {
+        if (this.office == null) {
+            return Long.valueOf(0);
+        }
         return this.office.getId();
     }
 
@@ -121,44 +124,68 @@ public class User {
     }
 
     public String getLastName() {
-        return lastName;
+        return lastName.toString();
     }
 
     public String getMiddleName() {
-        return middleName;
+        return middleName.toString();
     }
 
     public String getPhone() {
-        return phone;
+        return phone.toString();
     }
 
     public String getPosition() {
-        return position;
+        return position.toString();
     }
 
     public String getDocNumber() {
+        if (this.document == null) {
+            return "";
+        }
         return this.document.getDocNumber();
-    };
+    }
 
     public String getDocName() {
+        if (this.document == null) {
+            return "";
+        }
         return this.document.getDocType().getDocName();
-    };
+    }
 
     public String getDocCode() {
+        if (this.document == null) {
+            return "";
+        }
         return this.document.getDocType().getDocCode();
-    };
+    }
 
+//    public boolean isDocument() {
+//        if (this.document == null) {
+//            return false;
+//        }
+//        return true;
+//    }
     public Date getDocDate() {
+        if (this.document == null) {
+            return new Date();
+        }
         return this.document.getDocDate();
-    };
+    }
 
     public String getCitizenshipCode() {
+        if (this.country == null) {
+            return "";
+        }
         return this.country.getCode();
-    };
+    }
 
     public String getCitizenshipName() {
+        if (this.country == null) {
+            return "";
+        }
         return this.country.getName();
-    };
+    }
 
     public boolean isIdentified() {
         return isIdentified;

@@ -54,12 +54,12 @@ public class OrganizationController {
         organizationService.update(organization);
     }
 
-    @ApiOperation(value = "Сохранение организации", nickname = "Organization", httpMethod = "POST")
-    @PostMapping("organizations/save")
+    @ApiOperation(value = "Создание организации", nickname = "Organization", httpMethod = "POST")
+    @PostMapping("organizations/add")
     public @ResponseBody
     void createOrganization(@RequestBody OrganizationViewFull organization)
     {
-        organizationService.save(organization);
+        organizationService.add(organization);
     }
 }
 

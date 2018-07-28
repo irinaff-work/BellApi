@@ -5,6 +5,7 @@ import org.hibernate.NonUniqueResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.country.dao.CountryDao;
 import ru.bellintegrator.practice.country.model.Country;
@@ -19,6 +20,7 @@ import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.*;
 import java.util.function.Function;
@@ -47,6 +49,8 @@ public class UserServiceImpl implements UserService {
      *
      * @return {@Set<User>}
      */
+    @Override
+    @Transactional(readOnly = true)
     public Set<UserViewFull> all () {
         Set<User> users = dao.all();
 
@@ -81,6 +85,7 @@ public class UserServiceImpl implements UserService {
      * @return {@Set<OfficeView>}
      */
     @Override
+    @Transactional(readOnly = true)
     public Set<UserView> loadByOfficeId(UserView userView) {
 
         Set<User> filteredUsers = dao.loadByOfficeId(userView.officeId, userView.firstName,
@@ -114,6 +119,7 @@ public class UserServiceImpl implements UserService {
      * @return {@Set<OfficeViewAll>}
      */
     @Override
+    @Transactional(readOnly = true)
     public UserViewFull loadById(Long id) {
 
         User user = dao.loadById(id);
@@ -128,7 +134,11 @@ public class UserServiceImpl implements UserService {
         view.position = user.getPosition();
         view.docName = user.getDocName();
         view.docNumber = user.getDocNumber();
-        view.docDate = user.getDocDate().toString();
+//        if (user.isDocument()) {
+//            view.docDate = user.getDocDate().toString();
+//        } else {
+//            view.docCode = "";
+//        }
         view.citizenshipCode = user.getCitizenshipCode();
         view.isIdentified = user.isIdentified();
 
@@ -141,12 +151,15 @@ public class UserServiceImpl implements UserService {
      * @param view
      */
     @Override
+    @Transactional
     public void update(UserViewFull view) {
 
         validationUserUdate(view);
         User user = dao.loadById(view.id);
 
         //обновляем информацию о пользователе
+
+
         user.setFirstName(view.firstName);
         user.setLastName(view.lastName);
         user.setMiddleName(view.middleName);
@@ -155,6 +168,7 @@ public class UserServiceImpl implements UserService {
         //updateUserDocument(user,view);
         //updateUserCity(user,view);
         user.setIdentified(true);
+        dao.save(user);
     }
 
     private boolean updateUserDocument (User user, UserViewFull view) {
@@ -197,11 +211,13 @@ public class UserServiceImpl implements UserService {
      * @return OfficeSave
      */
     @Override
+    @Transactional
     public void add(UserViewFull view) {
         //validationUserAdd(view);
         User user = new User(view.firstName, view.lastName, view.middleName, view.phone, view.position, view.isIdentified);
-        updateUserDocument(user,view);
-        updateUserCity(user,view);
+        dao.save(user);
+        //updateUserDocument(user,view);
+        //updateUserCity(user,view);
     }
 
 

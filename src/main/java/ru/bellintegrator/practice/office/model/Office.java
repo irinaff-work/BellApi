@@ -68,8 +68,9 @@ public class Office {
 
     }
 
-    public Office(String name, String phone,
+    public Office(Organization organization, String name, String phone,
                   String address, boolean isActive) {
+        this.organization = organization;
         this.name = name;
         this.phone = phone;
         this.address = address;

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
@@ -36,6 +37,8 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @param
      * @return {@Set<OrganizationViewFull>}
      */
+    @Override
+    @Transactional(readOnly = true)
     public Set<OrganizationViewFull> all () {
         Set<Organization> organizations = dao.all();
 
@@ -49,6 +52,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@Set<OrganizationView>}
      */
     @Override
+    @Transactional(readOnly = true)
     public Set<OrganizationView> loadByNameAndInn(OrganizationView organization) {
 
         validationOrgAll (organization);
@@ -99,6 +103,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return {@Set<OrganizationToSave>}
      */
     @Override
+    @Transactional(readOnly = true)
     public OrganizationViewFull loadById(Long id) {
         Organization organization = dao.loadById(id);
 
@@ -120,6 +125,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @param view
      */
     @Override
+    @Transactional
     public void update(OrganizationViewFull view) {
 
         validationOrgAll(view);
@@ -134,6 +140,7 @@ public class OrganizationServiceImpl implements OrganizationService {
             organization.setPhone(view.phone);
         }
         organization.setActive(true);
+        dao.save(organization);
     }
 
 
@@ -144,10 +151,11 @@ public class OrganizationServiceImpl implements OrganizationService {
      * @return OrganizationView
      */
     @Override
-    public void save (OrganizationViewFull view) {
+    @Transactional
+    public void add (OrganizationViewFull view) {
 
         validationOrgAll(view);
-        Organization organization = new Organization (view.id, view.name, view.fullName,
+        Organization organization = new Organization (view.name, view.fullName,
                 view.inn, view.kpp, view.phone, view.address, true);
         dao.save(organization);
     }

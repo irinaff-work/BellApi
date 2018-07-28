@@ -70,7 +70,7 @@ public class OfficeController {
      * Добавить новый офис
      */
     @ApiOperation(value = "Добавить информацию об офисе", nickname = "createOffice", httpMethod = "POST")
-    @PostMapping("office/save")
+    @PostMapping("office/add")
     public void createOffice (@RequestBody OfficeViewFull officeView) {
         officeService.add(officeView);
     };
