@@ -30,11 +30,11 @@ public class OrganizationController {
     public Set<OrganizationViewFull> all() {
         return organizationService.all();
     }
+
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody
-    Set<OrganizationView> organizationList(@RequestBody OrganizationView organization)
-            throws Exception {
+    Set<OrganizationView> organizationList(@RequestBody OrganizationView organization) {
         return organizationService.loadByNameAndInn(organization);
     }
 
@@ -46,7 +46,7 @@ public class OrganizationController {
         return organizationService.loadById(id);
     }
 
-    @ApiOperation(value = "Редактирование организации по id", nickname = "Organization", httpMethod = "POST")
+    @ApiOperation(value = "Редактирование организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
     public @ResponseBody
     void updateOrganizationView(@RequestBody OrganizationViewFull organization)
@@ -54,7 +54,7 @@ public class OrganizationController {
         organizationService.update(organization);
     }
 
-    @ApiOperation(value = "Создание организации", nickname = "Organization", httpMethod = "POST")
+    @ApiOperation(value = "Добавление организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/add")
     public @ResponseBody
     void createOrganization(@RequestBody OrganizationViewFull organization)

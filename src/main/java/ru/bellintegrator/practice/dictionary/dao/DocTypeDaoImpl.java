@@ -43,8 +43,8 @@ public class DocTypeDaoImpl implements DocTypeDao {
     /**
      * получить тип документа по docCode и docName
      *
-     * @param docName
-     * @return {@Set<User>}
+     * @param docCode
+     * @return {@DocType}
      */
     public DocType find (String docCode, String docName) {
 
@@ -53,10 +53,10 @@ public class DocTypeDaoImpl implements DocTypeDao {
         Root<DocType> docTypeRoot = criteriaQuery.from(DocType.class);
 
         if (!Strings.isNullOrEmpty(docName)) {
-            criteriaQuery.where(docTypeRoot.get("doc_code").in(docName));
+            criteriaQuery.where(docTypeRoot.get("doc_name").in(docName));
         }
         if (!Strings.isNullOrEmpty(docCode)) {
-            criteriaQuery.where(docTypeRoot.get("doc_name").in(docCode));
+            criteriaQuery.where(docTypeRoot.get("doc_code").in(docCode));
         }
         TypedQuery<DocType> query = em.createQuery(criteriaQuery);
 

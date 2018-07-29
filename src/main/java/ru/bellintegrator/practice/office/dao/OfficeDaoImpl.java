@@ -80,35 +80,6 @@ public class OfficeDaoImpl implements OfficeDao {
         return em.find(Office.class, id);
     };
 
-    /**
-     * Изменить данные офиса
-     *
-     * @param office
-     */
-    @Override
-    public void update(Office office) {
-
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-
-        CriteriaUpdate<Office> criteriaUpdate = criteriaBuilder.
-                createCriteriaUpdate(Office.class);
-
-        Root<Office> officeRoot = criteriaUpdate.from(Office.class);
-        criteriaUpdate.set("name", office.getName());
-
-        if (!Strings.isNullOrEmpty(office.getAddress())) {
-            criteriaUpdate.set("address", office.getAddress());
-        }
-
-        if (!Strings.isNullOrEmpty(office.getPhone())) {
-            criteriaUpdate.set("phone", office.getPhone());
-        }
-        criteriaUpdate.set("is_active", "true");
-
-        criteriaUpdate.where(criteriaBuilder.equal(officeRoot.get("id"),
-                office.getId()));
-        this.em.createQuery(criteriaUpdate).executeUpdate();
-    };
 
     /**
      * Добавить новый офис

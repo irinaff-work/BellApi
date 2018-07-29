@@ -30,12 +30,6 @@ public interface OfficeDao {
      */
     public Office loadById(Long id);
 
-    /**
-     * Изменить данные офиса
-     *
-     * @param office
-     */
-    public void update(Office office);
 
     /**
      * Добавить новый офис

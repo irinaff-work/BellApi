@@ -10,7 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import ru.bellintegrator.practice.validate.view.DataView;
 import ru.bellintegrator.practice.validate.view.SuccessView;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "ru.bellintegrator.practice")
 public class ResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override

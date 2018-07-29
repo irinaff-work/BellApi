@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
         user.setPosition(view.position);
         user.setPhone(view.phone);
 
-        updateUserCity(user, view);
+        updateUserCountry(user, view);
         updateUserDocument(user,view);
         user.setIdentified(true);
         dao.save(user);
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private void updateUserCity(User user, UserViewFull view) {
+    private void updateUserCountry(User user, UserViewFull view) {
         if (!Strings.isNullOrEmpty(view.citizenshipCode)) {
             try {
                 Country country = countryDao.findByCode(view.citizenshipCode);
@@ -220,7 +220,7 @@ public class UserServiceImpl implements UserService {
     public void add(UserViewFull view) {
         //validationUserAdd(view);
         User user = new User(view.firstName, view.lastName, view.middleName, view.phone, view.position, view.isIdentified);
-        updateUserCity(user,view);
+        updateUserCountry(user,view);
         addUserDocument(user,view);
         dao.save(user);
     }

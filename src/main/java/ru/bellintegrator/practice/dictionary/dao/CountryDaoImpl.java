@@ -33,7 +33,7 @@ public class CountryDaoImpl implements CountryDao {
         CriteriaQuery<Country> criteriaQuery = criteriaBuilder.createQuery(Country.class);
         Root<Country> сountryRoot = criteriaQuery.from(Country.class);
 
-        criteriaQuery.where(сountryRoot.get("сode").in(code));
+        criteriaQuery.where(сountryRoot.get("code").in(code));
         TypedQuery<Country> query = em.createQuery(criteriaQuery);
 
         return query.getSingleResult();

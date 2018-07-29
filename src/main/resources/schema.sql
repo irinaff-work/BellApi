@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS Document (
 CREATE TABLE IF NOT EXISTS Country (
     id                INTEGER PRIMARY KEY AUTO_INCREMENT,
     version           INTEGER NOT NULL,
-    code  VARCHAR(100) NOT NULL,
+    code  VARCHAR(3) NOT NULL,
     name  VARCHAR(250) NULL
 );
 

@@ -46,7 +46,7 @@ public class OfficeController {
     };
 
     /**
-     * Получить список офисов по Id офиса
+     * Получить офис по Id
      *
      */
     @ApiOperation(value = "Поиск офиса по id офиса", nickname = "filteredId", httpMethod = "GET")

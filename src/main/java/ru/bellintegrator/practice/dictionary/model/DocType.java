@@ -1,10 +1,6 @@
 package ru.bellintegrator.practice.dictionary.model;
 
-import ru.bellintegrator.practice.document.model.Document;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Типы документов
