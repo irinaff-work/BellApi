@@ -8,6 +8,7 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import ru.bellintegrator.practice.validate.view.DataView;
+import ru.bellintegrator.practice.validate.view.ErrorView;
 import ru.bellintegrator.practice.validate.view.SuccessView;
 
 @RestControllerAdvice(basePackages = "ru.bellintegrator.practice")

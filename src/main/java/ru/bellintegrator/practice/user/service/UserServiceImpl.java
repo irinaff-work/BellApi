@@ -1,7 +1,6 @@
 package ru.bellintegrator.practice.user.service;
 
 import com.google.common.base.Strings;
-import org.hibernate.NonUniqueResultException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -256,7 +255,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Date validationDocumentDate(String date) {
-        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date docDate = new Date();
         try {
             docDate = format.parse(date);

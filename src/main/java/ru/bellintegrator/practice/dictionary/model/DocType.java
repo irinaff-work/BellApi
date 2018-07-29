@@ -6,7 +6,7 @@ import javax.persistence.*;
  * Типы документов
  */
 @Entity
-@Table(name = "Document_Type")
+@Table(name = "Document_type")
 public class DocType {
 
     @Id
@@ -29,12 +29,12 @@ public class DocType {
     /**
      * Код типа документа
      */
-    @Column(name = "doc_code", length = 3, nullable = false)
+    @Column(name = "doc_type_code", length = 3, nullable = false)
     private String docCode;
     /**
      * Наименование типа документа
      */
-    @Column(name = "doc_name", length = 100, nullable = true)
+    @Column(name = "doc_type_name", length = 100, nullable = true)
     private String docName;
 
     /**

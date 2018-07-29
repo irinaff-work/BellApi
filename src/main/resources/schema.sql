@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS User (
   CREATE TABLE IF NOT EXISTS Document_Type (
     id          INTEGER PRIMARY KEY AUTO_INCREMENT,
     version     INTEGER NOT NULL,
-    doc_code    VARCHAR(3) NOT NULL,
-    doc_name    VARCHAR(100) NULL
+    doc_type_code    VARCHAR(3) NOT NULL,
+    doc_type_name    VARCHAR(100) NULL
 );
 
 CREATE TABLE IF NOT EXISTS Document (
@@ -68,7 +68,7 @@ ALTER TABLE User ADD FOREIGN KEY (doc_id) REFERENCES Document(id);
 CREATE INDEX IX_User_Country_Id ON User (country_id);
 ALTER TABLE User ADD FOREIGN KEY (country_id) REFERENCES Country(id);
 
-CREATE UNIQUE INDEX UX_Document_Type_Doc_Code ON Document_Type (doc_code);
+CREATE UNIQUE INDEX UX_Document_Type_Doc_Code ON Document_Type (doc_type_code);
 
 CREATE UNIQUE INDEX UX_Country_Code ON Country (code);
 

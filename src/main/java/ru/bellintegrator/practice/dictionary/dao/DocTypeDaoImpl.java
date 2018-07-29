@@ -34,7 +34,7 @@ public class DocTypeDaoImpl implements DocTypeDao {
         CriteriaQuery<DocType> criteriaQuery = criteriaBuilder.createQuery(DocType.class);
         Root<DocType> docTypeRoot = criteriaQuery.from(DocType.class);
 
-        criteriaQuery.where(docTypeRoot.get("doc_name").in(docName));
+        criteriaQuery.where(docTypeRoot.get("docName").in(docName));
         TypedQuery<DocType> query = em.createQuery(criteriaQuery);
 
         return query.getSingleResult();
@@ -52,14 +52,16 @@ public class DocTypeDaoImpl implements DocTypeDao {
         CriteriaQuery<DocType> criteriaQuery = criteriaBuilder.createQuery(DocType.class);
         Root<DocType> docTypeRoot = criteriaQuery.from(DocType.class);
 
-        if (!Strings.isNullOrEmpty(docName)) {
-            criteriaQuery.where(docTypeRoot.get("doc_name").in(docName));
-        }
         if (!Strings.isNullOrEmpty(docCode)) {
-            criteriaQuery.where(docTypeRoot.get("doc_code").in(docCode));
+            criteriaQuery.where(docTypeRoot.get("docCode").in(docCode));
         }
+
+        if (!Strings.isNullOrEmpty(docName)) {
+            criteriaQuery.where(docTypeRoot.get("docName").in(docName));
+        }
+
         TypedQuery<DocType> query = em.createQuery(criteriaQuery);
 
         return query.getSingleResult();
-    };
+    }
 }

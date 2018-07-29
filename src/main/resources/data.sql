@@ -4,9 +4,9 @@ INSERT INTO Country ( id, version, code, name) VALUES (1, 0, '643','Россий
 
 INSERT INTO Country ( id, version, code, name) VALUES (2, 0, '112','Республика Беларусь');
 
-INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (1, 0, '21','Паспорт гражданина РФ');
+INSERT INTO Document_type (id, version, doc_type_code, doc_type_name) VALUES (1, 0, '21','Паспорт гражданина РФ');
 
-INSERT INTO Document_type (id, version, doc_code, doc_name) VALUES (2, 0, '03','Свидетельство о рождении');
+INSERT INTO Document_type (id, version, doc_type_code, doc_type_name) VALUES (2, 0, '03','Свидетельство о рождении');
 
 INSERT INTO Document (id, version, doc_type_id, doc_number, doc_date) VALUES (1, 0, 1, '4562126712', '2013-03-12');
 
