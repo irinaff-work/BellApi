@@ -1,18 +1,15 @@
-package ru.bellintegrator.practice.docType.dao;
+package ru.bellintegrator.practice.dictionary.dao;
 
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.docType.model.DocType;
-import ru.bellintegrator.practice.organization.model.Organization;
-import ru.bellintegrator.practice.user.model.User;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.stream.Collectors;
 
 @Repository
 public class DocTypeDaoImpl implements DocTypeDao {

@@ -1,9 +1,7 @@
 package ru.bellintegrator.practice.user.service;
 
-import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
-import ru.bellintegrator.practice.validate.SuccessView;
 
 import java.util.Set;
 
@@ -25,7 +23,7 @@ public interface UserService {
     public Set<UserView> loadByOfficeId(UserView userView  );
 
     /**
-     * Получить список пользователей по Id пользователя
+     * Получить пользователя по Id
      *
      * @param id
      * @return {@Set<OfficeViewAll>}

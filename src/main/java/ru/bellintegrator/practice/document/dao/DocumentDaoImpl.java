@@ -3,17 +3,14 @@ package ru.bellintegrator.practice.document.dao;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
-import ru.bellintegrator.practice.organization.model.Organization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
@@ -28,7 +25,6 @@ public class DocumentDaoImpl implements DocumentDao {
 
     /**
      * получить ссылку на документ по docType, docNumber и docDate
-     *
      * @param docNumber
      * @return {Long}
      */

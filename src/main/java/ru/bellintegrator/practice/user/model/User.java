@@ -1,13 +1,12 @@
 package ru.bellintegrator.practice.user.model;
 
-import ru.bellintegrator.practice.country.model.Country;
+import ru.bellintegrator.practice.dictionary.model.Country;
 import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.office.model.Office;
 
 import javax.persistence.*;
 
 import java.util.Date;
-import java.util.Set;
 
 /**
  * Пользователь
@@ -160,12 +159,6 @@ public class User {
         return this.document.getDocType().getDocCode();
     }
 
-//    public boolean isDocument() {
-//        if (this.document == null) {
-//            return false;
-//        }
-//        return true;
-//    }
     public Date getDocDate() {
         if (this.document == null) {
             return new Date();

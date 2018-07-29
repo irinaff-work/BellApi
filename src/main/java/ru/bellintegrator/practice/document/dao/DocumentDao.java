@@ -1,6 +1,6 @@
 package ru.bellintegrator.practice.document.dao;
 
-import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
 
 public interface DocumentDao {

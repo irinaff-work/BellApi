@@ -7,25 +7,40 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+import ru.bellintegrator.practice.validate.view.ErrorView;
 
-
+/*
+Обработка исключений
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
+    /*
+    Обработка собственного исключения при проверке данных
+     */
+
     @ExceptionHandler(RequestValidationException.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Неверный формат входных данных")
-    public String validationException (RequestValidationException e) {
+    public ErrorView validationException (RequestValidationException e) {
         log.debug(e.getMessage());
-        return e.getMessage();
+        ErrorView errorView = new ErrorView(e.getMessage());
+        return errorView;
     }
+
+    /*
+    Обработка остальных исключений
+     */
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Ошибка сервера")
-    public String unhandleException (Exception e) {
+    public ErrorView unhandleException (Exception e) {
+        //потом убрать
         e.printStackTrace();
         log.debug(e.getMessage());
-        return e.getMessage();
+
+        ErrorView errorView = new ErrorView("Ошибка сервера");
+        return errorView;
     }
 }

@@ -7,21 +7,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
-import ru.bellintegrator.practice.country.dao.CountryDao;
-import ru.bellintegrator.practice.country.model.Country;
-import ru.bellintegrator.practice.docType.dao.DocTypeDao;
-import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.dictionary.dao.CountryDao;
+import ru.bellintegrator.practice.dictionary.model.Country;
+import ru.bellintegrator.practice.dictionary.dao.DocTypeDao;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.dao.DocumentDao;
 import ru.bellintegrator.practice.document.model.Document;
-import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserViewFull;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -51,13 +51,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<UserViewFull> all () {
+    public Set<UserViewFull> all() {
         Set<User> users = dao.all();
 
         return users.stream()
                 .map(mapUserFull())
                 .collect(Collectors.toSet());
-    };
+    }
+
+    ;
 
     private Function<User, UserViewFull> mapUserFull() {
         return p -> {
@@ -70,7 +72,7 @@ public class UserServiceImpl implements UserService {
             view.position = p.getPosition();
             view.phone = p.getPhone();
             view.docName = p.getDocName();
-            view.docCode= p.getDocCode();
+            view.docCode = p.getDocCode();
             view.docNumber = p.getDocNumber();
             view.docDate = p.getDocDate().toString();
             view.citizenshipCode = p.getCitizenshipCode();
@@ -78,6 +80,7 @@ public class UserServiceImpl implements UserService {
             return view;
         };
     }
+
     /**
      * Получить список пользователей по Id офиса
      *
@@ -113,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить список пользователей по Id пользователя
+     * Получить пользователя по Id
      *
      * @param id
      * @return {@Set<OfficeViewAll>}
@@ -134,11 +137,11 @@ public class UserServiceImpl implements UserService {
         view.position = user.getPosition();
         view.docName = user.getDocName();
         view.docNumber = user.getDocNumber();
-//        if (user.isDocument()) {
-//            view.docDate = user.getDocDate().toString();
-//        } else {
-//            view.docCode = "";
-//        }
+        if (Strings.isNullOrEmpty(user.getDocNumber())) {
+            view.docDate = "";
+        } else {
+            view.docDate = user.getDocDate().toString();
+        }
         view.citizenshipCode = user.getCitizenshipCode();
         view.isIdentified = user.isIdentified();
 
@@ -154,56 +157,58 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void update(UserViewFull view) {
 
-        validationUserUdate(view);
+        validationUserUpdate(view);
         User user = dao.loadById(view.id);
 
         //обновляем информацию о пользователе
-
-
         user.setFirstName(view.firstName);
         user.setLastName(view.lastName);
         user.setMiddleName(view.middleName);
         user.setPosition(view.position);
         user.setPhone(view.phone);
-        //updateUserDocument(user,view);
-        //updateUserCity(user,view);
+
+        updateUserCity(user, view);
+        updateUserDocument(user,view);
         user.setIdentified(true);
         dao.save(user);
     }
 
-    private boolean updateUserDocument (User user, UserViewFull view) {
+    private boolean updateUserDocument(User user, UserViewFull view) {
         if (!Strings.isNullOrEmpty(view.docCode) || !Strings.isNullOrEmpty(view.docName)) {
-            try {
-                DocType docType = docTypeDao.find(view.docCode, view.docName);
-                if (!Strings.isNullOrEmpty(view.docNumber) || !Strings.isNullOrEmpty(view.docDate)) {
-                    try {
-                        Document document = documentDao.findDocument(docType, view.docNumber, view.docDate);
-                        user.setDocument(document);
-                    }
-                    catch (NoResultException|NonUniqueResultException e) {
-                        return false;
-                    }
+            DocType docType = validationDocType(view.docCode, view.docName);
+
+            if (!Strings.isNullOrEmpty(view.docNumber) || !Strings.isNullOrEmpty(view.docDate)) {
+                Document document = user.getDocument();
+                if (document.getDocType() != docType) {
+                    document.setDocType(docType);
                 }
-            }
-            catch (NoResultException e) {
-                return false;
+
+                if (!Strings.isNullOrEmpty(view.docNumber) && document.getDocNumber() != view.docNumber) {
+                    document.setDocNumber(view.docNumber);
+                }
+
+                if (!Strings.isNullOrEmpty(view.docDate) && document.getDocDate() != validationDocumentDate(view.docDate)) {
+                    document.setDocDate(validationDocumentDate(view.docDate));
+                }
+
+                documentDao.save(document);
+                user.setDocument(document);
             }
         }
         return true;
     }
 
-    private boolean updateUserCity (User user, UserViewFull view) {
+    private void updateUserCity(User user, UserViewFull view) {
         if (!Strings.isNullOrEmpty(view.citizenshipCode)) {
             try {
                 Country country = countryDao.findByCode(view.citizenshipCode);
                 user.setCountry(country);
             } catch (NoResultException e) {
-                return false;
-                //throw new RequestValidationException("Нет страны с таким кодом");
+                throw new RequestValidationException("Нет страны с таким кодом");
             }
         }
-        return true;
     }
+
     /**
      * Добавить нового пользователя
      *
@@ -215,17 +220,28 @@ public class UserServiceImpl implements UserService {
     public void add(UserViewFull view) {
         //validationUserAdd(view);
         User user = new User(view.firstName, view.lastName, view.middleName, view.phone, view.position, view.isIdentified);
+        updateUserCity(user,view);
+        addUserDocument(user,view);
         dao.save(user);
-        //updateUserDocument(user,view);
-        //updateUserCity(user,view);
     }
 
+    private void addUserDocument(User user, UserViewFull view) {
+        if (!Strings.isNullOrEmpty(view.docCode) || !Strings.isNullOrEmpty(view.docName)) {
+            DocType docType = validationDocType(view.docCode, view.docName);
 
-    public void validationUserUdate(UserViewFull view) {
+            if (!Strings.isNullOrEmpty(view.docNumber) && !Strings.isNullOrEmpty(view.docDate)) {
+                Document document = new Document(docType, view.docNumber, validationDocumentDate(view.docDate));
+                documentDao.save(document);
+                user.setDocument(document);
+            }
+        }
+    }
+
+    public void validationUserUpdate(UserViewFull view) {
         //validationUserAdd(view);
         //проверим, есть ли пользователь
         try {
-            log.debug("view.id="+ view.id);
+            log.debug("view.id=" + view.id);
             User user = dao.loadById(view.id);
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет пользователя с таким идентификатором");
@@ -237,5 +253,29 @@ public class UserServiceImpl implements UserService {
                 view.position.isEmpty() || !view.isIdentified) {
             throw new RequestValidationException("Не заполнены обязательные для заполнения поля");
         }
+    }
+
+    public Date validationDocumentDate(String date) {
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        Date docDate = new Date();
+        try {
+            docDate = format.parse(date);
+        } catch (ParseException e) {
+            throw new RequestValidationException("Не верный формат даты");
+        }
+        return docDate;
+    }
+
+    public DocType validationDocType(String docCode, String docName) {
+
+        DocType docType = new DocType();
+        if (!Strings.isNullOrEmpty(docCode) || !Strings.isNullOrEmpty(docName)) {
+            try {
+                docType = docTypeDao.find(docCode, docName);
+            } catch (NoResultException e) {
+                throw new RequestValidationException("В справочнике нет такого типа документа");
+            }
+        }
+        return docType;
     }
 }

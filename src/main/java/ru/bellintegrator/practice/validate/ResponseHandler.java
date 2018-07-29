@@ -7,10 +7,16 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+import ru.bellintegrator.practice.validate.view.DataView;
+import ru.bellintegrator.practice.validate.view.SuccessView;
 
 @RestControllerAdvice
-public class ResponseSuccess implements ResponseBodyAdvice<Object> {
+public class ResponseHandler implements ResponseBodyAdvice<Object> {
 
+    @Override
+    public boolean supports(MethodParameter arg0, Class<? extends HttpMessageConverter<?>> arg1) {
+        return true;
+    }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter arg1, MediaType arg2,
@@ -18,14 +24,11 @@ public class ResponseSuccess implements ResponseBodyAdvice<Object> {
         // Get a handle to your response object and make changes here
         if(arg1.getParameterType().getSimpleName().equals("void")) {
             SuccessView successView = new SuccessView();
-            successView.result = "success";
             return successView;
         };
-        return body;
+
+        DataView dataView = new DataView(body);
+        return dataView;
     }
 
-    @Override
-    public boolean supports(MethodParameter arg0, Class<? extends HttpMessageConverter<?>> arg1) {
-        return true;
-    }
 }

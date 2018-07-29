@@ -1,6 +1,6 @@
-package ru.bellintegrator.practice.docType.dao;
+package ru.bellintegrator.practice.dictionary.dao;
 
-import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 
 //справочник, только получаем данные
 public interface DocTypeDao {

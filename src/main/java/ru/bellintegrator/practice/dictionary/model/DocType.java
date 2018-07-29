@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.docType.model;
+package ru.bellintegrator.practice.dictionary.model;
 
 import ru.bellintegrator.practice.document.model.Document;
 

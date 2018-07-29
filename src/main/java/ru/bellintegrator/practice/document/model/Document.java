@@ -1,6 +1,6 @@
 package ru.bellintegrator.practice.document.model;
 
-import ru.bellintegrator.practice.docType.model.DocType;
+import ru.bellintegrator.practice.dictionary.model.DocType;
 
 import javax.persistence.*;
 import java.util.Date;

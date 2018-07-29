@@ -1,4 +1,4 @@
-package ru.bellintegrator.practice.country.model;
+package ru.bellintegrator.practice.dictionary.model;
 
 
 import javax.persistence.*;
@@ -22,7 +22,7 @@ public class Country {
     private Integer version;
 
 //    @OneToMany(
-//            mappedBy="country"
+//            mappedBy="dictionary"
 //            //fetch = FetchType.LAZY,
 //            //cascade = CascadeType.ALL,
 //            //orphanRemoval = true
