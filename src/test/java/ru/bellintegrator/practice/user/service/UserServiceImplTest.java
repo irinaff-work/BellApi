@@ -2,9 +2,16 @@ package ru.bellintegrator.practice.user.service;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.Application;
 import ru.bellintegrator.practice.user.model.User;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,6 +19,11 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = {Application.class})
+@WebAppConfiguration(value = "src/main/resources")
+@Transactional
+@DirtiesContext
 public class UserServiceImplTest {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -38,8 +50,8 @@ public class UserServiceImplTest {
         } catch (ParseException e) {
             Assert.fail("Неверный шаблон даты");
         }
-        Assert.assertNull(userService.validationDocumentDate(DocDate1));
+        //Assert.assertNull(userService.validationDocumentDate(DocDate1));
         //log.info("DocDate1 validate="+userService.validationDocumentDate(DocDate1).toString());
-        //Assert.assertEquals(vDate1, vDate1);//userService.validationDocumentDate(DocDate1)
+        Assert.assertEquals(vDate1, userService.validationDocumentDate(DocDate1));
     }
 }
