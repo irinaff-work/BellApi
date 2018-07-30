@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 import ru.bellintegrator.practice.dictionary.dao.CountryDao;
@@ -271,7 +272,7 @@ public class UserServiceImpl implements UserService {
         if (!Strings.isNullOrEmpty(docCode) || !Strings.isNullOrEmpty(docName)) {
             try {
                 docType = docTypeDao.find(docCode, docName);
-            } catch (NoResultException e) {
+            } catch (EmptyResultDataAccessException e) {
                 throw new RequestValidationException("В справочнике нет такого типа документа");
             }
         }
