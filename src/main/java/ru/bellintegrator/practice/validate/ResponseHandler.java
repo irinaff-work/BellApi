@@ -26,18 +26,17 @@ public class ResponseHandler implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter arg1, MediaType arg2,
                                        Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
-        log.debug("arg1.getParameterType().getSimpleName().toString()="+ arg1.getParameterType().getSimpleName().toString());
 
         // Get a handle to your response object and make changes here
         if(arg1.getParameterType().getSimpleName().equals("void")) {
             SuccessView successView = new SuccessView();
-            return successView;
+            DataView dataView = new DataView(successView);
+            return dataView;
         };
 
-        if (body instanceof RequestValidationException || body instanceof Exception) {
-            ErrorView errorView = new ErrorView("error");
-            return errorView;
-        }
+        if(arg1.getParameterType().getSimpleName().equals("ErrorView")) {
+            return body;
+        };
 
         DataView dataView = new DataView(body);
         return dataView;

@@ -256,6 +256,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Date validationDocumentDate(String date) {
+        log.debug("date=" + date);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date docDate = new Date();
         try {
