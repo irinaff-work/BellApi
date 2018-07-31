@@ -11,6 +11,7 @@ import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.office.view.*;
 import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
+import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.ArrayList;
@@ -25,12 +26,14 @@ public class OfficeServiceImpl implements OfficeService{
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final OfficeDao dao;
+    private final UserDao userDao;
     private final OrganizationDao organizationDao;
 
     @Autowired
-    public OfficeServiceImpl(OfficeDao dao, OrganizationDao organizationDao) {
+    public OfficeServiceImpl(OfficeDao dao, OrganizationDao organizationDao, UserDao userDao) {
         this.dao = dao;
         this.organizationDao = organizationDao;
+        this.userDao = userDao;
     }
 
     /**
@@ -155,5 +158,22 @@ public class OfficeServiceImpl implements OfficeService{
         office.setActive(true);
 
         dao.save(office);
-    };
+    }
+
+    /**
+     * Удалить офис по ID
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public void delete (Long id) {
+        Office office = dao.loadById(id);
+        Set<User> users = userDao.loadByOffice(office);
+        for (User user: users) {
+            user.setOffice(null);
+            userDao.save(user);
+        }
+        dao.deleteById(id);
+    }
 }

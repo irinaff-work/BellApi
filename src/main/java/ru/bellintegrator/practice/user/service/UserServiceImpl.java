@@ -82,16 +82,16 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить список пользователей по фильтрам
      *
      * @param userView
      * @return {@Set<OfficeView>}
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<UserView> loadByOfficeId(UserView userView) {
+    public Set<UserView> loadByFilter(UserView userView) {
 
-        Set<User> filteredUsers = dao.loadByOfficeId(userView.officeId, userView.firstName,
+        Set<User> filteredUsers = dao.loadByFilter(userView.officeId, userView.firstName,
                 userView.lastName, userView.middleName, userView.position,
                 userView.docNumber, userView.citizenshipCode);
         return filteredUsers.stream()

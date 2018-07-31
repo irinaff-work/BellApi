@@ -38,4 +38,9 @@ public interface OfficeDao {
      * @return OfficeSave
      */
     public void save (Office office);
+
+    /*
+    * Удаление офиса по Id
+     */
+    public void deleteById(Long id);
 }

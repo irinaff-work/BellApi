@@ -44,4 +44,11 @@ public interface OfficeService {
      * @return OfficeSave
      */
     public void add (OfficeViewFull view);
+
+    /**
+     * Удалить офис по ID
+     * @param id
+     * @return
+     */
+    void delete (Long id);
 }

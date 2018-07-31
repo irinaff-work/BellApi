@@ -35,14 +35,14 @@ public class UserController {
     }
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить список пользователей по фильтрам
      */
 
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")
     @PostMapping("user/list/")
     public @ResponseBody
-    Set<UserView> loadByIdOfficeId(@RequestBody UserView userView) {
-        return userService.loadByOfficeId(userView);
+    Set<UserView> loadByloadByFilter(@RequestBody UserView userView) {
+        return userService.loadByFilter(userView);
     };
 
     /**

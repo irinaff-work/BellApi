@@ -13,6 +13,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bellintegrator.practice.Application;
 import ru.bellintegrator.practice.user.model.User;
+import ru.bellintegrator.practice.validate.RequestValidationException;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -35,23 +37,29 @@ public class UserServiceImplTest {
     public void validationDocumentDate() {
         //User user = new User();
         String DocDate1 = "2018-01-23";
-        String DocDate2 = "23/11/2018";
-        String DocDate3 = "23.11.2018";
-        String DocDate4 = "2018.18.23";
-        String DocDate5 = "2018/18/23";
-        String DocDate6 = "2018/18/23";
-        String DocDate7 = "2018-01-23-12";
+        String DocDate2 = "2018.01.23";
+        String DocDate3 = "2018/01/23";
+        String DocDate4 = "20180123";
+        String DocDate5 = "23/01/2018";
+        String DocDate6 = "23.01.2018";
+        String DocDate7 = "23-01-2018";
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date vDate1 = new Date();
+        Date vDate2 = new Date();
         try {
             vDate1 = format.parse(DocDate1);
-            log.info("DocDate1="+DocDate1.toString());
-
         } catch (ParseException e) {
             Assert.fail("Неверный шаблон даты");
         }
         //Assert.assertNull(userService.validationDocumentDate(DocDate1));
         //log.info("DocDate1 validate="+userService.validationDocumentDate(DocDate1).toString());
         Assert.assertEquals(vDate1, userService.validationDocumentDate(DocDate1));
+
+        try {
+            vDate2 = userService.validationDocumentDate(DocDate2);
+        } catch (RequestValidationException e) {
+            vDate2 = vDate1;
+        }
+        Assert.assertEquals(vDate1, vDate2);
     }
 }

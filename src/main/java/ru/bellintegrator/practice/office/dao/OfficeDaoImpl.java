@@ -90,5 +90,17 @@ public class OfficeDaoImpl implements OfficeDao {
     @Override
     public void save (Office office) {
         em.persist(office);
-    };
+    }
+
+    /*
+     * Удаление офиса по Id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public void deleteById(Long id) {
+        Office office = em.find(Office.class, id);
+        em.remove(office);
+    }
 }

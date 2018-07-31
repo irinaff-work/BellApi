@@ -15,12 +15,12 @@ public interface UserService {
     public Set<UserViewFull> all ();
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить список пользователей по фильтрам
      *
      * @param userView
      * @return {@Set<OfficeView>}
      */
-    public Set<UserView> loadByOfficeId(UserView userView  );
+    public Set<UserView> loadByFilter(UserView userView  );
 
     /**
      * Получить пользователя по Id

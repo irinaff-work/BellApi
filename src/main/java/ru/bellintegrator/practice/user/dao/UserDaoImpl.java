@@ -3,6 +3,7 @@ package ru.bellintegrator.practice.user.dao;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.EntityManager;
@@ -41,7 +42,7 @@ public class UserDaoImpl implements UserDao {
      * @return {@Set<User>}
      */
     @Override
-    public Set<User> loadByOfficeId (Long officeId, String firstName, String lastName,
+    public Set<User> loadByFilter (Long officeId, String firstName, String lastName,
                                     String middleName, String position, String docNumber,
                                     String citizenshipCode) {
 
@@ -50,6 +51,7 @@ public class UserDaoImpl implements UserDao {
         Root<User> userRoot = criteriaQuery.from(User.class);
 
         criteriaQuery.where(userRoot.get("officeId").in(officeId));
+
         if (!Strings.isNullOrEmpty(firstName)) {
             criteriaQuery.where(userRoot.get("firstName").in(firstName));
         }
@@ -80,6 +82,25 @@ public class UserDaoImpl implements UserDao {
         return query.getResultList().stream().collect(Collectors.toSet());
 
     };
+
+    /**
+     * Получить список пользователей по Id офиса
+     *
+     * @param office
+     * @return {@Set<User>}
+     */
+
+    @Override
+    public Set<User> loadByOffice(Office office) {
+        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
+        CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+        Root<User> userRoot = criteriaQuery.from(User.class);
+
+        criteriaQuery.where(userRoot.get("office").in(office));
+        TypedQuery<User> query = em.createQuery(criteriaQuery);
+
+        return query.getResultList().stream().collect(Collectors.toSet());
+    }
 
     /**
      * Найти пользователя по Id

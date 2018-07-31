@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.user.dao;
 
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.Set;
@@ -19,9 +20,16 @@ public interface UserDao {
      * @param officeId
      * @return {@Set<User>}
      */
-    public Set<User> loadByOfficeId(Long officeId, String firstName, String lastName,
+    public Set<User> loadByFilter(Long officeId, String firstName, String lastName,
                                     String middleName, String position, String docNumber,
                                     String citizenshipCode);
+    /**
+     * Получить список пользователей по Id офиса
+     *
+     * @param office
+     * @return {@Set<User>}
+     */
+    public Set<User> loadByOffice(Office office);
 
     /**
      * Найти пользователя по Id

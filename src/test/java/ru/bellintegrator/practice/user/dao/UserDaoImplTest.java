@@ -13,6 +13,7 @@ import ru.bellintegrator.practice.Application;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.dao.UserDao;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.Assert.*;
@@ -25,11 +26,11 @@ import static org.junit.Assert.*;
 public class UserDaoImplTest {
 
     @Autowired
-    private UserDao dao;
+    private UserDao userDao;
 
     @Test
     public void all() {
-        Set<User> users = dao.all();
+        Set<User> users = userDao.all();
         Assert.assertEquals(users.size(), 2);
     }
 }

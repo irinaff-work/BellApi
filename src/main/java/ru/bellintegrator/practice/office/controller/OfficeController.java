@@ -43,7 +43,7 @@ public class OfficeController {
     public @ResponseBody
     Set<OfficeView> filteredOrgId(@RequestBody OfficeViewFull officeView ) {
         return officeService.loadByOrgId(officeView);
-    };
+    }
 
     /**
      * Получить офис по Id
@@ -55,7 +55,7 @@ public class OfficeController {
     OfficeViewFull filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
             return officeService.loadById(id);
-    };
+    }
 
     /**
      * Изменить данные офиса
@@ -64,7 +64,7 @@ public class OfficeController {
     @PostMapping("office/update")
     public void update(@RequestBody OfficeViewFull officeView) {
         officeService.update(officeView);
-    };
+    }
 
     /**
      * Добавить новый офис
@@ -73,5 +73,14 @@ public class OfficeController {
     @PostMapping("office/add")
     public void createOffice (@RequestBody OfficeViewFull officeView) {
         officeService.add(officeView);
-    };
+    }
+
+    /**
+     * Удалить офис по Id
+     */
+    @ApiOperation(value = "Удалить офис по Id", nickname = "deleteOffice", httpMethod = "POST")
+    @PostMapping("office/delete{id}")
+    public void deleteOffice (@PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
+        officeService.delete(id);
+    }
 }
