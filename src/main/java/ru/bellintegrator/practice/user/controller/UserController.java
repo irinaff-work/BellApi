@@ -41,7 +41,7 @@ public class UserController {
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")
     @PostMapping("user/list/")
     public @ResponseBody
-    Set<UserView> loadByloadByFilter(@RequestBody UserView userView) {
+    Set<UserView> loadByloadByFilter(@RequestBody UserViewFull userView) {
         return userService.loadByFilter(userView);
     };
 

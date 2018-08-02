@@ -46,15 +46,13 @@ public class DocTypeDaoImpl implements DocTypeDao {
      * @param docCode
      * @return {@DocType}
      */
-    public DocType find (String docCode, String docName) {
+    public DocType findByDocCode (String docCode, String docName) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DocType> criteriaQuery = criteriaBuilder.createQuery(DocType.class);
         Root<DocType> docTypeRoot = criteriaQuery.from(DocType.class);
 
-        if (!Strings.isNullOrEmpty(docCode)) {
-            criteriaQuery.where(docTypeRoot.get("docCode").in(docCode));
-        }
+        criteriaQuery.where(docTypeRoot.get("docCode").in(docCode));
 
         if (!Strings.isNullOrEmpty(docName)) {
             criteriaQuery.where(docTypeRoot.get("docName").in(docName));

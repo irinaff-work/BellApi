@@ -3,15 +3,15 @@ package ru.bellintegrator.practice.user.dao;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import ru.bellintegrator.practice.dictionary.model.Country;
+import ru.bellintegrator.practice.dictionary.model.DocType;
+import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,19 +38,29 @@ public class UserDaoImpl implements UserDao {
     /**
      * Получить список пользователей по фильтрам
      *
-     * @param officeId
+     * @param office
      * @return {@Set<User>}
      */
     @Override
-    public Set<User> loadByFilter (Long officeId, String firstName, String lastName,
-                                    String middleName, String position, String docNumber,
-                                    String citizenshipCode) {
+    public Set<User> loadByFilter (Office office, Country country, DocType docType, String firstName, String lastName,
+                                   String middleName, String position) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
+
         Root<User> userRoot = criteriaQuery.from(User.class);
 
-        criteriaQuery.where(userRoot.get("officeId").in(officeId));
+        criteriaQuery.where(userRoot.get("office").in(office));
+
+        if (country != null) {
+            criteriaQuery.where(userRoot.get("country").in(country));
+        }
+
+        if (docType != null) {
+            Join <User, Document> docs = userRoot.join("document", JoinType.LEFT);
+            criteriaQuery.select(userRoot);
+            criteriaQuery.where(docs.get("docType").in(docType));
+        }
 
         if (!Strings.isNullOrEmpty(firstName)) {
             criteriaQuery.where(userRoot.get("firstName").in(firstName));
@@ -68,13 +78,6 @@ public class UserDaoImpl implements UserDao {
             criteriaQuery.where(userRoot.get("position").in(position));
         }
 
-        if (!Strings.isNullOrEmpty(docNumber)) {
-            criteriaQuery.where(userRoot.get("docNumber").in(docNumber));
-        }
-
-        if (!Strings.isNullOrEmpty(citizenshipCode)) {
-            criteriaQuery.where(userRoot.get("citizenshipCode").in(citizenshipCode));
-        }
         criteriaQuery.orderBy(criteriaBuilder.asc(userRoot.get("firstName")));
 
         TypedQuery<User> query = em.createQuery(criteriaQuery);
@@ -84,7 +87,7 @@ public class UserDaoImpl implements UserDao {
     };
 
     /**
-     * Получить список пользователей по Id офиса
+     * Получить список пользователей по ссылке на офис
      *
      * @param office
      * @return {@Set<User>}

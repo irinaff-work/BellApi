@@ -1,5 +1,8 @@
 package ru.bellintegrator.practice.user.dao;
 
+import ru.bellintegrator.practice.dictionary.model.Country;
+import ru.bellintegrator.practice.dictionary.model.DocType;
+import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
@@ -17,14 +20,13 @@ public interface UserDao {
     /**
      * Получить список пользователей по фильтрам
      *
-     * @param officeId
+     * @param office
      * @return {@Set<User>}
      */
-    public Set<User> loadByFilter(Long officeId, String firstName, String lastName,
-                                    String middleName, String position, String docNumber,
-                                    String citizenshipCode);
+    public Set<User> loadByFilter(Office office, Country country, DocType docType, String firstName, String lastName,
+                                  String middleName, String position);
     /**
-     * Получить список пользователей по Id офиса
+     * Получить список пользователей по ссылке на офис
      *
      * @param office
      * @return {@Set<User>}

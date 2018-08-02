@@ -13,6 +13,8 @@ import ru.bellintegrator.practice.dictionary.dao.DocTypeDao;
 import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.dao.DocumentDao;
 import ru.bellintegrator.practice.document.model.Document;
+import ru.bellintegrator.practice.office.dao.OfficeDao;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserViewFull;
@@ -35,13 +37,15 @@ public class UserServiceImpl implements UserService {
     private final DocTypeDao docTypeDao;
     private final CountryDao countryDao;
     private final DocumentDao documentDao;
+    private final OfficeDao officeDao;
 
     @Autowired
-    public UserServiceImpl(UserDao dao, DocTypeDao docTypeDao, CountryDao countryDao, DocumentDao documentDao) {
+    public UserServiceImpl(UserDao dao, DocTypeDao docTypeDao, CountryDao countryDao, DocumentDao documentDao, OfficeDao officeDao) {
         this.dao = dao;
         this.docTypeDao = docTypeDao;
         this.countryDao = countryDao;
         this.documentDao = documentDao;
+        this.officeDao = officeDao;
     }
 
     /**
@@ -89,11 +93,24 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<UserView> loadByFilter(UserView userView) {
+    public Set<UserView> loadByFilter(UserViewFull userView) {
 
-        Set<User> filteredUsers = dao.loadByFilter(userView.officeId, userView.firstName,
-                userView.lastName, userView.middleName, userView.position,
-                userView.docNumber, userView.citizenshipCode);
+        Office office = officeDao.loadById(userView.officeId);
+
+        DocType docType = null;
+        if (!Strings.isNullOrEmpty(userView.docCode)) {
+            docType = docTypeDao.findByDocCode(userView.docCode, null);
+        }
+
+        Country country = null;
+        if (!Strings.isNullOrEmpty(userView.citizenshipCode)) {
+            log.debug("citizenshipCode=" + userView.citizenshipCode);
+            country = countryDao.findByCode(userView.citizenshipCode);
+        }
+
+        Set<User> filteredUsers = dao.loadByFilter(office, country, docType, userView.firstName,
+                userView.lastName, userView.middleName, userView.position);
+
         return filteredUsers.stream()
                 .map(mapUserShort())
                 .collect(Collectors.toSet());
@@ -272,7 +289,7 @@ public class UserServiceImpl implements UserService {
         DocType docType = new DocType();
         if (!Strings.isNullOrEmpty(docCode) || !Strings.isNullOrEmpty(docName)) {
             try {
-                docType = docTypeDao.find(docCode, docName);
+                docType = docTypeDao.findByDocCode(docCode, docName);
             } catch (EmptyResultDataAccessException e) {
                 throw new RequestValidationException("В справочнике нет такого типа документа");
             }

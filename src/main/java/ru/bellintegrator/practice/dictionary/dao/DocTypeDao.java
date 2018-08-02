@@ -19,5 +19,5 @@ public interface DocTypeDao {
      * @param docName
      * @return {@Set<User>}
      */
-    public DocType find (String docCode, String docName);
+    public DocType findByDocCode (String docCode, String docName);
 }

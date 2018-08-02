@@ -20,7 +20,7 @@ public interface UserService {
      * @param userView
      * @return {@Set<OfficeView>}
      */
-    public Set<UserView> loadByFilter(UserView userView  );
+    public Set<UserView> loadByFilter(UserViewFull userView  );
 
     /**
      * Получить пользователя по Id
