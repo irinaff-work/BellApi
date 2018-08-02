@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.office.dao;
 
 import ru.bellintegrator.practice.office.model.Office;
+import ru.bellintegrator.practice.organization.model.Organization;
 
 import java.util.Set;
 
@@ -17,10 +18,10 @@ public interface OfficeDao {
     /**
      * Получить список офисов по Id организации
      *
-     * @param organizationId
+     * @param organization
      * @return {@Set<OfficeView>}
      */
-    public Set<Office> loadByOrgId (Long organizationId, String name, String phone);
+    public Set<Office> loadByOrgId (Organization organization, String name, String phone);
 
     /**
      * Получить список офисов по Id офиса

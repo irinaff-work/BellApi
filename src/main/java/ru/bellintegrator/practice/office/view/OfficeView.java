@@ -1,5 +1,6 @@
 package ru.bellintegrator.practice.office.view;
 
+
 import io.swagger.annotations.ApiModelProperty;
 
 public class OfficeView {
@@ -10,6 +11,8 @@ public class OfficeView {
     public Long orgId;
 
     public String name;
+
+    public String phone;
 
     public boolean isActive;
 

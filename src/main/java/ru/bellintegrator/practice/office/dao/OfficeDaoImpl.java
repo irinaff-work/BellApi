@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import ru.bellintegrator.practice.office.model.Office;
+import ru.bellintegrator.practice.organization.model.Organization;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -39,17 +40,17 @@ public class OfficeDaoImpl implements OfficeDao {
     /**
      * Получить список офисов по Id организации
      *
-     * @param organizationId
+     * @param organization
      * @return {@Set<OfficeView>}
      */
     @Override
-    public Set<Office> loadByOrgId (Long organizationId, String name, String phone) {
+    public Set<Office> loadByOrgId (Organization organization, String name, String phone) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Office> criteriaQuery = criteriaBuilder.createQuery(Office.class);
         Root<Office> officeRoot = criteriaQuery.from(Office.class);
 
-        criteriaQuery.where(officeRoot.get("org_id").in(organizationId));
+        criteriaQuery.where(officeRoot.get("organization").in(organization));
         if (!Strings.isNullOrEmpty(name)) {
             criteriaQuery.where(officeRoot.get("name").in(name));
         }
@@ -58,7 +59,7 @@ public class OfficeDaoImpl implements OfficeDao {
             criteriaQuery.where(officeRoot.get("phone").in(phone));
         }
 
-        criteriaQuery.where(officeRoot.get("is_active").in(true));
+        criteriaQuery.where(officeRoot.get("isActive").in(true));
 
         criteriaQuery.orderBy(criteriaBuilder.asc(officeRoot.get("name")));
 

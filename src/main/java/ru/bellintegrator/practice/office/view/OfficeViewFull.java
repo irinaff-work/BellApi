@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 public class OfficeViewFull extends OfficeView{
 
     @ApiModelProperty
-    public String phone;
 
     public String address;
 

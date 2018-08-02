@@ -55,14 +55,15 @@ public class OfficeServiceImpl implements OfficeService{
     /**
      * Получить список офисов по Id организации
      *
-     * @param officeView
+     * @param view
      * @return {@Set<OfficeView>}
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OfficeView> loadByOrgId (OfficeViewFull officeView) {
+    public Set<OfficeView> loadByOrgId (OfficeViewFull view) {
+        Organization organization = organizationDao.loadById(view.orgId);
 
-        Set<Office> offices = dao.loadByOrgId(officeView.orgId, officeView.name, officeView.phone);
+        Set<Office> offices = dao.loadByOrgId(organization, view.name, view.phone);
 
             return offices.stream()
                     .map(mapOfficeAll())
