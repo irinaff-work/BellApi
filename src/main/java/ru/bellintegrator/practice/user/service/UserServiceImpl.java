@@ -274,14 +274,12 @@ public class UserServiceImpl implements UserService {
 
     public Date validationDocumentDate(String date) {
         log.debug("date=" + date);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date docDate = new Date();
+
         try {
-            docDate = format.parse(date);
+            return new SimpleDateFormat("yyyy-MM-dd").parse(date);
         } catch (ParseException e) {
             throw new RequestValidationException("Не верный формат даты");
         }
-        return docDate;
     }
 
     public DocType validationDocType(String docCode, String docName) {
