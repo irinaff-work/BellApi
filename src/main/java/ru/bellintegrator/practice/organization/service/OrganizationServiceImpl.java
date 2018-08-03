@@ -11,7 +11,8 @@ import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
-import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.organization.view.OrganizationViewAdd;
+import ru.bellintegrator.practice.organization.view.OrganizationViewUpdate;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
 import javax.persistence.NoResultException;
@@ -43,7 +44,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OrganizationViewFull> all () {
+    public Set<OrganizationViewUpdate> all () {
         Set<Organization> organizations = dao.all();
 
         return organizations.stream()
@@ -82,9 +83,9 @@ public class OrganizationServiceImpl implements OrganizationService {
         };
     }
 
-    private Function<Organization, OrganizationViewFull> mapOrganizationAll() {
+    private Function<Organization, OrganizationViewUpdate> mapOrganizationAll() {
         return p -> {
-            OrganizationViewFull view = new OrganizationViewFull();
+            OrganizationViewUpdate view = new OrganizationViewUpdate();
             view.setId(p.getId());
             view.setName(p.getName());
             view.setFullName(p.getFullName());
@@ -108,10 +109,10 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public OrganizationViewFull loadById(Long id) {
+    public OrganizationViewUpdate loadById(Long id) {
         Organization organization = dao.loadById(id);
 
-        OrganizationViewFull view = new OrganizationViewFull();
+        OrganizationViewUpdate view = new OrganizationViewUpdate();
         view.setId(organization.getId());
         view.setName(organization.getName());
         view.setFullName(organization.getFullName());
@@ -129,7 +130,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional
-    public void update(OrganizationViewFull view) {
+    public void update(OrganizationViewUpdate view) {
 
         validationOrgAll(view);
         validationOrgUdate(view);
@@ -155,9 +156,9 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional
-    public void add (OrganizationViewFull view) {
+    public void add (OrganizationViewAdd view) {
 
-        validationOrgAll(view);
+        //validationOrgAll(view);
         Organization organization = new Organization (view.getName(), view.getFullName(),
                 view.getInn(), view.getKpp(), view.getPhone(), view.getAddress(), true);
         dao.save(organization);
@@ -167,14 +168,14 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Проверить входящий запрос
      * @param organization
      */
-    public void validationOrgAll (OrganizationViewFull view) {
+    public void validationOrgAll (OrganizationViewUpdate view) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
         if (Strings.isNullOrEmpty(view.getInn()) || !numericPattern.matcher(view.getInn()).find()) {
             throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
         }
     }
 
-    public void validationOrgUdate(OrganizationViewFull view) {
+    public void validationOrgUdate(OrganizationViewUpdate view) {
         //проверим, есть ли организация
         try {
             Organization organization = dao.loadById(view.getId());

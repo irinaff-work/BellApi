@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.organization.service;
 
-import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.organization.view.OrganizationViewAdd;
+import ru.bellintegrator.practice.organization.view.OrganizationViewUpdate;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
 
 
@@ -14,7 +15,7 @@ public interface OrganizationService {
      * @param
      * @return {@Set<OrganizationViewFull>}
      */
-    public Set<OrganizationViewFull> all ();
+    public Set<OrganizationViewUpdate> all ();
     /**
      * Получить список организаций по наименованию и ИНН
      *
@@ -27,13 +28,13 @@ public interface OrganizationService {
      * @param id
      * @return {@OrganizationView}
      */
-    public OrganizationViewFull loadById(Long id);
+    public OrganizationViewUpdate loadById(Long id);
     /**
      * Изменить данные организации
      *
      * @param organization
      */
-    public void update(OrganizationViewFull organization);
+    public void update(OrganizationViewUpdate organization);
 
     /**
      * Добавить новую организацию в БД
@@ -41,7 +42,7 @@ public interface OrganizationService {
      * @param organization
      * @return OrganizationView
      */
-    public void add (OrganizationViewFull organization);
+    public void add (OrganizationViewAdd organization);
 
     /**
      * Удалить организацию по ID

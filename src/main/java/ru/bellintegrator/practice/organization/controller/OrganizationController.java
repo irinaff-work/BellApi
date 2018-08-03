@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.organization.service.OrganizationService;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
-import ru.bellintegrator.practice.organization.view.OrganizationViewFull;
+import ru.bellintegrator.practice.organization.view.OrganizationViewAdd;
+import ru.bellintegrator.practice.organization.view.OrganizationViewUpdate;
 
 import java.util.Set;
 
@@ -27,20 +28,21 @@ public class OrganizationController {
      */
     @ApiOperation(value = "Все организации", nickname = "all", httpMethod = "GET")
     @GetMapping("organizations/list/all")
-    public Set<OrganizationViewFull> all() {
+    public Set<OrganizationViewUpdate> all() {
         return organizationService.all();
     }
 
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody
-    Set<OrganizationView> organizationList(@RequestBody OrganizationView organization) {
-        return organizationService.loadByNameAndInn(organization);
+    Set<OrganizationView> organizationList(@RequestBody OrganizationView view) {
+        return organizationService.loadByNameAndInn(view);
     }
 
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
     @GetMapping("organizations/{id}")
-    public @ResponseBody OrganizationViewFull filteredId(
+    public @ResponseBody
+    OrganizationViewUpdate filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id
     ) {
         return organizationService.loadById(id);
@@ -49,17 +51,17 @@ public class OrganizationController {
     @ApiOperation(value = "Редактирование организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
     public @ResponseBody
-    void updateOrganizationView(@RequestBody OrganizationViewFull organization)
+    void updateOrganizationView(@RequestBody OrganizationViewUpdate viewUpdate)
     {
-        organizationService.update(organization);
+        organizationService.update(viewUpdate);
     }
 
     @ApiOperation(value = "Добавление организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/add")
     public @ResponseBody
-    void createOrganization(@RequestBody OrganizationViewFull organization)
+    void createOrganization(@RequestBody OrganizationViewAdd viewAdd)
     {
-        organizationService.add(organization);
+        organizationService.add(viewAdd);
     }
 
     /**

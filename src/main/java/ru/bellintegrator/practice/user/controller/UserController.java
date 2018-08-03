@@ -6,7 +6,8 @@ import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.bellintegrator.practice.user.service.UserService;
-import ru.bellintegrator.practice.user.view.UserViewFull;
+import ru.bellintegrator.practice.user.view.UserViewAdd;
+import ru.bellintegrator.practice.user.view.UserViewUpdate;
 import ru.bellintegrator.practice.user.view.UserView;
 
 import java.util.Set;
@@ -30,7 +31,7 @@ public class UserController {
      */
     @ApiOperation(value = "Все пользователи", nickname = "all", httpMethod = "GET")
     @GetMapping("user/list/all")
-    public Set<UserViewFull> all() {
+    public Set<UserViewUpdate> all() {
         return userService.all();
     }
 
@@ -41,8 +42,8 @@ public class UserController {
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")
     @PostMapping("user/list/")
     public @ResponseBody
-    Set<UserView> loadByloadByFilter(@RequestBody UserViewFull userView) {
-        return userService.loadByFilter(userView);
+    Set<UserView> loadByloadByFilter(@RequestBody UserView view) {
+        return userService.loadByFilter(view);
     };
 
     /**
@@ -51,7 +52,8 @@ public class UserController {
      */
     @ApiOperation(value = "Поиск пользователя по id пользователя", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("user/{id}")
-    public @ResponseBody UserViewFull filteredId(
+    public @ResponseBody
+    UserViewUpdate filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
             return userService.loadById(id);
     };
@@ -61,17 +63,17 @@ public class UserController {
      */
     @ApiOperation(value = "Изменить информацию о пользователе", nickname = "update", httpMethod = "POST")
     @PostMapping("user/update")
-    public void update(@RequestBody UserViewFull userView) {
-        userService.update(userView);
+    public void update(@RequestBody UserViewUpdate viewUpdate) {
+        userService.update(viewUpdate);
     };
 
     /**
      * Добавить нового пользователя
      */
-    @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createOffice", httpMethod = "POST")
+    @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createUser", httpMethod = "POST")
     @PostMapping("user/save")
-    public void createUser(@RequestBody UserViewFull userView) {
-        userService.add(userView);
+    public void createUser(@RequestBody UserViewAdd viewAdd) {
+        userService.add(viewAdd);
     }
 
     /**

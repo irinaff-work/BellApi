@@ -1,6 +1,7 @@
 package ru.bellintegrator.practice.user.service;
 
-import ru.bellintegrator.practice.user.view.UserViewFull;
+import ru.bellintegrator.practice.user.view.UserViewAdd;
+import ru.bellintegrator.practice.user.view.UserViewUpdate;
 import ru.bellintegrator.practice.user.view.UserView;
 
 import java.util.Set;
@@ -12,7 +13,7 @@ public interface UserService {
      *
      * @return {@Set<User>}
      */
-    public Set<UserViewFull> all ();
+    public Set<UserViewUpdate> all ();
 
     /**
      * Получить список пользователей по фильтрам
@@ -20,7 +21,7 @@ public interface UserService {
      * @param userView
      * @return {@Set<OfficeView>}
      */
-    public Set<UserView> loadByFilter(UserViewFull userView  );
+    public Set<UserView> loadByFilter(UserView userView  );
 
     /**
      * Получить пользователя по Id
@@ -28,22 +29,22 @@ public interface UserService {
      * @param id
      * @return {@Set<OfficeViewAll>}
      */
-    public UserViewFull loadById(Long id);
+    public UserViewUpdate loadById(Long id);
 
     /**
      * Изменить данные пользователя
      *
      * @param userView
      */
-    public void update(UserViewFull userView);
+    public void update(UserViewUpdate userView);
 
     /**
      * Добавить нового пользователя
      *
      * @param userView
-     * @return OfficeSave
+     * @return UserViewAdd
      */
-    public void add (UserViewFull userView);
+    public void add (UserViewAdd userView);
 
     /**
      * Удалить пользователя по ID
