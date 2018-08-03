@@ -1,20 +1,19 @@
 package ru.bellintegrator.practice.office.view;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.annotations.ApiModelProperty;
 
-@JsonPropertyOrder({"id", "name", "address", "phone", "isActive"})
-public class OfficeView {
+@JsonPropertyOrder({"name", "address", "phone", "isActive"})
+public class OfficeViewSave {
 
     @ApiModelProperty(hidden = true)
     private Long id;
 
-    private Long orgId;
-
     private String name;
+
+    private String address;
 
     private String phone;
 
@@ -25,18 +24,16 @@ public class OfficeView {
         return id;
     }
 
-    @JsonIgnore
-    public Long getOrgId() {
-        return orgId;
-    }
-
     public String getName() {
         return name;
     }
 
-    @JsonIgnore
     public String getPhone() {
         return phone;
+    }
+
+    public String getAddress() {
+        return address;
     }
 
     public boolean isActive() {
@@ -48,18 +45,16 @@ public class OfficeView {
         this.id = id;
     }
 
-    @JsonProperty
-    public void setOrgId(Long orgId) {
-        this.orgId = orgId;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
-    @JsonProperty
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public void setActive(boolean active) {
@@ -68,6 +63,7 @@ public class OfficeView {
 
     @Override
     public String toString() {
-        return "{id:" + id + "orgId:" + orgId + ";name:" + name + ";isActive:" + isActive + "}";
+        return "{id:" + id + ";name:" + name + ";address:" + address + ";phone:" +
+                phone + ";isActive:" + isActive + "}";
     }
 }

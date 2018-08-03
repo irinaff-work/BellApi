@@ -5,14 +5,46 @@ import io.swagger.annotations.ApiModelProperty;
 public class OrganizationView {
 
     @ApiModelProperty
-    public Long id;
+    private Long id;
 
     @ApiModelProperty(required  =  true)
-    public String name;
+    private String name;
 
-    public String inn;
+    private String inn;
 
-    public boolean isActive;
+    private boolean isActive;
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getInn() {
+        return inn;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setInn(String inn) {
+        this.inn = inn;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 
     @Override
     public String toString() {

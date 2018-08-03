@@ -14,8 +14,6 @@ import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -44,7 +42,7 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OfficeViewFull> all () {
+    public Set<OfficeViewSave> all () {
         Set<Office> offices = dao.all();
 
         return offices.stream()
@@ -60,23 +58,23 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OfficeView> loadByOrgId (OfficeViewFull view) {
-        Organization organization = organizationDao.loadById(view.orgId);
+    public Set<OfficeView> loadByOrgId (OfficeView view) {
+        Organization organization = organizationDao.loadById(view.getOrgId());
 
-        Set<Office> offices = dao.loadByOrgId(organization, view.name, view.phone);
+        Set<Office> offices = dao.loadByOrgId(organization, view.getName(), view.getPhone());
 
             return offices.stream()
-                    .map(mapOfficeAll())
+                    .map(mapOffice())
                     .collect(Collectors.toSet());
         }
 
     private Function<Office, OfficeView> mapOffice() {
         return p -> {
             OfficeView view = new OfficeView();
-            view.id = p.getId();
-            view.orgId = p.getOrgId();
-            view.name = p.getName();
-            view.isActive = p.isActive();
+            view.setId(p.getId());
+            view.setOrgId(p.getOrgId());
+            view.setName(p.getName());
+            view.setActive(p.isActive());
             return view;
         };
     }
@@ -88,28 +86,26 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional(readOnly = true)
-    public OfficeViewFull loadById(Long id) {
+    public OfficeViewSave loadById(Long id) {
         Office office = dao.loadById(id);
 
-        OfficeViewFull view = new OfficeViewFull();
-        view.id = office.getId();
-        view.orgId = office.getOrgId();
-        view.name = office.getName();
-        view.phone = office.getPhone();
-        view.address = office.getAddress();
-        view.isActive = office.isActive();
+        OfficeViewSave view = new OfficeViewSave();
+        view.setId(office.getId());
+        view.setName(office.getName());
+        view.setPhone(office.getPhone());
+        view.setAddress(office.getAddress());
+        view.setActive(office.isActive());
         return view;
     };
 
-    private Function<Office, OfficeViewFull> mapOfficeAll() {
+    private Function<Office, OfficeViewSave> mapOfficeAll() {
         return p -> {
-            OfficeViewFull view = new OfficeViewFull();
-            view.id = p.getId();
-            view.orgId = p.getOrgId();
-            view.name = p.getName();
-            view.phone = p.getPhone();
-            view.address = p.getAddress();
-            view.isActive = p.isActive();
+            OfficeViewSave view = new OfficeViewSave();
+            view.setId(p.getId());
+            view.setName(p.getName());
+            view.setPhone(p.getPhone());
+            view.setAddress(p.getAddress());
+            view.setActive(p.isActive());
             return view;
         };
     }
@@ -120,13 +116,14 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional
-    public void update(OfficeViewFull view) {
-        Office office = dao.loadById(view.id);
-        office.setName(view.name);
-        office.setAddress(view.address);
+    public void update(OfficeViewUpdate view) {
+        Office office = dao.loadById(view.getId());
 
-        if (!Strings.isNullOrEmpty(view.phone)) {
-            office.setPhone(view.phone);
+        office.setName(view.getName());
+        office.setAddress(view.getAddress());
+
+        if (!Strings.isNullOrEmpty(view.getPhone())) {
+            office.setPhone(view.getPhone());
         }
 
         office.setActive(true);
@@ -141,19 +138,19 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional
-    public void add (OfficeViewFull view) {
+    public void add (OfficeViewSave view) {
         Office office = new Office();
-        Organization organization = organizationDao.loadById(view.orgId);
+        Organization organization = organizationDao.loadById(view.getId());
         office.setOrganization(organization);
 
-        office.setName(view.name);
+        office.setName(view.getName());
 
-        if (!Strings.isNullOrEmpty(view.address)) {
-            office.setAddress(view.address);
+        if (!Strings.isNullOrEmpty(view.getAddress())) {
+            office.setAddress(view.getAddress());
         }
 
-        if (!Strings.isNullOrEmpty(view.phone)) {
-            office.setPhone(view.phone);
+        if (!Strings.isNullOrEmpty(view.getPhone())) {
+            office.setPhone(view.getPhone());
         }
 
         office.setActive(true);

@@ -12,7 +12,7 @@ public interface OfficeService {
      * @param
      * @return {@Set<mapOfficeAll>}
      */
-    public Set<OfficeViewFull> all ();
+    public Set<OfficeViewSave> all ();
 
     /**
      * Получить список офисов по Id организации
@@ -20,7 +20,7 @@ public interface OfficeService {
      * @param officeView
      * @return {@Set<OfficeView>}
      */
-    public Set<OfficeView> loadByOrgId (OfficeViewFull officeView);
+    public Set<OfficeView> loadByOrgId (OfficeView officeView);
 
     /**
      * Получить офис по Id
@@ -28,14 +28,14 @@ public interface OfficeService {
      * @param id
      * @return {@OfficeViewAll}
      */
-    public OfficeViewFull loadById(Long id);
+    public OfficeViewSave loadById(Long id);
 
     /**
      * Изменить данные офиса
      *
      * @param view
      */
-    public void update(OfficeViewFull view);
+    public void update(OfficeViewUpdate view);
 
     /**
      * Добавить новый офис
@@ -43,7 +43,7 @@ public interface OfficeService {
      * @param view
      * @return OfficeSave
      */
-    public void add (OfficeViewFull view);
+    public void add (OfficeViewSave view);
 
     /**
      * Удалить офис по ID

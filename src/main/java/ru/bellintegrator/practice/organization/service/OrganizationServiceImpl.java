@@ -57,10 +57,10 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OrganizationView> loadByNameAndInn(OrganizationView organization) {
+    public Set<OrganizationView> loadByNameAndInn(OrganizationView view) {
 
-        validationOrgAll (organization);
-        Set<Organization> organizations = dao.loadByNameAndInn(organization.name, organization.inn);
+        //validationOrgAll (view);
+        Set<Organization> organizations = dao.loadByNameAndInn(view.getName(), view.getInn());
 
         return organizations.stream()
                 .map(mapOrganization())
@@ -71,10 +71,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     private Function<Organization, OrganizationView> mapOrganization() {
         return p -> {
             OrganizationView view = new OrganizationView();
-            view.id = p.getId();
-            view.name = p.getName();
-            view.inn = p.getInn();
-            view.isActive = p.isActive();
+            view.setId(p.getId());
+            view.setName(p.getName());
+            view.setInn(p.getInn());
+            view.setActive(p.isActive());
 
             log.debug(view.toString());
 
@@ -85,14 +85,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     private Function<Organization, OrganizationViewFull> mapOrganizationAll() {
         return p -> {
             OrganizationViewFull view = new OrganizationViewFull();
-            view.id = p.getId();
-            view.name = p.getName();
-            view.fullName = p.getFullName();
-            view.inn = p.getInn();
-            view.kpp = p.getKpp();
-            view.address = p.getAddress();
-            view.phone = p.getPhone();
-            view.isActive = p.isActive();
+            view.setId(p.getId());
+            view.setName(p.getName());
+            view.setFullName(p.getFullName());
+            view.setInn(p.getInn());
+            view.setKpp(p.getKpp());
+            view.setAddress(p.getAddress());
+            view.setPhone(p.getPhone());
+            view.setActive(p.isActive());
 
             log.debug(view.toString());
 
@@ -112,14 +112,13 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization organization = dao.loadById(id);
 
         OrganizationViewFull view = new OrganizationViewFull();
-        view.id = organization.getId();
-        view.name = organization.getName();
-        view.fullName = organization.getFullName();
-        view.inn = organization.getInn();
-        view.kpp = organization.getKpp();
-        view.address = organization.getAddress();
-        view.isActive = organization.isActive();
-
+        view.setId(organization.getId());
+        view.setName(organization.getName());
+        view.setFullName(organization.getFullName());
+        view.setInn(organization.getInn());
+        view.setKpp(organization.getKpp());
+        view.setAddress(organization.getAddress());
+        view.setActive(organization.isActive());
         return view;
     }
 
@@ -135,13 +134,13 @@ public class OrganizationServiceImpl implements OrganizationService {
         validationOrgAll(view);
         validationOrgUdate(view);
 
-        Organization organization = dao.loadById(view.id);
-        organization.setName(view.name);
-        organization.setKpp(view.kpp);
-        organization.setInn(view.inn);
-        organization.setAddress(view.address);
-        if (Strings.isNullOrEmpty(view.phone)) {
-            organization.setPhone(view.phone);
+        Organization organization = dao.loadById(view.getId());
+        organization.setName(view.getName());
+        organization.setKpp(view.getKpp());
+        organization.setInn(view.getInn());
+        organization.setAddress(view.getAddress());
+        if (Strings.isNullOrEmpty(view.getPhone())) {
+            organization.setPhone(view.getPhone());
         }
         organization.setActive(true);
         dao.save(organization);
@@ -159,8 +158,8 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void add (OrganizationViewFull view) {
 
         validationOrgAll(view);
-        Organization organization = new Organization (view.name, view.fullName,
-                view.inn, view.kpp, view.phone, view.address, true);
+        Organization organization = new Organization (view.getName(), view.getFullName(),
+                view.getInn(), view.getKpp(), view.getPhone(), view.getAddress(), true);
         dao.save(organization);
     }
 
@@ -168,17 +167,17 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Проверить входящий запрос
      * @param organization
      */
-    public void validationOrgAll (OrganizationView organization) {
+    public void validationOrgAll (OrganizationViewFull view) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
-        if (Strings.isNullOrEmpty(organization.inn) || !numericPattern.matcher(organization.inn).find()) {
+        if (Strings.isNullOrEmpty(view.getInn()) || !numericPattern.matcher(view.getInn()).find()) {
             throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
         }
     }
 
-    public void validationOrgUdate(OrganizationView view) {
+    public void validationOrgUdate(OrganizationViewFull view) {
         //проверим, есть ли организация
         try {
-            Organization organization = dao.loadById(view.id);
+            Organization organization = dao.loadById(view.getId());
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет организации с таким идентификатором");
         }

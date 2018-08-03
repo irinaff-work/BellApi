@@ -35,7 +35,7 @@ public class User {
     /**
      * Ссылка на страну
      */
-    @ManyToOne//(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "country_id")
     private Country country;
 
