@@ -57,5 +57,14 @@ public class DocumentDaoImpl implements DocumentDao {
     @Override
     public void save (Document document) {
         em.persist(document);
-    };
+    }
+
+    /*
+     * Удаление документа по Id
+     */
+    @Override
+    public void deleteById(Long id) {
+        Document document = em.find(Document.class, id);
+        em.remove(document);
+    }
 }

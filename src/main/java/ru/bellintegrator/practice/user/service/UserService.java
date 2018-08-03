@@ -45,4 +45,10 @@ public interface UserService {
      */
     public void add (UserViewFull userView);
 
+    /**
+     * Удалить пользователя по ID
+     * @param id
+     * @return
+     */
+    void delete (Long id);
 }

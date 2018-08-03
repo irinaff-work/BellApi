@@ -47,4 +47,9 @@ public interface UserDao {
      * @param user
      */
     public void save (User user);
+
+    /*
+     * Удаление пользователя по Id
+     */
+    public void deleteById(Long id);
 }

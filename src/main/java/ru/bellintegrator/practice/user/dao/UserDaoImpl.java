@@ -125,6 +125,19 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void save (User user) {
             em.persist(user);
-    };
+    }
+
+
+    /*
+     * Удаление пользователя по Id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public void deleteById(Long id) {
+        User user = em.find(User.class, id);
+        em.remove(user);
+    }
 
 }

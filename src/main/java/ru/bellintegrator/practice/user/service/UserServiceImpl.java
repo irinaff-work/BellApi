@@ -294,4 +294,18 @@ public class UserServiceImpl implements UserService {
         }
         return docType;
     }
+
+    /**
+     * Удалить офис по ID
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public void delete (Long id) {
+        User user = dao.loadById(id);
+        Document document = user.getDocument();
+        dao.deleteById(id);
+        documentDao.deleteById(document.getId());
+    }
 }

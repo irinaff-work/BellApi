@@ -20,4 +20,9 @@ public interface DocumentDao {
      * @return {Long}
      */
     public void save (Document document);
+
+    /*
+     * Удаление документа по Id
+     */
+    public void deleteById(Long id);
 }

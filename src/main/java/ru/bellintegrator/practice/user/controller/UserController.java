@@ -66,11 +66,20 @@ public class UserController {
     };
 
     /**
-     * Добавить новый офис
+     * Добавить нового пользователя
      */
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("user/save")
     public void createUser(@RequestBody UserViewFull userView) {
         userService.add(userView);
-    };
+    }
+
+    /**
+     * Удалить офис по Id
+     */
+    @ApiOperation(value = "Удалить пользователя по Id", nickname = "deleteUser", httpMethod = "POST")
+    @PostMapping("user/delete{id}")
+    public void deleteUser (@PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
+        userService.delete(id);
+    }
 }
