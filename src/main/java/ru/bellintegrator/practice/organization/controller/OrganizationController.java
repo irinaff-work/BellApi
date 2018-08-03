@@ -61,5 +61,14 @@ public class OrganizationController {
     {
         organizationService.add(organization);
     }
+
+    /**
+     * Удалить организацию по Id
+     */
+    @ApiOperation(value = "Удалить организацию по Id", nickname = "deleteOrganization", httpMethod = "POST")
+    @PostMapping("organizations/delete{id}")
+    public void deleteOrganization (@PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id) {
+        organizationService.delete(id);
+    }
 }
 

@@ -101,5 +101,17 @@ public class OrganizationDaoImpl implements OrganizationDao{
     @Override
     public void save (Organization organization) {
         em.persist(organization);
-    };
+    }
+
+    /*
+     * Удаление офиса по Id
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public void deleteById(Long id) {
+        Organization organization = em.find(Organization.class, id);
+        em.remove(organization);
+    }
 }

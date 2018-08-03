@@ -43,7 +43,12 @@ public interface OrganizationService {
      */
     public void add (OrganizationViewFull organization);
 
-
+    /**
+     * Удалить организацию по ID
+     * @param id
+     * @return
+     */
+    void delete (Long id);
 
 
 }

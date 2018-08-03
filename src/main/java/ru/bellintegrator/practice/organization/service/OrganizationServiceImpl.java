@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bellintegrator.practice.office.dao.OfficeDao;
+import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.organization.view.OrganizationView;
@@ -24,10 +26,12 @@ public class OrganizationServiceImpl implements OrganizationService {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final OrganizationDao dao;
+    private final OfficeDao officeDao;
 
     @Autowired
-    public OrganizationServiceImpl(OrganizationDao dao) {
+    public OrganizationServiceImpl(OrganizationDao dao, OfficeDao officeDao) {
         this.dao = dao;
+        this.officeDao = officeDao;
     }
 
 
@@ -178,5 +182,22 @@ public class OrganizationServiceImpl implements OrganizationService {
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет организации с таким идентификатором");
         }
+    }
+
+    /**
+     * Удалить офис по ID
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public void delete (Long id) {
+        Organization organization = dao.loadById(id);
+        Set<Office> offices = officeDao.loadByOrgId(organization, null, null);
+        for (Office office: offices) {
+            office.setOrganization(null);
+            officeDao.save(office);
+        }
+        dao.deleteById(id);
     }
 }

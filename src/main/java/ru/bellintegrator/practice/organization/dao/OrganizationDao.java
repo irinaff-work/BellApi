@@ -42,4 +42,9 @@ public interface OrganizationDao {
      * @return OrganizationView
      */
     public void save (Organization organization);
+
+    /*
+     * Удаление организации по Id
+     */
+    public void deleteById(Long id);
 }

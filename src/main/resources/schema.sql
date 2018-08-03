@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Organization (
 CREATE TABLE IF NOT EXISTS Office (
     id          INTEGER  PRIMARY KEY AUTO_INCREMENT,
     version     INTEGER NOT NULL,
-    org_id      INTEGER NOT NULL,
+    org_id      INTEGER NULL,
     name        VARCHAR(100) NOT NULL,
     address     VARCHAR(1000)  NOT NULL,
     phone       VARCHAR(11)  NULL,
