@@ -22,7 +22,7 @@ public class UserViewAdd extends UserView {
 
     private String citizenshipCode;
 
-    private boolean isIdentified;
+    private String isIdentified;
 
     public String getFirstName() {
         return firstName;
@@ -64,7 +64,7 @@ public class UserViewAdd extends UserView {
         return citizenshipCode;
     }
 
-    public boolean isIdentified() {
+    public String isIdentified() {
         return isIdentified;
     }
 
@@ -108,7 +108,7 @@ public class UserViewAdd extends UserView {
         this.citizenshipCode = citizenshipCode;
     }
 
-    public void setIdentified(boolean identified) {
+    public void setIdentified(String identified) {
         isIdentified = identified;
     }
 }

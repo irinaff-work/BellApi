@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserViewUpdate {
 
-    private Long id;
+    private String id;
 
     private String firstName;
 
@@ -27,9 +27,9 @@ public class UserViewUpdate {
 
     private String citizenshipCode;
 
-    private boolean isIdentified;
+    private String isIdentified;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
@@ -75,11 +75,11 @@ public class UserViewUpdate {
         return citizenshipCode;
     }
 
-    public boolean isIdentified() {
+    public String isIdentified() {
         return isIdentified;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -124,7 +124,7 @@ public class UserViewUpdate {
         this.citizenshipCode = citizenshipCode;
     }
 
-    public void setIdentified(boolean identified) {
+    public void setIdentified(String identified) {
         isIdentified = identified;
     }
 }

@@ -27,6 +27,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -70,7 +71,7 @@ public class UserServiceImpl implements UserService {
         return p -> {
             UserViewUpdate view = new UserViewUpdate();
 
-            view.setId(p.getId());
+            view.setId(p.getId().toString());
             view.setFirstName(p.getFirstName());
             view.setLastName(p.getLastName());
             view.setMiddleName(p.getMiddleName());
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
             view.setDocDate(p.getDocDate().toString());
             view.setCitizenshipCode(p.getCitizenshipCode());
             view.setCitizenshipName(p.getCitizenshipName());
-            view.setIdentified(p.isIdentified());
+            view.setIdentified(String.valueOf(p.isIdentified()));
             return view;
         };
     }
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public Set<UserView> loadByFilter(UserView userView) {
 
-        Office office = officeDao.loadById(userView.getOfficeId());
+        Office office = officeDao.loadById(Long.valueOf(userView.getOfficeId()));
 
         DocType docType = null;
         if (!Strings.isNullOrEmpty(userView.getDocCode())) {
@@ -121,8 +122,8 @@ public class UserServiceImpl implements UserService {
         return p -> {
             UserView view = new UserView();
 
-            view.setId(p.getId());
-            view.setOfficeId(p.getOfficeId());
+            view.setId(p.getId().toString());
+            view.setOfficeId(p.getOfficeId().toString());
             view.setFirstName(p.getFirstName());
             view.setLastName(p.getLastName());
             view.setMiddleName(p.getMiddleName());
@@ -142,12 +143,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserViewUpdate loadById(Long id) {
-
         User user = dao.loadById(id);
 
         UserViewUpdate view = new UserViewUpdate();
-
-        view.setId(user.getId());
+        view.setId(user.getId().toString());
         view.setFirstName(user.getFirstName());
         view.setLastName(user.getLastName());
         view.setMiddleName(user.getMiddleName());
@@ -155,15 +154,9 @@ public class UserServiceImpl implements UserService {
         view.setPhone(user.getPhone());
         view.setDocName(user.getDocName());
         view.setDocNumber(user.getDocNumber());
-//
-//        if (Strings.isNullOrEmpty(user.getDocNumber())) {
-//            view.setDocCode("");
-//        } else {
-//            view.setDocCode(user.getDocDate().toString());
-//        }
         view.setCitizenshipCode(user.getCitizenshipCode());
         view.setCitizenshipName(user.getCitizenshipName());
-        view.setIdentified(user.isIdentified());
+        view.setIdentified(String.valueOf(user.isIdentified()));
         return view;
     }
 
@@ -177,17 +170,16 @@ public class UserServiceImpl implements UserService {
     public void update(UserViewUpdate view) {
 
         validationUserUpdate(view);
-        User user = dao.loadById(view.getId());
+        User user = dao.loadById(Long.valueOf(view.getId()));
 
-        //обновляем информацию о пользователе
         user.setFirstName(view.getFirstName());
         user.setLastName(view.getLastName());
         user.setMiddleName(view.getMiddleName());
         user.setPosition(view.getPosition());
         user.setPhone(view.getPhone());
 
-        updateUserCountry(user, view);
-        updateUserDocument(user,view);
+        updateUserCountry(user, view.getCitizenshipCode());
+        updateUserDocument(user, view);
         user.setIdentified(true);
         dao.save(user);
     }
@@ -217,10 +209,10 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private void updateUserCountry(User user, UserViewUpdate view) {
-        if (!Strings.isNullOrEmpty(view.getCitizenshipCode())) {
+    private void updateUserCountry(User user, String citizenshipCode) {
+        if (!Strings.isNullOrEmpty(citizenshipCode)) {
             try {
-                Country country = countryDao.findByCode(view.getCitizenshipCode());
+                Country country = countryDao.findByCode(citizenshipCode);
                 user.setCountry(country);
             } catch (NoResultException e) {
                 throw new RequestValidationException("Нет страны с таким кодом");
@@ -237,11 +229,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(UserViewAdd view) {
-        //validationUserAdd(view);
+        validationUserAdd(view);
         User user = new User(view.getFirstName(), view.getLastName(), view.getMiddleName(), view.getPhone(),
-                view.getPosition(), view.isIdentified());
-        //updateUserCountry(user,view);
-        //addUserDocument(user,view);
+                view.getPosition(), Boolean.valueOf(view.isIdentified()));
+        updateUserCountry(user, view.getCitizenshipCode());
+        addUserDocument(user, view);
         dao.save(user);
     }
 
@@ -257,22 +249,53 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Удалить офис по ID
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    @Transactional
+    public void delete(Long id) {
+        User user = dao.loadById(id);
+        Document document = user.getDocument();
+        dao.deleteById(id);
+        documentDao.deleteById(document.getId());
+    }
+
     public void validationUserUpdate(UserViewUpdate view) {
-        //validationUserAdd(view);
+        checkIsIdentified(view.getId());
         //проверим, есть ли пользователь
         try {
-            log.debug("view.id=" + view.getId());
-            User user = dao.loadById(view.getId());
+            User user = dao.loadById(Long.valueOf(view.getId()));
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет пользователя с таким идентификатором");
         }
+        checkName(true, view.getFirstName());
+        checkName(false, view.getLastName());
+        checkName(false, view.getMiddleName());
+        checkName(true, view.getPosition());
+        checkPhone(false, view.getPhone());
+        checkName(false, view.getDocName());
+        checkDocNumber(false, view.getDocNumber());
+        checkDocdate(false, view.getDocDate());
+        checkСitizenshipCode(false, view.getCitizenshipCode());
+        checkIsIdentified(view.isIdentified());
     }
 
-    public void validationUserAdd(UserViewUpdate view) {
-        if (view.getId() == 0 || view.getFirstName().isEmpty() ||
-                view.getPosition().isEmpty() || !view.isIdentified()) {
-            throw new RequestValidationException("Не заполнены обязательные для заполнения поля");
-        }
+    public void validationUserAdd(UserViewAdd view) {
+        checkName(true, view.getFirstName());
+        checkName(false, view.getLastName());
+        checkName(false, view.getMiddleName());
+        checkName(true, view.getPosition());
+        checkPhone(false, view.getPhone());
+        checkDocCode(false, view.getDocCode());
+        checkName(false, view.getDocName());
+        checkDocNumber(false, view.getDocNumber());
+        checkDocdate(false, view.getDocDate());
+        checkСitizenshipCode(false, view.getCitizenshipCode());
+        checkIsIdentified(view.isIdentified());
     }
 
     public Date validationDocumentDate(String date) {
@@ -298,17 +321,90 @@ public class UserServiceImpl implements UserService {
         return docType;
     }
 
-    /**
-     * Удалить офис по ID
-     * @param id
-     * @return
-     */
-    @Override
-    @Transactional
-    public void delete (Long id) {
-        User user = dao.loadById(id);
-        Document document = user.getDocument();
-        dao.deleteById(id);
-        documentDao.deleteById(document.getId());
+    public boolean checkId(String id) {
+        Pattern pattern = Pattern.compile("[0-9]{1,10}");
+        if (Strings.isNullOrEmpty(id) || !pattern.matcher(id).matches()) {
+            throw new RequestValidationException("Поле <id> должно содержать от 1 до 10 цифр");
+        }
+        return true;
+    }
+
+    public boolean checkName(boolean isNotNull, String name) {
+        if (isNotNull && Strings.isNullOrEmpty(name)) {
+            throw new RequestValidationException("Текстовое поле должно быть заполнено");
+        }
+        if (!Strings.isNullOrEmpty(name)) {
+            Pattern pattern = Pattern.compile("[a-zA-Zа-яА-Я ]{3,100}");
+            if (!pattern.matcher(name).matches()) {
+                throw new RequestValidationException("Текстовое должно содержать не меньше 3-х и не больше 100 буквенных символов");
+            }
+        }
+        return true;
+    }
+
+    public boolean checkPhone(boolean isNotNull, String phone) {
+        if (isNotNull && Strings.isNullOrEmpty(phone)) {
+            throw new RequestValidationException("Поле <Pnone> должно быть заполнено");
+        }
+        Pattern pattern = Pattern.compile("[0-9]{11}");
+        if (!pattern.matcher(phone).matches()) {
+            throw new RequestValidationException("Поле <Pnone> должно быть введено в формате 8NNNNNNNNNN}, первый символ <8> и десять цифр без пробелов");
+        }
+        return true;
+    }
+
+    public boolean checkDocCode(boolean isNotNull, String docCode) {
+        if (isNotNull && Strings.isNullOrEmpty(docCode)) {
+            throw new RequestValidationException("Поле <docCode> должно быть заполнено");
+        }
+        Pattern pattern = Pattern.compile("[0-9]{2}");
+        if (!pattern.matcher(docCode).matches()) {
+            throw new RequestValidationException("Поле <docCode> должно содержать 2 цифровых символа");
+        }
+        return true;
+    }
+
+    public boolean checkDocNumber(boolean isNotNull, String docNumber) {
+        if (isNotNull && Strings.isNullOrEmpty(docNumber)) {
+            throw new RequestValidationException("Поле <DocNumber> должно быть заполнено");
+        }
+        Pattern pattern = Pattern.compile("[0-9]{10}");
+        if (!pattern.matcher(docNumber).matches()) {
+            throw new RequestValidationException("Поле <DocNumber> должно содержать 10 цифровых символов");
+        }
+        return true;
+    }
+
+    public boolean checkDocdate(boolean isNotNull, String docDate) {
+        if (isNotNull && Strings.isNullOrEmpty(docDate)) {
+            throw new RequestValidationException("Поле <docDate> должно быть заполнено");
+        }
+        if (!Strings.isNullOrEmpty(docDate)) {
+            try {
+                new SimpleDateFormat("yyyy-MM-dd").parse(docDate);
+            } catch (ParseException e) {
+                throw new RequestValidationException("Поле <docDate> должно быть введено в формате YYYY-MM-DD");
+            }
+        }
+        return true;
+    }
+
+    public boolean checkСitizenshipCode(boolean isNotNull, String сitizenshipCode) {
+        if (isNotNull && Strings.isNullOrEmpty(сitizenshipCode)) {
+            throw new RequestValidationException("Поле <сitizenshipCode> должно быть заполнено");
+        }
+            Pattern pattern = Pattern.compile("[0-9]{3}");
+            if (!Strings.isNullOrEmpty(сitizenshipCode) && !pattern.matcher(сitizenshipCode).matches()) {
+                throw new RequestValidationException("Поле <сitizenshipCode> должно содержать 3 цифровых символа");
+            }
+        return true;
+    }
+
+    public boolean checkIsIdentified(String isIdentified) {
+        Pattern pattern = Pattern.compile("true|false");
+        if (Strings.isNullOrEmpty(isIdentified) || !pattern.matcher(isIdentified).matches()) {
+            throw new RequestValidationException("Поле <isIdentified> должно содержать true или false");
+        }
+        return true;
     }
 }

@@ -6,9 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class UserView {
 
-    private Long id;
+    private String id;
 
-    private Long officeId;
+    private String officeId;
 
     private String firstName;
 
@@ -24,12 +24,12 @@ public class UserView {
 
 
     @JsonProperty
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
     @JsonIgnore
-    public Long getOfficeId() {
+    public String getOfficeId() {
         return officeId;
     }
 
@@ -60,12 +60,12 @@ public class UserView {
     }
 
     @JsonIgnore
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
     @JsonProperty
-    public void setOfficeId(Long officeId) {
+    public void setOfficeId(String officeId) {
         this.officeId = officeId;
     }
 
