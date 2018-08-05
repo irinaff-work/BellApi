@@ -369,8 +369,8 @@ public class UserServiceImpl implements UserService {
         if (isNotNull && Strings.isNullOrEmpty(phone)) {
             throw new RequestValidationException("Поле <Pnone> должно быть заполнено");
         }
-        Pattern pattern = Pattern.compile("[0-9]{11}");
-        if (!pattern.matcher(phone).matches()) {
+        Pattern pattern = Pattern.compile("8[0-9]{10}");
+        if (!Strings.isNullOrEmpty(phone) && !pattern.matcher(phone).matches()) {
             throw new RequestValidationException("Поле <Pnone> должно быть введено в формате 8NNNNNNNNNN}, первый символ <8> и десять цифр без пробелов");
         }
         return true;
@@ -381,7 +381,7 @@ public class UserServiceImpl implements UserService {
             throw new RequestValidationException("Поле <docCode> должно быть заполнено");
         }
         Pattern pattern = Pattern.compile("[0-9]{2}");
-        if (!pattern.matcher(docCode).matches()) {
+        if (!Strings.isNullOrEmpty(docCode) && !pattern.matcher(docCode).matches()) {
             throw new RequestValidationException("Поле <docCode> должно содержать 2 цифровых символа");
         }
         return true;
@@ -392,7 +392,7 @@ public class UserServiceImpl implements UserService {
             throw new RequestValidationException("Поле <DocNumber> должно быть заполнено");
         }
         Pattern pattern = Pattern.compile("[0-9]{10}");
-        if (!pattern.matcher(docNumber).matches()) {
+        if (! Strings.isNullOrEmpty(docNumber) && !pattern.matcher(docNumber).matches()) {
             throw new RequestValidationException("Поле <DocNumber> должно содержать 10 цифровых символов");
         }
         return true;

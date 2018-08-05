@@ -23,6 +23,7 @@ import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserView;
+import ru.bellintegrator.practice.user.view.UserViewAdd;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -144,12 +145,13 @@ public class UserServiceImplTestMock {
     }
 
     @Test
-    public void validationUserList() {
+    public void validationUserListOk() {
         UserView view = new UserView();
-        OfficeDaoImpl officeDaoImpl = Mockito.mock(OfficeDaoImpl.class);
+        //OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
         Office office = new Office();
 
-        when(officeDaoImpl.loadById(anyLong())).thenReturn(office);
+        when(officeDao.loadById(anyLong())).thenReturn(office);
+
         view.setOfficeId("1");
         view.setFirstName("Иванов");
         view.setLastName("Иван");
@@ -157,6 +159,37 @@ public class UserServiceImplTestMock {
         view.setPosition("должность");
         view.setDocCode("1234567890");
         view.setCitizenshipCode("021");
-        userService.validationUserList(view);
+        //userService.validationUserList(view);
+    }
+
+    @Test
+    public void validationUserAddOk() {
+        UserViewAdd view = new UserViewAdd();
+
+        view.setFirstName("Иванов");
+        view.setLastName("Иван");
+        view.setMiddleName("Иванович");
+        view.setPosition("должность");
+        view.setPhone("89177588888");
+        view.setDocCode("21");
+        view.setDocName("паспорт гражданина РФ");
+        view.setDocNumber("1234567890");
+        view.setDocDate("2013-03-21");
+        view.setCitizenshipCode("643");
+        view.setIdentified("true");
+        userService.validationUserAdd(view);
+
+        view.setFirstName("Иванов");
+        view.setLastName("");
+        view.setMiddleName("");
+        view.setPosition("должность");
+        view.setPhone("");
+        view.setDocCode("");
+        view.setDocName("");
+        view.setDocNumber("");
+        view.setDocDate("");
+        view.setCitizenshipCode("");
+        view.setIdentified("true");
+        userService.validationUserAdd(view);
     }
 }
