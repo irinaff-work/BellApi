@@ -272,7 +272,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void validationUserList(UserView view) {
-        checkIsIdentified(view.getOfficeId());
+        checkId(view.getOfficeId());
         //проверим, есть ли офис
         try {
             Office office = officeDao.loadById(Long.valueOf(view.getOfficeId()));
@@ -288,7 +288,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public void validationUserUpdate(UserViewUpdate view) {
-        checkIsIdentified(view.getId());
+        checkId(view.getId());
         //проверим, есть ли пользователь
         try {
             User user = dao.loadById(Long.valueOf(view.getId()));
