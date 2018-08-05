@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public Set<UserView> loadByFilter(UserView userView) {
-
+        validationUserList(userView);
         Office office = officeDao.loadById(Long.valueOf(userView.getOfficeId()));
 
         DocType docType = null;
@@ -138,31 +138,33 @@ public class UserServiceImpl implements UserService {
      * Получить пользователя по Id
      *
      * @param id
-     * @return {@Set<OfficeViewAll>}
+     * @return {@Set<UserViewUpdate>}
      */
     @Override
     @Transactional(readOnly = true)
     public UserViewUpdate loadById(Long id) {
-        User user = dao.loadById(id);
-
         UserViewUpdate view = new UserViewUpdate();
-        view.setId(user.getId().toString());
-        view.setFirstName(user.getFirstName());
-        view.setLastName(user.getLastName());
-        view.setMiddleName(user.getMiddleName());
-        view.setPosition(user.getPosition());
-        view.setPhone(user.getPhone());
-        view.setDocName(user.getDocName());
-        view.setDocNumber(user.getDocNumber());
-        view.setCitizenshipCode(user.getCitizenshipCode());
-        view.setCitizenshipName(user.getCitizenshipName());
-        view.setIdentified(String.valueOf(user.isIdentified()));
+        try {
+            User user = dao.loadById(id);
+            view.setId(user.getId().toString());
+            view.setFirstName(user.getFirstName());
+            view.setLastName(user.getLastName());
+            view.setMiddleName(user.getMiddleName());
+            view.setPosition(user.getPosition());
+            view.setPhone(user.getPhone());
+            view.setDocName(user.getDocName());
+            view.setDocNumber(user.getDocNumber());
+            view.setCitizenshipCode(user.getCitizenshipCode());
+            view.setCitizenshipName(user.getCitizenshipName());
+            view.setIdentified(String.valueOf(user.isIdentified()));
+        } catch (Exception e) {
+            throw new RequestValidationException("Нет пользователя с таким идентификатором");
+        }
         return view;
     }
 
     /**
      * Изменить данные пользователя
-     *
      * @param view
      */
     @Override
@@ -230,6 +232,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void add(UserViewAdd view) {
         validationUserAdd(view);
+
         User user = new User(view.getFirstName(), view.getLastName(), view.getMiddleName(), view.getPhone(),
                 view.getPosition(), Boolean.valueOf(view.isIdentified()));
         updateUserCountry(user, view.getCitizenshipCode());
@@ -250,18 +253,38 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Удалить офис по ID
-     *
+     * Удалить пользователя по ID
      * @param id
      * @return
      */
     @Override
     @Transactional
     public void delete(Long id) {
-        User user = dao.loadById(id);
-        Document document = user.getDocument();
-        dao.deleteById(id);
-        documentDao.deleteById(document.getId());
+        try {
+            User user = dao.loadById(id);
+            Document document = user.getDocument();
+            dao.deleteById(id);
+            documentDao.deleteById(document.getId());
+        } catch (Exception e) {
+            throw new RequestValidationException("Нет пользователя с таким кодом");
+        }
+
+    }
+
+    public void validationUserList(UserView view) {
+        checkIsIdentified(view.getOfficeId());
+        //проверим, есть ли офис
+        try {
+            Office office = officeDao.loadById(Long.valueOf(view.getOfficeId()));
+        } catch (NoResultException e) {
+            throw new RequestValidationException("Нет офиса с таким идентификатором");
+        }
+        checkName(false, view.getFirstName());
+        checkName(false, view.getLastName());
+        checkName(false, view.getMiddleName());
+        checkName(false, view.getPosition());
+        checkDocCode(false, view.getDocCode());
+        checkСitizenshipCode(false, view.getCitizenshipCode());
     }
 
     public void validationUserUpdate(UserViewUpdate view) {
