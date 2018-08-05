@@ -160,7 +160,7 @@ public class UserServiceImplTestMock {
         view.setPosition("должность");
         view.setDocCode("1234567890");
         view.setCitizenshipCode("021");
-        //userService.validationUserList(view);
+        userService.validationUserList(view);
     }
 
     @Test(expected = RequestValidationException.class)
@@ -271,7 +271,7 @@ public class UserServiceImplTestMock {
         view.setDocDate("");
         view.setCitizenshipCode("");
         view.setIdentified("true");
-        //userService.validationUserUpdate(view);
+        userService.validationUserUpdate(view);
     }
 
     @Test(expected = RequestValidationException.class)
@@ -292,6 +292,6 @@ public class UserServiceImplTestMock {
         view.setDocDate("");
         view.setCitizenshipCode("");
         view.setIdentified("true");
-        //userService.validationUserUpdate(view);
+        userService.validationUserUpdate(view);
     }
 }
