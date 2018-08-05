@@ -44,9 +44,12 @@ public class UserServiceImplTestMock {
     UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
 
 
-//    @Before
+
+    @Before
 //    public void before() {
 //        log.info("Before");
+//        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao,
+//                countryDao, documentDao, officeDao);
 //    }
 
     @Test
@@ -148,8 +151,9 @@ public class UserServiceImplTestMock {
     @Test
     public void validationUserListOk() {
         UserView view = new UserView();
-        //OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
+        OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
         Office office = new Office();
+        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
 
         when(officeDao.loadById(anyLong())).thenReturn(office);
 
@@ -158,16 +162,17 @@ public class UserServiceImplTestMock {
         view.setLastName("Иван");
         view.setMiddleName("Иванович");
         view.setPosition("должность");
-        view.setDocCode("1234567890");
-        view.setCitizenshipCode("021");
+        view.setDocCode("21");
+        view.setCitizenshipCode("643");
         userService.validationUserList(view);
     }
 
     @Test(expected = RequestValidationException.class)
     public void validationUserListBad() {
         UserView view = new UserView();
-        //OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
+        OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
         Office office = new Office();
+        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
         when(officeDao.loadById(anyLong())).thenReturn(office);
 
         view.setOfficeId("");
@@ -175,8 +180,8 @@ public class UserServiceImplTestMock {
         view.setLastName("Иван");
         view.setMiddleName("Иванович");
         view.setPosition("должность");
-        view.setDocCode("1234567890");
-        view.setCitizenshipCode("021");
+        view.setDocCode("21");
+        view.setCitizenshipCode("643");
         userService.validationUserList(view);
     }
 
@@ -197,6 +202,7 @@ public class UserServiceImplTestMock {
         view.setIdentified("true");
         userService.validationUserAdd(view);
     }
+
     @Test
     public void validationUserAddOk2() {
         UserViewAdd view = new UserViewAdd();
@@ -254,7 +260,8 @@ public class UserServiceImplTestMock {
     @Test
     public void validationUserUpdateOk() {
         UserViewUpdate view = new UserViewUpdate();
-        //UserDao userDao = Mockito.mock(UserDao.class);
+        UserDao userDao = Mockito.mock(UserDao.class);
+        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
         User user = new User();
 
         when(userDao.loadById(anyLong())).thenReturn(user);
@@ -278,6 +285,8 @@ public class UserServiceImplTestMock {
     public void validationUserUpdateBad() {
         UserViewUpdate view = new UserViewUpdate();
         User user = new User();
+        UserDao userDao = Mockito.mock(UserDao.class);
+        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
         when(userDao.loadById(anyLong())).thenReturn(user);
 
         view.setId("1");
