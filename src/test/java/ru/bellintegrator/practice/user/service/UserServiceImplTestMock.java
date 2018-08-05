@@ -24,6 +24,7 @@ import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
 import ru.bellintegrator.practice.user.view.UserView;
 import ru.bellintegrator.practice.user.view.UserViewAdd;
+import ru.bellintegrator.practice.user.view.UserViewUpdate;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -162,8 +163,25 @@ public class UserServiceImplTestMock {
         //userService.validationUserList(view);
     }
 
+    @Test(expected = RequestValidationException.class)
+    public void validationUserListBad() {
+        UserView view = new UserView();
+        //OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
+        Office office = new Office();
+        when(officeDao.loadById(anyLong())).thenReturn(office);
+
+        view.setOfficeId("");
+        view.setFirstName("Иванов");
+        view.setLastName("Иван");
+        view.setMiddleName("Иванович");
+        view.setPosition("должность");
+        view.setDocCode("1234567890");
+        view.setCitizenshipCode("021");
+        userService.validationUserList(view);
+    }
+
     @Test
-    public void validationUserAddOk() {
+    public void validationUserAddOk1() {
         UserViewAdd view = new UserViewAdd();
 
         view.setFirstName("Иванов");
@@ -178,6 +196,10 @@ public class UserServiceImplTestMock {
         view.setCitizenshipCode("643");
         view.setIdentified("true");
         userService.validationUserAdd(view);
+    }
+    @Test
+    public void validationUserAddOk2() {
+        UserViewAdd view = new UserViewAdd();
 
         view.setFirstName("Иванов");
         view.setLastName("");
@@ -191,5 +213,85 @@ public class UserServiceImplTestMock {
         view.setCitizenshipCode("");
         view.setIdentified("true");
         userService.validationUserAdd(view);
+    }
+
+    @Test(expected = RequestValidationException.class)
+    public void validationUserAddBad1() {
+        UserViewAdd view = new UserViewAdd();
+
+        view.setFirstName("");
+        view.setLastName("Иван");
+        view.setMiddleName("Иванович");
+        view.setPosition("должность");
+        view.setPhone("89177588888");
+        view.setDocCode("21");
+        view.setDocName("паспорт гражданина РФ");
+        view.setDocNumber("1234567890");
+        view.setDocDate("2013-03-21");
+        view.setCitizenshipCode("643");
+        view.setIdentified("true");
+        userService.validationUserAdd(view);
+    }
+
+    @Test(expected = RequestValidationException.class)
+    public void validationUserAddBad2() {
+        UserViewAdd view = new UserViewAdd();
+
+        view.setFirstName("Иванов");
+        view.setLastName("123");
+        view.setMiddleName("");
+        view.setPosition("должность");
+        view.setPhone("");
+        view.setDocCode("");
+        view.setDocName("11");
+        view.setDocNumber("");
+        view.setDocDate("");
+        view.setCitizenshipCode("");
+        view.setIdentified("true");
+        userService.validationUserAdd(view);
+    }
+
+    @Test
+    public void validationUserUpdateOk() {
+        UserViewUpdate view = new UserViewUpdate();
+        //UserDao userDao = Mockito.mock(UserDao.class);
+        User user = new User();
+
+        when(userDao.loadById(anyLong())).thenReturn(user);
+
+        view.setId("1");
+        view.setFirstName("Иванов");
+        view.setLastName("Иван");
+        view.setMiddleName("Иванович");
+        view.setPosition("должность");
+        view.setCitizenshipCode("021");
+        view.setPhone("");
+        view.setDocName("паспорт гражданина РФ");
+        view.setDocNumber("");
+        view.setDocDate("");
+        view.setCitizenshipCode("");
+        view.setIdentified("true");
+        //userService.validationUserUpdate(view);
+    }
+
+    @Test(expected = RequestValidationException.class)
+    public void validationUserUpdateBad() {
+        UserViewUpdate view = new UserViewUpdate();
+        User user = new User();
+        when(userDao.loadById(anyLong())).thenReturn(user);
+
+        view.setId("1");
+        view.setFirstName("");
+        view.setLastName("Иван");
+        view.setMiddleName("Иванович");
+        view.setPosition("должность");
+        view.setCitizenshipCode("021");
+        view.setPhone("");
+        view.setDocName("паспорт гражданина РФ");
+        view.setDocNumber("");
+        view.setDocDate("");
+        view.setCitizenshipCode("");
+        view.setIdentified("true");
+        //userService.validationUserUpdate(view);
     }
 }
