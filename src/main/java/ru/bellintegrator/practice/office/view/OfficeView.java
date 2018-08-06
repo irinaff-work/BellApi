@@ -20,7 +20,7 @@ public class OfficeView {
 
     private boolean isActive;
 
-    @JsonProperty
+    @JsonProperty("id")
     public Long getId() {
         return id;
     }
@@ -48,7 +48,7 @@ public class OfficeView {
         this.id = id;
     }
 
-    @JsonProperty
+    @JsonProperty("orgId")
     public void setOrgId(Long orgId) {
         this.orgId = orgId;
     }
@@ -57,7 +57,7 @@ public class OfficeView {
         this.name = name;
     }
 
-    @JsonProperty
+    @JsonProperty("phone")
     public void setPhone(String phone) {
         this.phone = phone;
     }

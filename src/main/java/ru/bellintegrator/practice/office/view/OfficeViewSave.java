@@ -19,7 +19,7 @@ public class OfficeViewSave {
 
     private boolean isActive;
 
-    @JsonProperty
+    @JsonProperty("id")
     public Long getId() {
         return id;
     }

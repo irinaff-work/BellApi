@@ -117,7 +117,7 @@ public class OfficeServiceImpl implements OfficeService{
     @Override
     @Transactional
     public void update(OfficeViewUpdate view) {
-        Office office = dao.loadById(view.getId());
+        Office office = dao.loadById(Long.valueOf(view.getId()));
 
         office.setName(view.getName());
         office.setAddress(view.getAddress());

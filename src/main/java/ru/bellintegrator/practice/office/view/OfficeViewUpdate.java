@@ -1,11 +1,13 @@
 package ru.bellintegrator.practice.office.view;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({"id", "name", "address", "phone", "isActive"})
 public class OfficeViewUpdate {
 
-    private Long id;
+    private String id;
 
     private String name;
 
@@ -13,9 +15,10 @@ public class OfficeViewUpdate {
 
     private String phone;
 
-    private boolean isActive;
+    private String isActive;
 
-    public Long getId() {
+    @JsonProperty("id")
+    public String getId() {
         return id;
     }
 
@@ -31,11 +34,12 @@ public class OfficeViewUpdate {
         return phone;
     }
 
-    public boolean isActive() {
+    public String isActive() {
         return isActive;
     }
 
-    public void setId(Long id) {
+    @JsonIgnore
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,7 +55,7 @@ public class OfficeViewUpdate {
         this.phone = phone;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(String active) {
         isActive = active;
     }
 

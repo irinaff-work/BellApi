@@ -2,7 +2,10 @@ package ru.bellintegrator.practice.user.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"id", "firstName", "lastName", "middleName", "position", "phone", "docCode", "docName",
+        "docNumber", "docDate", "citizenshipCode", "isIdentified"})
 public class UserViewUpdate {
 
     private String id;
@@ -66,7 +69,7 @@ public class UserViewUpdate {
         return docDate;
     }
 
-    @JsonProperty
+    @JsonProperty("citizenshipName")
     public String getCitizenshipName() {
         return citizenshipName;
     }

@@ -1,5 +1,9 @@
 package ru.bellintegrator.practice.user.view;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"firstName", "lastName", "middleName", "position", "phone", "docCode", "docName",
+        "docNumber", "docDate", "citizenshipCode", "isIdentified"})
 public class UserViewAdd extends UserView {
 
     private String firstName;

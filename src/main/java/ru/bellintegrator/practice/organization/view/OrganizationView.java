@@ -2,21 +2,23 @@ package ru.bellintegrator.practice.organization.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.annotations.ApiModelProperty;
 
+@JsonPropertyOrder({"id", "name", "inn", "isActive"})
 public class OrganizationView {
 
     @ApiModelProperty(hidden = true)
-    private Long id;
+    private String id;
 
     private String name;
 
     private String inn;
 
-    private boolean isActive;
+    private String isActive;
 
-    @JsonProperty
-    public Long getId() {
+    @JsonProperty("id")
+    public String getId() {
         return id;
     }
 
@@ -29,12 +31,12 @@ public class OrganizationView {
         return inn;
     }
 
-    public boolean isActive() {
+    public String isActive() {
         return isActive;
     }
 
     @JsonIgnore
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -42,12 +44,12 @@ public class OrganizationView {
         this.name = name;
     }
 
-    @JsonProperty
+    @JsonProperty("inn")
     public void setInn(String inn) {
         this.inn = inn;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(String active) {
         isActive = active;
     }
 

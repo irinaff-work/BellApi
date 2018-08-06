@@ -4,16 +4,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
+import org.junit.runners.Parameterized;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.bellintegrator.practice.dictionary.dao.CountryDao;
 import ru.bellintegrator.practice.dictionary.dao.DocTypeDao;
 import ru.bellintegrator.practice.document.dao.DocumentDao;
@@ -27,30 +26,48 @@ import ru.bellintegrator.practice.user.view.UserViewAdd;
 import ru.bellintegrator.practice.user.view.UserViewUpdate;
 import ru.bellintegrator.practice.validate.RequestValidationException;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.util.Arrays;
+import java.util.List;
+
+@RunWith(Parameterized.class)
 public class UserServiceImplTestMock {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    @Mock
-    UserDao userDao;
-    @Mock
-    DocTypeDao docTypeDao;
-    @Mock
-    CountryDao countryDao;
-    @Mock
-    DocumentDao documentDao;
-    @Mock
-    OfficeDao officeDao;
-    UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
+    private UserServiceImpl userService = null;
+    private UserDao userDao = null;
+    private OfficeDao officeDao = null;
+    private User user = null;
+    private Office office = null;
 
+    public UserServiceImplTestMock(UserServiceImpl userService, UserDao userDao, OfficeDao officeDao, User user, Office office) {
+        this.userService = userService;
+        this.userDao = userDao;
+        this.officeDao = officeDao;
+        this.user = user;
+        this.office = office;
+    }
 
+    @Parameterized.Parameters
+    public static List<Object[]> balanceRates() {
+        UserDao userDao = Mockito.mock(UserDao.class);
+        DocTypeDao docTypeDao = Mockito.mock(DocTypeDao.class);
+        CountryDao countryDao= Mockito.mock(CountryDao.class);
+        DocumentDao documentDao = Mockito.mock(DocumentDao.class);
+        OfficeDao officeDao = Mockito.mock(OfficeDao.class);
+
+        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
+        User user = new User();
+        Office office = new Office();
+
+        return Arrays.asList(new Object[][] {
+                {userService, userDao, officeDao, user, office}});
+    }
 
     @Before
-//    public void before() {
-//        log.info("Before");
-//        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao,
-//                countryDao, documentDao, officeDao);
-//    }
+    public void before() {
+        //log.info("Before");
+        initMocks(this);
+    }
 
     @Test
     public void validationDocumentDateOk() {
@@ -151,9 +168,6 @@ public class UserServiceImplTestMock {
     @Test
     public void validationUserListOk() {
         UserView view = new UserView();
-        OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
-        Office office = new Office();
-        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
 
         when(officeDao.loadById(anyLong())).thenReturn(office);
 
@@ -170,9 +184,7 @@ public class UserServiceImplTestMock {
     @Test(expected = RequestValidationException.class)
     public void validationUserListBad() {
         UserView view = new UserView();
-        OfficeDao officeDao = Mockito.mock(OfficeDaoImpl.class);
-        Office office = new Office();
-        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
+
         when(officeDao.loadById(anyLong())).thenReturn(office);
 
         view.setOfficeId("");
@@ -260,9 +272,6 @@ public class UserServiceImplTestMock {
     @Test
     public void validationUserUpdateOk() {
         UserViewUpdate view = new UserViewUpdate();
-        UserDao userDao = Mockito.mock(UserDao.class);
-        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
-        User user = new User();
 
         when(userDao.loadById(anyLong())).thenReturn(user);
 
@@ -284,9 +293,7 @@ public class UserServiceImplTestMock {
     @Test(expected = RequestValidationException.class)
     public void validationUserUpdateBad() {
         UserViewUpdate view = new UserViewUpdate();
-        User user = new User();
-        UserDao userDao = Mockito.mock(UserDao.class);
-        UserServiceImpl userService = new UserServiceImpl(userDao, docTypeDao, countryDao, documentDao, officeDao);
+
         when(userDao.loadById(anyLong())).thenReturn(user);
 
         view.setId("1");
@@ -303,4 +310,5 @@ public class UserServiceImplTestMock {
         view.setIdentified("true");
         userService.validationUserUpdate(view);
     }
+
 }

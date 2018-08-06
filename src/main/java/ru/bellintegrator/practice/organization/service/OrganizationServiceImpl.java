@@ -72,10 +72,10 @@ public class OrganizationServiceImpl implements OrganizationService {
     private Function<Organization, OrganizationView> mapOrganization() {
         return p -> {
             OrganizationView view = new OrganizationView();
-            view.setId(p.getId());
+            view.setId(p.getId().toString());
             view.setName(p.getName());
             view.setInn(p.getInn());
-            view.setActive(p.isActive());
+            view.setActive(Boolean.toString(p.isActive()));
 
             log.debug(view.toString());
 
@@ -86,14 +86,14 @@ public class OrganizationServiceImpl implements OrganizationService {
     private Function<Organization, OrganizationViewUpdate> mapOrganizationAll() {
         return p -> {
             OrganizationViewUpdate view = new OrganizationViewUpdate();
-            view.setId(p.getId());
+            view.setId(p.getId().toString());
             view.setName(p.getName());
             view.setFullName(p.getFullName());
             view.setInn(p.getInn());
             view.setKpp(p.getKpp());
             view.setAddress(p.getAddress());
             view.setPhone(p.getPhone());
-            view.setActive(p.isActive());
+            view.setActive(Boolean.toString(p.isActive()));
 
             log.debug(view.toString());
 
@@ -113,13 +113,13 @@ public class OrganizationServiceImpl implements OrganizationService {
         Organization organization = dao.loadById(id);
 
         OrganizationViewUpdate view = new OrganizationViewUpdate();
-        view.setId(organization.getId());
+        view.setId(organization.getId().toString());
         view.setName(organization.getName());
         view.setFullName(organization.getFullName());
         view.setInn(organization.getInn());
         view.setKpp(organization.getKpp());
         view.setAddress(organization.getAddress());
-        view.setActive(organization.isActive());
+        view.setActive(Boolean.toString(organization.isActive()));
         return view;
     }
 
@@ -135,7 +135,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         validationOrgAll(view);
         validationOrgUdate(view);
 
-        Organization organization = dao.loadById(view.getId());
+        Organization organization = dao.loadById(Long.valueOf(view.getId()));
         organization.setName(view.getName());
         organization.setKpp(view.getKpp());
         organization.setInn(view.getInn());
@@ -178,7 +178,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     public void validationOrgUdate(OrganizationViewUpdate view) {
         //проверим, есть ли организация
         try {
-            Organization organization = dao.loadById(view.getId());
+            Organization organization = dao.loadById(Long.valueOf(view.getId()));
         } catch (NoResultException e) {
             throw new RequestValidationException("Нет организации с таким идентификатором");
         }
