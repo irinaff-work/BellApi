@@ -40,20 +40,20 @@ public class Organization {
     /**
      * КПП
      */
-    @Column(name = "kpp", length = 12, nullable = false)
+    @Column(name = "kpp", length = 9, nullable = false)
     private String kpp;
-
-    /**
-     * Номер телефона
-     */
-    @Column(name = "phone", length = 9, nullable = true)
-    private String phone;
 
     /**
      * Адрес
      */
     @Column(name = "address", length = 1000, nullable = false)
     private String address;
+
+    /**
+     * Номер телефона
+     */
+    @Column(name = "phone", length = 11, nullable = true)
+    private String phone;
 
     /**
      * Запись действительна

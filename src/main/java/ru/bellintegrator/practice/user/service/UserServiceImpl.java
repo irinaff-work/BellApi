@@ -90,28 +90,28 @@ public class UserServiceImpl implements UserService {
     /**
      * Получить список пользователей по фильтрам
      *
-     * @param userView
+     * @param user
      * @return {@Set<OfficeView>}
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<UserView> loadByFilter(UserView userView) {
-        validationUserList(userView);
-        Office office = officeDao.loadById(Long.valueOf(userView.getOfficeId()));
+    public Set<UserView> loadByFilter(UserView user) {
+        validationUserList(user);
+        Office office = officeDao.loadById(Long.valueOf(user.getOfficeId()));
 
         DocType docType = null;
-        if (!Strings.isNullOrEmpty(userView.getDocCode())) {
-            docType = docTypeDao.findByDocCode(userView.getDocCode(), null);
+        if (!Strings.isNullOrEmpty(user.getDocCode())) {
+            docType = docTypeDao.findByDocCode(user.getDocCode(), null);
         }
 
         Country country = null;
-        if (!Strings.isNullOrEmpty(userView.getCitizenshipCode())) {
-            log.debug("citizenshipCode=" + userView.getCitizenshipCode());
-            country = countryDao.findByCode(userView.getCitizenshipCode());
+        if (!Strings.isNullOrEmpty(user.getCitizenshipCode())) {
+            log.debug("citizenshipCode=" + user.getCitizenshipCode());
+            country = countryDao.findByCode(user.getCitizenshipCode());
         }
 
-        Set<User> filteredUsers = dao.loadByFilter(office, country, docType, userView.getFirstName(),
-                userView.getLastName(), userView.getMiddleName(), userView.getPosition());
+        Set<User> filteredUsers = dao.loadByFilter(office, country, docType, user.getFirstName(),
+                user.getLastName(), user.getMiddleName(), user.getPosition());
 
         return filteredUsers.stream()
                 .map(mapUserShort())

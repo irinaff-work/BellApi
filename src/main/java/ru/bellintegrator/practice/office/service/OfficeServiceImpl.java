@@ -13,6 +13,7 @@ import ru.bellintegrator.practice.organization.dao.OrganizationDao;
 import ru.bellintegrator.practice.organization.model.Organization;
 import ru.bellintegrator.practice.user.dao.UserDao;
 import ru.bellintegrator.practice.user.model.User;
+import ru.bellintegrator.practice.validate.RequestValidationException;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -87,14 +88,17 @@ public class OfficeServiceImpl implements OfficeService{
     @Override
     @Transactional(readOnly = true)
     public OfficeViewSave loadById(Long id) {
-        Office office = dao.loadById(id);
-
         OfficeViewSave view = new OfficeViewSave();
-        view.setId(office.getId());
-        view.setName(office.getName());
-        view.setPhone(office.getPhone());
-        view.setAddress(office.getAddress());
-        view.setActive(office.isActive());
+        try {
+            Office office = dao.loadById(id);
+            view.setId(office.getId());
+            view.setName(office.getName());
+            view.setPhone(office.getPhone());
+            view.setAddress(office.getAddress());
+            view.setActive(office.isActive());
+        } catch (Exception e) {
+        throw new RequestValidationException("Нет офиса с таким идентификатором");
+    }
         return view;
     };
 

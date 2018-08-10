@@ -4,6 +4,9 @@ import ru.bellintegrator.practice.office.view.*;
 
 import java.util.Set;
 
+/**
+ * Сервис
+ */
 public interface OfficeService {
 
     /**
@@ -18,7 +21,7 @@ public interface OfficeService {
      * Получить список офисов по Id организации
      *
      * @param officeView
-     * @return {@Set<OfficeView>}
+     * @return
      */
     public Set<OfficeView> loadByOrgId (OfficeView officeView);
 
@@ -26,7 +29,7 @@ public interface OfficeService {
      * Получить офис по Id
      *
      * @param id
-     * @return {@OfficeViewAll}
+     * @return
      */
     public OfficeViewSave loadById(Long id);
 
@@ -41,12 +44,13 @@ public interface OfficeService {
      * Добавить новый офис
      *
      * @param view
-     * @return OfficeSave
+     * @return
      */
     public void add (OfficeViewSave view);
 
     /**
      * Удалить офис по ID
+     *
      * @param id
      * @return
      */

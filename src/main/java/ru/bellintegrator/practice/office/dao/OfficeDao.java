@@ -4,22 +4,25 @@ import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.organization.model.Organization;
 
 import java.util.Set;
-
+/**
+ * DAO для работы с офисами
+ */
 public interface OfficeDao {
 
     /**
      * Получить все объекты Офис
      *
-     * @param
-     * @return {@Set<OfficeViewFull>}
+     * @return
      */
     public Set<Office> all ();
 
     /**
-     * Получить список офисов по Id организации
+     * Получить список офисов по фильтру
      *
      * @param organization
-     * @return {@Set<OfficeView>}
+     * @param name
+     * @param phone
+     * @return
      */
     public Set<Office> loadByOrgId (Organization organization, String name, String phone);
 
@@ -27,21 +30,22 @@ public interface OfficeDao {
      * Получить список офисов по Id офиса
      *
      * @param id
-     * @return {@Office}
+     * @return
      */
     public Office loadById(Long id);
-
 
     /**
      * Добавить новый офис
      *
      * @param office
-     * @return OfficeSave
+     * @return
      */
     public void save (Office office);
 
     /*
-    * Удаление офиса по Id
-     */
+    * Удалить офис по Id
+    *
+    * @param id
+    */
     public void deleteById(Long id);
 }

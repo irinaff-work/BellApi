@@ -4,6 +4,9 @@ import ru.bellintegrator.practice.user.view.UserViewAdd;
 import ru.bellintegrator.practice.user.view.UserViewUpdate;
 import ru.bellintegrator.practice.user.view.UserView;
 
+/**
+ * Сервис
+ */
 import java.util.Set;
 
 public interface UserService {
@@ -11,7 +14,7 @@ public interface UserService {
     /**
      * Получить список всех пользователей
      *
-     * @return {@Set<User>}
+     * @return
      */
     public Set<UserViewUpdate> all ();
 
@@ -19,7 +22,7 @@ public interface UserService {
      * Получить список пользователей по фильтрам
      *
      * @param userView
-     * @return {@Set<OfficeView>}
+     * @return
      */
     public Set<UserView> loadByFilter(UserView userView  );
 
@@ -27,7 +30,7 @@ public interface UserService {
      * Получить пользователя по Id
      *
      * @param id
-     * @return {@Set<OfficeViewAll>}
+     * @return
      */
     public UserViewUpdate loadById(Long id);
 
@@ -42,7 +45,7 @@ public interface UserService {
      * Добавить нового пользователя
      *
      * @param userView
-     * @return UserViewAdd
+     * @return
      */
     public void add (UserViewAdd userView);
 

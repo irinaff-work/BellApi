@@ -22,10 +22,7 @@ public class DocTypeDaoImpl implements DocTypeDao {
     }
 
     /**
-     * получить ссылку на тип документа по docName
-     *
-     * @param docName
-     * @return {@DocType}
+     * @inheritDoc
      */
     @Override
     public DocType findByDocName(String docName) {
@@ -38,13 +35,10 @@ public class DocTypeDaoImpl implements DocTypeDao {
         TypedQuery<DocType> query = em.createQuery(criteriaQuery);
 
         return query.getSingleResult();
-    };
+    }
 
     /**
-     * получить тип документа по docCode и docName
-     *
-     * @param docCode
-     * @return {@DocType}
+     * @inheritDoc
      */
     public DocType findByDocCode (String docCode, String docName) {
 

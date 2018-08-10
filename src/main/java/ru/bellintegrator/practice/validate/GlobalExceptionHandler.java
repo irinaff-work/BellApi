@@ -24,9 +24,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RequestValidationException.class)
     @ResponseStatus
     public ErrorView  validationException (RequestValidationException e) {
-        log.debug(e.getMessage());
         ErrorView errorView = new ErrorView(e.getMessage());
-        return errorView;//e.getMessage();
+        return errorView;
     }
 
     /*
@@ -34,11 +33,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
      */
 
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST, reason = "Ошибка сервера")
+    @ResponseStatus
     public ErrorView  unhandleException (Exception e) {
-        //потом убрать
-        e.printStackTrace();
-        log.debug(e.getMessage());
+        log.debug("e.getMessage="+e.toString());
 
         ErrorView errorView = new ErrorView("Ошибка сервера");
         return errorView;

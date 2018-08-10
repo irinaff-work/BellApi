@@ -1,11 +1,8 @@
 package ru.bellintegrator.practice.office.model;
 
 import ru.bellintegrator.practice.organization.model.Organization;
-import ru.bellintegrator.practice.user.model.User;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Офис
@@ -26,35 +23,23 @@ public class Office {
     private Integer version;
 
     /**
-     * Ссылка на Организацию
-     */
-    //@Column(name = "org_id", nullable = false)
-    //private Long orgId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "org_id")
-    private Organization organization;
-
-//    @OneToMany(
-//            mappedBy="office",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-
-    /**
      * Наименование
      */
     @Column(name = "name", length = 100, nullable = false)
     private String name;
-    /**
-     * Номер телефона
-     */
-    @Column(name = "phone", length = 9, nullable = true)
-    private String phone;
+
     /**
      * Адрес
      */
     @Column(name = "address", length = 1000, nullable = false)
     private String address;
+
+    /**
+     * Номер телефона
+     */
+    @Column(name = "phone", length = 11, nullable = true)
+    private String phone;
+
     /**
      * Запись действительна
      */
@@ -62,10 +47,16 @@ public class Office {
     private boolean isActive;
 
     /**
+     * Ссылка на Организацию
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "org_id")
+    private Organization organization;
+
+    /**
      * Конструктор для hibernate
      */
     public Office() {
-
     }
 
     public Office(Organization organization, String name, String phone,

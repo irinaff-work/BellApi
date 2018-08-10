@@ -2,14 +2,16 @@ package ru.bellintegrator.practice.dictionary.dao;
 
 import ru.bellintegrator.practice.dictionary.model.Country;
 
-//справочник, только получаем данные
+/**
+ * DAO для работы со справочником стран
+ */
 public interface CountryDao {
 
     /**
-     * получить ссылку на страну  по citizenshipCode
+     * Получить страну по коду
      *
      * @param code
-     * @return {@Country}
+     * @return
      */
     public Country findByCode(String code);
 

@@ -10,6 +10,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class CountryDaoImpl implements CountryDao {
 
@@ -21,10 +24,7 @@ public class CountryDaoImpl implements CountryDao {
     }
 
     /**
-     * получить ссылку на страну  по citizenshipCode
-     *
-     * @param code
-     * @return {@Country}
+     * @inheritDoc
      */
     @Override
     public Country findByCode(String code) {

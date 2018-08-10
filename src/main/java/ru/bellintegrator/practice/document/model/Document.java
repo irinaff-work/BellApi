@@ -23,19 +23,6 @@ public class Document {
     @Version
     private Integer version;
 
-//    @OneToMany(
-//            mappedBy="document",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-
-    /**
-     * Ссылка на тип документа
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "doc_type_id")
-    private DocType docType;
-
     /**
      * Номер документа
      */
@@ -49,10 +36,16 @@ public class Document {
     private Date docDate;
 
     /**
+     * Ссылка на тип документа
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doc_type_id")
+    private DocType docType;
+
+    /**
      * Конструктор для hibernate
      */
     public Document() {
-
     }
 
     public Document(DocType docType, String docNumber, Date docDate) {
@@ -67,13 +60,6 @@ public class Document {
 
     public DocType getDocType() {
         return this.docType;
-    }
-
-    public Long getDocTypeId() {
-        if (this.docType == null) {
-            return Long.valueOf(0);
-        }
-        return this.docType.getId();
     }
 
     public String getDocNumber() {

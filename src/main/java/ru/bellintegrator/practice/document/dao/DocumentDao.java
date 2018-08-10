@@ -2,27 +2,31 @@ package ru.bellintegrator.practice.document.dao;
 
 import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
-
+/**
+ * DAO для работы с документами
+ */
 public interface DocumentDao {
 
     /**
-     * получить ссылку на документ по docType, docNumber и docDate
+     * Получить ссылку на документ по docType, docNumber и docDate
      *
+     * @param docType
      * @param docNumber
-     * @return {Long}
+     * @param docDate
+     * @return
      */
     public Document findDocument(DocType docType, String docNumber, String docDate);
 
     /**
-     * добавить документ по docNumber и docDate
+     * Добавить документ по docNumber и docDate
      *
      * @param document
-     * @return {Long}
      */
     public void save (Document document);
 
     /*
-     * Удаление документа по Id
+     * Удалить документ по Id
+     * * @param id
      */
     public void deleteById(Long id);
 }

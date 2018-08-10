@@ -15,6 +15,9 @@ import javax.persistence.criteria.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class UserDaoImpl implements UserDao {
 
@@ -26,9 +29,7 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * Получить все объекты Пользователь
-     *
-     * @return {@Set<User>}
+     * {@inheritDoc}
      */
     public Set<User> all () {
         TypedQuery<User> query = em.createQuery("SELECT p FROM User p", User.class);
@@ -36,10 +37,7 @@ public class UserDaoImpl implements UserDao {
     };
 
     /**
-     * Получить список пользователей по фильтрам
-     *
-     * @param office
-     * @return {@Set<User>}
+     * {@inheritDoc}
      */
     @Override
     public Set<User> loadByFilter (Office office, Country country, DocType docType, String firstName, String lastName,
@@ -87,10 +85,7 @@ public class UserDaoImpl implements UserDao {
     };
 
     /**
-     * Получить список пользователей по ссылке на офис
-     *
-     * @param office
-     * @return {@Set<User>}
+     * {@inheritDoc}
      */
 
     @Override
@@ -106,33 +101,23 @@ public class UserDaoImpl implements UserDao {
     }
 
     /**
-     * Найти пользователя по Id
-     *
-     * @param id
-     * @return {@Set<User>}
+     * {@inheritDoc}
      */
     @Override
     public User loadById(Long id) {
         return em.find(User.class, id);
     };
 
-
     /**
-     * Добавить нового пользователя
-     *
-     * @param user
+     * {@inheritDoc}
      */
     @Override
     public void save (User user) {
             em.persist(user);
     }
 
-
-    /*
-     * Удаление пользователя по Id
-     *
-     * @param id
-     * @return
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void deleteById(Long id) {

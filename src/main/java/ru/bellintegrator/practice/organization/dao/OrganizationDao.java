@@ -5,13 +5,15 @@ import ru.bellintegrator.practice.organization.model.Organization;
 
 import java.util.Set;
 
+/**
+ * DAO для работы с организациями
+ */
 public interface OrganizationDao {
 
     /**
-     * Получить список всех офисов
+     * Получить все объекты организация
      *
-     * @param
-     * @return {@Set<Organization>}
+     * @return
      */
     public Set<Organization> all ();
 
@@ -21,25 +23,20 @@ public interface OrganizationDao {
      * @return {@Set<OrganizationView>}
      */
     public Set<Organization> loadByNameAndInn(String name, String inn);
-    /**
-     * Получить организацию по Id
-     *
-     * @param id
-     * @return {@Set<OrganizationView>}
-     */
-    public Organization loadById(Long id);
-    /**
-     * Изменить данные организации
-     *
-     * @param organization
-     */
-    public void update(Organization organization);
 
     /**
-     * Добавить новую организацию в БД
+     * Получить Organization по Id
+     *
+     * @param id
+     * @return
+     */
+    public Organization loadById(Long id);
+
+    /**
+     * Сохранить Organization
      *
      * @param organization
-     * @return OrganizationView
+     * @return
      */
     public void save (Organization organization);
 

@@ -9,11 +9,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class OrganizationDaoImpl implements OrganizationDao{
 
@@ -26,10 +28,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
 
 
     /**
-     * Получить список всех офисов
-     *
-     * @param
-     * @return {@Set<Organization>}
+     * {@inheritDoc}
      */
     @Override
     public Set<Organization> all () {
@@ -38,9 +37,7 @@ public class OrganizationDaoImpl implements OrganizationDao{
     };
 
     /**
-     * Получить список организаций по наименованию и ИНН
-     *
-     * @return {@List<Organization>}
+     * {@inheritDoc}
      */
     @Override
     public Set<Organization> loadByNameAndInn(String name, String inn) {
@@ -55,59 +52,26 @@ public class OrganizationDaoImpl implements OrganizationDao{
         TypedQuery<Organization> query = em.createQuery(criteriaQuery);
 
         return query.getResultList().stream().collect(Collectors.toSet());
-    };
+    }
+
     /**
-     * Получить организацию по Id
-     *
-     * @param id
-     * @return {@List<Organization>}
+     * {@inheritDoc}
      */
     @Override
     public Organization loadById(Long id) {
         return em.find(Organization.class, id);
     };
-    /**
-     * Изменить данные организации
-     *
-     * @param organization
-     */
-    @Override
-    public void update(Organization organization) {
-
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaUpdate<Organization> criteriaUpdate = criteriaBuilder.
-                createCriteriaUpdate(Organization.class);
-        Root<Organization> organizationRoot = criteriaUpdate.from(Organization.class);
-        criteriaUpdate.set("name", organization.getName());
-        criteriaUpdate.set("inn", organization.getInn());
-        criteriaUpdate.set("fullName", organization.getFullName());
-        criteriaUpdate.set("kpp", organization.getKpp());
-        criteriaUpdate.set("address", organization.getAddress());
-        if (!Strings.isNullOrEmpty(organization.getPhone())) {
-            criteriaUpdate.set("phone", organization.getPhone());
-        }
-        criteriaUpdate.set("is_active", "true");
-        criteriaUpdate.where(criteriaBuilder.equal(organizationRoot.get("id"),
-                organization.getId()));
-        this.em.createQuery(criteriaUpdate).executeUpdate();
-    };
 
     /**
-     * Добавить новую организацию в БД
-     *
-     * @param organization
-     * @return Organization
+     * {@inheritDoc}
      */
     @Override
     public void save (Organization organization) {
         em.persist(organization);
     }
 
-    /*
-     * Удаление офиса по Id
-     *
-     * @param id
-     * @return
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void deleteById(Long id) {

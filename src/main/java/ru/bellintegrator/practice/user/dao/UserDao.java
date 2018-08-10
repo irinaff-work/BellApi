@@ -2,18 +2,20 @@ package ru.bellintegrator.practice.user.dao;
 
 import ru.bellintegrator.practice.dictionary.model.Country;
 import ru.bellintegrator.practice.dictionary.model.DocType;
-import ru.bellintegrator.practice.document.model.Document;
 import ru.bellintegrator.practice.office.model.Office;
 import ru.bellintegrator.practice.user.model.User;
 
 import java.util.Set;
 
+/**
+ * DAO для работы с User
+ */
 public interface UserDao {
 
     /**
-     * Получить все объекты Пользователь
+     * Получить все объекты User
      *
-     * @return {@Set<User>}
+     * @return
      */
     public Set<User> all ();
 
@@ -21,7 +23,11 @@ public interface UserDao {
      * Получить список пользователей по фильтрам
      *
      * @param office
-     * @return {@Set<User>}
+     * @param country
+     * @param docType
+     * @param firstName
+     * @param lastName
+     * @return
      */
     public Set<User> loadByFilter(Office office, Country country, DocType docType, String firstName, String lastName,
                                   String middleName, String position);
@@ -29,7 +35,7 @@ public interface UserDao {
      * Получить список пользователей по ссылке на офис
      *
      * @param office
-     * @return {@Set<User>}
+     * @return
      */
     public Set<User> loadByOffice(Office office);
 
@@ -37,19 +43,21 @@ public interface UserDao {
      * Найти пользователя по Id
      *
      * @param id
-     * @return {@Set<User>}
+     * @return
      */
     public User loadById(Long id);
 
     /**
-     * Добавить нового пользователя
+     * Сохранить пользователя
      *
      * @param user
      */
     public void save (User user);
 
     /*
-     * Удаление пользователя по Id
+     * Удалить пользователя по Id
+     *
+     * @param id
      */
     public void deleteById(Long id);
 }

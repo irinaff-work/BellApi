@@ -10,11 +10,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.CriteriaUpdate;
 import javax.persistence.criteria.Root;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class OfficeDaoImpl implements OfficeDao {
 
@@ -26,10 +28,7 @@ public class OfficeDaoImpl implements OfficeDao {
     }
 
     /**
-     * Получить все объекты Офис
-     *
-     * @param
-     * @return {@Set<OfficeView>}
+     * {@inheritDoc}
      */
     @Override
     public Set<Office> all () {
@@ -38,10 +37,7 @@ public class OfficeDaoImpl implements OfficeDao {
     };
 
     /**
-     * Получить список офисов по Id организации
-     *
-     * @param organization
-     * @return {@Set<OfficeView>}
+     * {@inheritDoc}
      */
     @Override
     public Set<Office> loadByOrgId (Organization organization, String name, String phone) {
@@ -71,10 +67,7 @@ public class OfficeDaoImpl implements OfficeDao {
     };
 
     /**
-     * Получить список офисов по Id офиса
-     *
-     * @param id
-     * @return {@Office>}
+     * {@inheritDoc}
      */
     @Override
     public Office loadById(Long id) {
@@ -83,21 +76,15 @@ public class OfficeDaoImpl implements OfficeDao {
 
 
     /**
-     * Добавить новый офис
-     *
-     * @param office
-     * @return OfficeSave
+     * {@inheritDoc}
      */
     @Override
     public void save (Office office) {
         em.persist(office);
     }
 
-    /*
-     * Удаление офиса по Id
-     *
-     * @param id
-     * @return
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void deleteById(Long id) {

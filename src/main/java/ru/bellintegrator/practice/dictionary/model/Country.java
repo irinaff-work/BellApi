@@ -21,18 +21,12 @@ public class Country {
     @Version
     private Integer version;
 
-//    @OneToMany(
-//            mappedBy="dictionary"
-//            //fetch = FetchType.LAZY,
-//            //cascade = CascadeType.ALL,
-//            //orphanRemoval = true
-//    )
-
     /**
      * Код страны
      */
     @Column(name = "code", length = 3, nullable = false)
     private String code;
+
     /**
      * Название страны
      */
@@ -70,10 +64,6 @@ public class Country {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public void setName(String name) {

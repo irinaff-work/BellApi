@@ -20,17 +20,12 @@ public class DocType {
     @Version
     private Integer version;
 
-//    @OneToMany(
-//            mappedBy="docType",
-//            cascade = CascadeType.ALL,
-//            orphanRemoval = true
-//    )
-
     /**
      * Код типа документа
      */
     @Column(name = "doc_type_code", length = 3, nullable = false)
     private String docCode;
+
     /**
      * Наименование типа документа
      */

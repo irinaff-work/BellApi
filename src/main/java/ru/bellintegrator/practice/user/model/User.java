@@ -25,6 +25,44 @@ public class User {
      */
     @Version
     private Integer version;
+
+    /**
+     * Имя
+     */
+    @Column(name = "first_name", length = 100, nullable = false)
+    private String firstName;
+
+    /**
+     * Фамилия
+     */
+
+    @Column(name = "last_name", length = 100, nullable = true)
+    private String lastName;
+
+    /**
+     * Отчество
+     */
+    @Column(name = "middle_name", length = 100, nullable = true)
+    private String middleName;
+
+    /**
+     * Номер телефона
+     */
+    @Column(name = "phone", length = 11, nullable = true)
+    private String phone;
+
+    /**
+     * Должность
+     */
+    @Column(name = "position", length = 100, nullable = false)
+    private String position;
+
+    /**
+     * Запись действительна
+     */
+    @Column(name = "is_identified")
+    private boolean isIdentified;
+
     /**
      * Ссылка на Офис
      */
@@ -45,39 +83,6 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doc_id")
     private Document document;
-
-    /**
-     * Имя
-     */
-    @Column(name = "first_name", length = 100, nullable = false)
-    private String firstName;
-    /**
-     * Фамилия
-     */
-    @Column(name = "last_name", length = 100, nullable = true)
-    private String lastName;
-    /**
-     * Отчество
-     */
-    @Column(name = "middle_name", length = 100, nullable = true)
-    private String middleName;
-    /**
-     * Номер телефона
-     */
-    @Column(name = "phone", length = 9, nullable = true)
-    private String phone;
-    /**
-     * Должность
-     */
-    @Column(name = "position", length = 100, nullable = false)
-    private String position;
-
-    /**
-     * Запись действительна
-     */
-    @Column(name = "is_identified")
-    private boolean isIdentified;
-
 
     /**
      * Конструктор для hibernate
@@ -108,10 +113,6 @@ public class User {
             return Long.valueOf(0);
         }
         return this.office.getId();
-    }
-
-    public Country getCountry() {
-        return this.country;
     }
 
     public Document getDocument() {

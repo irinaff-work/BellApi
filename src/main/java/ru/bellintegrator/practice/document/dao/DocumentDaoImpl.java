@@ -12,6 +12,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+/**
+ * {@inheritDoc}
+ */
 @Repository
 public class DocumentDaoImpl implements DocumentDao {
 
@@ -24,9 +27,7 @@ public class DocumentDaoImpl implements DocumentDao {
     }
 
     /**
-     * получить ссылку на документ по docType, docNumber и docDate
-     * @param docNumber
-     * @return {Long}
+     * @inheritDoc
      */
     @Override
     public Document findDocument(DocType docType, String docNumber, String docDate) {
@@ -50,17 +51,15 @@ public class DocumentDaoImpl implements DocumentDao {
     };
 
     /**
-     * добавить документ по docNumber и docDate
-     *
-     * @param document
+     * {@inheritDoc}
      */
     @Override
     public void save (Document document) {
         em.persist(document);
     }
 
-    /*
-     * Удаление документа по Id
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void deleteById(Long id) {

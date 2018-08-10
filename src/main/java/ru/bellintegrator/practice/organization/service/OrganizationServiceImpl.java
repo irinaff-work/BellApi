@@ -44,13 +44,16 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OrganizationViewUpdate> all () {
+    public Set<OrganizationViewUpdate> all() {
         Set<Organization> organizations = dao.all();
 
         return organizations.stream()
                 .map(mapOrganizationAll())
                 .collect(Collectors.toSet());
-    };
+    }
+
+    ;
+
     /**
      * Получить список организаций по наименованию и ИНН
      *
@@ -110,16 +113,21 @@ public class OrganizationServiceImpl implements OrganizationService {
     @Override
     @Transactional(readOnly = true)
     public OrganizationViewUpdate loadById(Long id) {
-        Organization organization = dao.loadById(id);
-
         OrganizationViewUpdate view = new OrganizationViewUpdate();
-        view.setId(organization.getId().toString());
-        view.setName(organization.getName());
-        view.setFullName(organization.getFullName());
-        view.setInn(organization.getInn());
-        view.setKpp(organization.getKpp());
-        view.setAddress(organization.getAddress());
-        view.setActive(Boolean.toString(organization.isActive()));
+
+        try {
+            Organization organization = dao.loadById(id);
+
+            view.setId(organization.getId().toString());
+            view.setName(organization.getName());
+            view.setFullName(organization.getFullName());
+            view.setInn(organization.getInn());
+            view.setKpp(organization.getKpp());
+            view.setAddress(organization.getAddress());
+            view.setActive(Boolean.toString(organization.isActive()));
+        } catch (Exception e) {
+            throw new RequestValidationException("Нет организации с таким идентификатором");
+        }
         return view;
     }
 
@@ -156,10 +164,10 @@ public class OrganizationServiceImpl implements OrganizationService {
      */
     @Override
     @Transactional
-    public void add (OrganizationViewAdd view) {
+    public void add(OrganizationViewAdd view) {
 
         //validationOrgAll(view);
-        Organization organization = new Organization (view.getName(), view.getFullName(),
+        Organization organization = new Organization(view.getName(), view.getFullName(),
                 view.getInn(), view.getKpp(), view.getPhone(), view.getAddress(), true);
         dao.save(organization);
     }
@@ -168,7 +176,7 @@ public class OrganizationServiceImpl implements OrganizationService {
      * Проверить входящий запрос
      * @param organization
      */
-    public void validationOrgAll (OrganizationViewUpdate view) {
+    public void validationOrgAll(OrganizationViewUpdate view) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
         if (Strings.isNullOrEmpty(view.getInn()) || !numericPattern.matcher(view.getInn()).find()) {
             throw new RequestValidationException("Поле ИНН должно содержать 12 цифровых символов");
@@ -186,15 +194,16 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     /**
      * Удалить офис по ID
+     *
      * @param id
      * @return
      */
     @Override
     @Transactional
-    public void delete (Long id) {
+    public void delete(Long id) {
         Organization organization = dao.loadById(id);
         Set<Office> offices = officeDao.loadByOrgId(organization, null, null);
-        for (Office office: offices) {
+        for (Office office : offices) {
             office.setOrganization(null);
             officeDao.save(office);
         }
