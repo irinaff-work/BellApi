@@ -19,6 +19,9 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 public class OfficeServiceImpl implements OfficeService{
 
@@ -36,10 +39,7 @@ public class OfficeServiceImpl implements OfficeService{
     }
 
     /**
-     * Получить список офисов
-     *
-     * @param
-     * @return {@Set<OfficeView>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -52,10 +52,7 @@ public class OfficeServiceImpl implements OfficeService{
     };
 
     /**
-     * Получить список офисов по Id организации
-     *
-     * @param view
-     * @return {@Set<OfficeView>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -80,10 +77,7 @@ public class OfficeServiceImpl implements OfficeService{
         };
     }
     /**
-     * Получить офис по Id
-     *
-     * @param id
-     * @return {@List<OfficeViewAll>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -114,9 +108,7 @@ public class OfficeServiceImpl implements OfficeService{
         };
     }
     /**
-     * Изменить данные офиса
-     *
-     * @param view
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -135,10 +127,7 @@ public class OfficeServiceImpl implements OfficeService{
     }
 
     /**
-     * Добавить новый офис
-     *
-     * @param view
-     * @return OfficeSave
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -163,9 +152,7 @@ public class OfficeServiceImpl implements OfficeService{
     }
 
     /**
-     * Удалить офис по ID
-     * @param id
-     * @return
+     * {@inheritDoc}
      */
     @Override
     @Transactional

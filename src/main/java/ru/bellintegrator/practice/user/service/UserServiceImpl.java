@@ -30,6 +30,9 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -51,9 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить список всех пользователей
-     *
-     * @return {@Set<User>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -88,10 +89,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить список пользователей по фильтрам
-     *
-     * @param user
-     * @return {@Set<OfficeView>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -135,10 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Получить пользователя по Id
-     *
-     * @param id
-     * @return {@Set<UserViewUpdate>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -164,8 +159,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Изменить данные пользователя
-     * @param view
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -223,10 +217,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Добавить нового пользователя
-     *
-     * @param view
-     * @return OfficeSave
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -253,9 +244,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * Удалить пользователя по ID
-     * @param id
-     * @return
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -271,9 +260,14 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    /**
+     * Проверить введенные параметры для UserView
+     *
+     * @param view
+     */
     public void validationUserList(UserView view) {
         checkId(view.getOfficeId());
-        //проверим, есть ли офис
+
         try {
             Office office = officeDao.loadById(Long.valueOf(view.getOfficeId()));
         } catch (NoResultException e) {
@@ -287,9 +281,14 @@ public class UserServiceImpl implements UserService {
         checkСitizenshipCode(false, view.getCitizenshipCode());
     }
 
+    /**
+     * Проверить введенные параметры для UserViewUpdate
+     *
+     * @param view
+     */
     public void validationUserUpdate(UserViewUpdate view) {
         checkId(view.getId());
-        //проверим, есть ли пользователь
+
         try {
             User user = dao.loadById(Long.valueOf(view.getId()));
         } catch (NoResultException e) {
@@ -307,6 +306,11 @@ public class UserServiceImpl implements UserService {
         checkIsIdentified(view.isIdentified());
     }
 
+    /**
+     * Проверить введенные параметры для UserViewAdd
+     *
+     * @param view
+     */
     public void validationUserAdd(UserViewAdd view) {
         checkName(true, view.getFirstName());
         checkName(false, view.getLastName());
@@ -321,6 +325,11 @@ public class UserServiceImpl implements UserService {
         checkIsIdentified(view.isIdentified());
     }
 
+    /**
+     * Проверить введенную дату на конветацию в дату
+     *
+     * @param date
+     */
     public Date validationDocumentDate(String date) {
         log.debug("date=" + date);
 
@@ -331,6 +340,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * Проверить есть ли тип документа в справочнике
+     *
+     * @param docCode
+     * @param docName
+     */
     public DocType validationDocType(String docCode, String docName) {
 
         DocType docType = new DocType();
@@ -344,6 +359,11 @@ public class UserServiceImpl implements UserService {
         return docType;
     }
 
+    /**
+     * Проверить введенный идентификатор
+     *
+     * @param id
+     */
     public boolean checkId(String id) {
         Pattern pattern = Pattern.compile("[0-9]{1,10}");
         if (Strings.isNullOrEmpty(id) || !pattern.matcher(id).matches()) {
@@ -352,6 +372,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить текстовое поле
+     *
+     * @param isNotNull
+     * @param name
+     */
     public boolean checkName(boolean isNotNull, String name) {
         if (isNotNull && Strings.isNullOrEmpty(name)) {
             throw new RequestValidationException("Текстовое поле должно быть заполнено");
@@ -365,6 +391,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить введенный номер телефона
+     *
+     * @param isNotNull
+     * @param phone
+     */
     public boolean checkPhone(boolean isNotNull, String phone) {
         if (isNotNull && Strings.isNullOrEmpty(phone)) {
             throw new RequestValidationException("Поле <Pnone> должно быть заполнено");
@@ -376,6 +408,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить введенный код типа документа
+     *
+     * @param isNotNull
+     * @param docCode
+     */
     public boolean checkDocCode(boolean isNotNull, String docCode) {
         if (isNotNull && Strings.isNullOrEmpty(docCode)) {
             throw new RequestValidationException("Поле <docCode> должно быть заполнено");
@@ -387,6 +425,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить введенный номер документа
+     *
+     * @param isNotNull
+     * @param docNumber
+     */
     public boolean checkDocNumber(boolean isNotNull, String docNumber) {
         if (isNotNull && Strings.isNullOrEmpty(docNumber)) {
             throw new RequestValidationException("Поле <DocNumber> должно быть заполнено");
@@ -398,6 +442,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить формат введенной даты документа
+     *
+     * @param isNotNull
+     * @param docDate
+     */
     public boolean checkDocdate(boolean isNotNull, String docDate) {
         if (isNotNull && Strings.isNullOrEmpty(docDate)) {
             throw new RequestValidationException("Поле <docDate> должно быть заполнено");
@@ -412,6 +462,12 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить формат введенного кода страны
+     *
+     * @param isNotNull
+     * @param сitizenshipCode
+     */
     public boolean checkСitizenshipCode(boolean isNotNull, String сitizenshipCode) {
         if (isNotNull && Strings.isNullOrEmpty(сitizenshipCode)) {
             throw new RequestValidationException("Поле <сitizenshipCode> должно быть заполнено");
@@ -423,6 +479,11 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     * Проверить формат введенного логического значения
+     *
+     * @param isIdentified
+     */
     public boolean checkIsIdentified(String isIdentified) {
         Pattern pattern = Pattern.compile("true|false");
         if (Strings.isNullOrEmpty(isIdentified) || !pattern.matcher(isIdentified).matches()) {

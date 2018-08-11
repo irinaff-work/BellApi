@@ -21,6 +21,9 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+/**
+ * {@inheritDoc}
+ */
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
 
@@ -37,10 +40,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 
     /**
-     * Получить список всех организаций
-     *
-     * @param
-     * @return {@Set<OrganizationViewFull>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -55,9 +55,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     ;
 
     /**
-     * Получить список организаций по наименованию и ИНН
-     *
-     * @return {@Set<OrganizationView>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -105,10 +103,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
-     * Получить организацию по Id
-     *
-     * @param id
-     * @return {@Set<OrganizationToSave>}
+     * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
@@ -132,9 +127,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
-     * Изменить данные организации
-     *
-     * @param view
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -157,10 +150,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
 
     /**
-     * Добавить новую организацию в БД
-     *
-     * @param view
-     * @return OrganizationView
+     * {@inheritDoc}
      */
     @Override
     @Transactional
@@ -172,9 +162,8 @@ public class OrganizationServiceImpl implements OrganizationService {
         dao.save(organization);
     }
 
-    /*
-     * Проверить входящий запрос
-     * @param organization
+    /**
+     * {@inheritDoc}
      */
     public void validationOrgAll(OrganizationViewUpdate view) {
         Pattern numericPattern = Pattern.compile("[0-9]{12}");
@@ -193,10 +182,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     /**
-     * Удалить офис по ID
-     *
-     * @param id
-     * @return
+     * {@inheritDoc}
      */
     @Override
     @Transactional

@@ -26,18 +26,12 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-    /**
-     * Получить список всех пользователей
-     */
+
     @ApiOperation(value = "Все пользователи", nickname = "all", httpMethod = "GET")
     @GetMapping("user/list/all")
     public Set<UserViewUpdate> all() {
         return userService.all();
     }
-
-    /**
-     * Получить список пользователей по фильтрам
-     */
 
     @ApiOperation(value = "Поиск пользователя по id офиса", nickname = "filteredOfficeId", httpMethod = "POST")
     @PostMapping("user/list/")
@@ -46,10 +40,6 @@ public class UserController {
         return userService.loadByFilter(view);
     };
 
-    /**
-     * Получить список пользователей по Id пользователя
-     *
-     */
     @ApiOperation(value = "Поиск пользователя по id пользователя", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("user/{id}")
     public @ResponseBody
@@ -58,27 +48,18 @@ public class UserController {
             return userService.loadById(id);
     };
 
-    /**
-     * Изменить данные пользователя
-     */
     @ApiOperation(value = "Изменить информацию о пользователе", nickname = "update", httpMethod = "POST")
     @PostMapping("user/update")
     public void update(@RequestBody UserViewUpdate viewUpdate) {
         userService.update(viewUpdate);
     };
 
-    /**
-     * Добавить нового пользователя
-     */
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createUser", httpMethod = "POST")
     @PostMapping("user/save")
     public void createUser(@RequestBody UserViewAdd viewAdd) {
         userService.add(viewAdd);
     }
 
-    /**
-     * Удалить офис по Id
-     */
     @ApiOperation(value = "Удалить пользователя по Id", nickname = "deleteUser", httpMethod = "POST")
     @PostMapping("user/delete{id}")
     public void deleteUser (@PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {

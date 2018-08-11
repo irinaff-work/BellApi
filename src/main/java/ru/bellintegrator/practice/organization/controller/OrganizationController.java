@@ -23,18 +23,12 @@ public class OrganizationController {
         this.organizationService = organizationService;
     }
 
-    /**
-     * Получить список всех организаций
-     */
     @ApiOperation(value = "Все организации", nickname = "all", httpMethod = "GET")
     @GetMapping("organizations/list/all")
     public Set<OrganizationViewUpdate> all() {
         return organizationService.all();
     }
 
-    /**
-     * Поиск организации по фильтрам
-     */
     @ApiOperation(value = "Поиск организации по краткому наименованию и ИНН", nickname = "filterOrganization", httpMethod = "POST")
     @PostMapping("organizations/list")
     public @ResponseBody
@@ -42,9 +36,6 @@ public class OrganizationController {
         return organizationService.loadByNameAndInn(view);
     }
 
-    /**
-     * Поиск организации по Id
-     */
     @ApiOperation(value = "Поиск организации по id", nickname = "Organization", httpMethod = "GET")
     @GetMapping("organizations/{id}")
     public @ResponseBody
@@ -54,9 +45,6 @@ public class OrganizationController {
         return organizationService.loadById(id);
     }
 
-    /**
-     * Изменение организации
-     */
     @ApiOperation(value = "Редактирование организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
     public @ResponseBody
@@ -65,9 +53,6 @@ public class OrganizationController {
         organizationService.update(viewUpdate);
     }
 
-    /**
-     * Добавление организации
-     */
     @ApiOperation(value = "Добавление организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/add")
     public @ResponseBody
@@ -76,9 +61,6 @@ public class OrganizationController {
         organizationService.add(viewAdd);
     }
 
-    /**
-     * Удаление организации по Id
-     */
     @ApiOperation(value = "Удалить организацию по Id", nickname = "deleteOrganization", httpMethod = "POST")
     @PostMapping("organizations/delete{id}")
     public void deleteOrganization (@PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id) {
