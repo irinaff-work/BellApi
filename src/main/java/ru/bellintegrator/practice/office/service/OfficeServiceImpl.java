@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * {@inheritDoc}
  */
 @Service
-public class OfficeServiceImpl implements OfficeService{
+public class OfficeServiceImpl implements OfficeService {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -43,28 +43,30 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OfficeViewSave> all () {
+    public Set<OfficeViewSave> all() {
         Set<Office> offices = dao.all();
 
         return offices.stream()
                 .map(mapOfficeAll())
                 .collect(Collectors.toSet());
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
     @Transactional(readOnly = true)
-    public Set<OfficeView> loadByOrgId (OfficeView view) {
+    public Set<OfficeView> loadByOrgId(OfficeView view) {
         Organization organization = organizationDao.loadById(view.getOrgId());
 
         Set<Office> offices = dao.loadByOrgId(organization, view.getName(), view.getPhone());
 
-            return offices.stream()
-                    .map(mapOffice())
-                    .collect(Collectors.toSet());
-        }
+        return offices.stream()
+                .map(mapOffice())
+                .collect(Collectors.toSet());
+    }
 
     private Function<Office, OfficeView> mapOffice() {
         return p -> {
@@ -76,6 +78,7 @@ public class OfficeServiceImpl implements OfficeService{
             return view;
         };
     }
+
     /**
      * {@inheritDoc}
      */
@@ -91,10 +94,12 @@ public class OfficeServiceImpl implements OfficeService{
             view.setAddress(office.getAddress());
             view.setActive(office.isActive());
         } catch (Exception e) {
-        throw new RequestValidationException("Нет офиса с таким идентификатором");
-    }
+            throw new RequestValidationException("Нет офиса с таким идентификатором");
+        }
         return view;
-    };
+    }
+
+    ;
 
     private Function<Office, OfficeViewSave> mapOfficeAll() {
         return p -> {
@@ -107,6 +112,7 @@ public class OfficeServiceImpl implements OfficeService{
             return view;
         };
     }
+
     /**
      * {@inheritDoc}
      */
@@ -131,7 +137,7 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional
-    public void add (OfficeViewSave view) {
+    public void add(OfficeViewSave view) {
         Office office = new Office();
         Organization organization = organizationDao.loadById(view.getId());
         office.setOrganization(organization);
@@ -156,10 +162,10 @@ public class OfficeServiceImpl implements OfficeService{
      */
     @Override
     @Transactional
-    public void delete (Long id) {
+    public void delete(Long id) {
         Office office = dao.loadById(id);
         Set<User> users = userDao.loadByOffice(office);
-        for (User user: users) {
+        for (User user : users) {
             user.setOffice(null);
             userDao.save(user);
         }

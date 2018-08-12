@@ -4,8 +4,7 @@ public class DataView {
 
     public Object data;
 
-    public DataView (Object data)
-    {
+    public DataView(Object data) {
         this.data = data;
     }
 }

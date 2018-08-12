@@ -40,7 +40,7 @@ public class DocTypeDaoImpl implements DocTypeDao {
     /**
      * @inheritDoc
      */
-    public DocType findByDocCode (String docCode, String docName) {
+    public DocType findByDocCode(String docCode, String docName) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<DocType> criteriaQuery = criteriaBuilder.createQuery(DocType.class);

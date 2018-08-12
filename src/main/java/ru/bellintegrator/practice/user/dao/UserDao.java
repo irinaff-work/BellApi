@@ -17,7 +17,7 @@ public interface UserDao {
      *
      * @return
      */
-    public Set<User> all ();
+    public Set<User> all();
 
     /**
      * Получить список пользователей по фильтрам
@@ -31,6 +31,7 @@ public interface UserDao {
      */
     public Set<User> loadByFilter(Office office, Country country, DocType docType, String firstName, String lastName,
                                   String middleName, String position);
+
     /**
      * Получить список пользователей по ссылке на офис
      *
@@ -52,7 +53,7 @@ public interface UserDao {
      *
      * @param user
      */
-    public void save (User user);
+    public void save(User user);
 
     /*
      * Удалить пользователя по Id

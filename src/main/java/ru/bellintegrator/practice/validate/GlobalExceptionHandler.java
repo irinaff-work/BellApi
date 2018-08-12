@@ -23,7 +23,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RequestValidationException.class)
     @ResponseStatus
-    public ErrorView  validationException (RequestValidationException e) {
+    public ErrorView validationException(RequestValidationException e) {
         ErrorView errorView = new ErrorView(e.getMessage());
         return errorView;
     }
@@ -34,8 +34,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus
-    public ErrorView  unhandleException (Exception e) {
-        log.debug("e.getMessage="+e.toString());
+    public ErrorView unhandleException(Exception e) {
+        log.debug("e.getMessage=" + e.toString());
 
         ErrorView errorView = new ErrorView("Ошибка сервера");
         return errorView;

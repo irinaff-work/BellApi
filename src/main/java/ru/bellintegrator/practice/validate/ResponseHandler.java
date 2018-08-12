@@ -25,18 +25,20 @@ public class ResponseHandler implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter arg1, MediaType arg2,
-                                       Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
+                                  Class<? extends HttpMessageConverter<?>> arg3, ServerHttpRequest arg4, ServerHttpResponse arg5) {
 
         // Get a handle to your response object and make changes here
-        if(arg1.getParameterType().getSimpleName().equals("void")) {
+        if (arg1.getParameterType().getSimpleName().equals("void")) {
             SuccessView successView = new SuccessView();
             DataView dataView = new DataView(successView);
             return dataView;
-        };
+        }
+        ;
 
-        if(arg1.getParameterType().getSimpleName().equals("ErrorView")) {
+        if (arg1.getParameterType().getSimpleName().equals("ErrorView")) {
             return body;
-        };
+        }
+        ;
 
         DataView dataView = new DataView(body);
         return dataView;

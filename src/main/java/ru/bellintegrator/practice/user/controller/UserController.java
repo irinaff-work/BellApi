@@ -38,21 +38,27 @@ public class UserController {
     public @ResponseBody
     Set<UserView> loadByloadByFilter(@RequestBody UserView view) {
         return userService.loadByFilter(view);
-    };
+    }
+
+    ;
 
     @ApiOperation(value = "Поиск пользователя по id пользователя", nickname = "filteredId", httpMethod = "GET")
     @GetMapping("user/{id}")
     public @ResponseBody
     UserViewUpdate filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
-            return userService.loadById(id);
-    };
+        return userService.loadById(id);
+    }
+
+    ;
 
     @ApiOperation(value = "Изменить информацию о пользователе", nickname = "update", httpMethod = "POST")
     @PostMapping("user/update")
     public void update(@RequestBody UserViewUpdate viewUpdate) {
         userService.update(viewUpdate);
-    };
+    }
+
+    ;
 
     @ApiOperation(value = "Добавить информацию о пользователе", nickname = "createUser", httpMethod = "POST")
     @PostMapping("user/save")
@@ -62,7 +68,7 @@ public class UserController {
 
     @ApiOperation(value = "Удалить пользователя по Id", nickname = "deleteUser", httpMethod = "POST")
     @PostMapping("user/delete{id}")
-    public void deleteUser (@PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
+    public void deleteUser(@PathVariable("id") @ApiParam(value = "Идентификатор пользователя") Long id) {
         userService.delete(id);
     }
 }

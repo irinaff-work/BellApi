@@ -16,7 +16,7 @@ public interface UserService {
      *
      * @return
      */
-    public Set<UserViewUpdate> all ();
+    public Set<UserViewUpdate> all();
 
     /**
      * Получить список пользователей по фильтрам
@@ -24,7 +24,7 @@ public interface UserService {
      * @param userView
      * @return
      */
-    public Set<UserView> loadByFilter(UserView userView  );
+    public Set<UserView> loadByFilter(UserView userView);
 
     /**
      * Получить пользователя по Id
@@ -47,12 +47,13 @@ public interface UserService {
      * @param userView
      * @return
      */
-    public void add (UserViewAdd userView);
+    public void add(UserViewAdd userView);
 
     /**
      * Удалить пользователя по ID
+     *
      * @param id
      * @return
      */
-    void delete (Long id);
+    void delete(Long id);
 }

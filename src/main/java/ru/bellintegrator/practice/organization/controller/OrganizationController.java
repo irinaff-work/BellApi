@@ -1,4 +1,5 @@
 package ru.bellintegrator.practice.organization.controller;
+
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,22 +49,20 @@ public class OrganizationController {
     @ApiOperation(value = "Редактирование организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/update")
     public @ResponseBody
-    void updateOrganizationView(@RequestBody OrganizationViewUpdate viewUpdate)
-    {
+    void updateOrganizationView(@RequestBody OrganizationViewUpdate viewUpdate) {
         organizationService.update(viewUpdate);
     }
 
     @ApiOperation(value = "Добавление организации", nickname = "Organization", httpMethod = "POST")
     @PostMapping("organizations/add")
     public @ResponseBody
-    void createOrganization(@RequestBody OrganizationViewAdd viewAdd)
-    {
+    void createOrganization(@RequestBody OrganizationViewAdd viewAdd) {
         organizationService.add(viewAdd);
     }
 
     @ApiOperation(value = "Удалить организацию по Id", nickname = "deleteOrganization", httpMethod = "POST")
     @PostMapping("organizations/delete{id}")
-    public void deleteOrganization (@PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id) {
+    public void deleteOrganization(@PathVariable("id") @ApiParam(value = "Идентификатор организации") Long id) {
         organizationService.delete(id);
     }
 }

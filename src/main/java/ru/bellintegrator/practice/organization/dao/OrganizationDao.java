@@ -15,7 +15,7 @@ public interface OrganizationDao {
      *
      * @return
      */
-    public Set<Organization> all ();
+    public Set<Organization> all();
 
     /**
      * Получить список организаций по наименованию и ИНН
@@ -38,7 +38,7 @@ public interface OrganizationDao {
      * @param organization
      * @return
      */
-    public void save (Organization organization);
+    public void save(Organization organization);
 
     /*
      * Удаление организации по Id

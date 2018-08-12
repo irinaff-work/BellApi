@@ -17,7 +17,7 @@ public interface OrganizationService {
      *
      * @return
      */
-    public Set<OrganizationViewUpdate> all ();
+    public Set<OrganizationViewUpdate> all();
 
     /**
      * Получить список организаций по наименованию и ИНН
@@ -48,13 +48,14 @@ public interface OrganizationService {
      * @param organization
      * @return
      */
-    public void add (OrganizationViewAdd organization);
+    public void add(OrganizationViewAdd organization);
 
     /**
      * Удалить организацию по ID
+     *
      * @param id
      */
-    void delete (Long id);
+    void delete(Long id);
 
 
 }

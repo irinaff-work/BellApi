@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
  * {@inheritDoc}
  */
 @Repository
-public class OrganizationDaoImpl implements OrganizationDao{
+public class OrganizationDaoImpl implements OrganizationDao {
 
     private final EntityManager em;
 
     @Autowired
-    public OrganizationDaoImpl (EntityManager em) {
+    public OrganizationDaoImpl(EntityManager em) {
         this.em = em;
     }
 
@@ -31,10 +31,12 @@ public class OrganizationDaoImpl implements OrganizationDao{
      * {@inheritDoc}
      */
     @Override
-    public Set<Organization> all () {
+    public Set<Organization> all() {
         TypedQuery<Organization> query = em.createQuery("SELECT p FROM Organization p", Organization.class);
         return query.getResultList().stream().collect(Collectors.toSet());
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
@@ -60,13 +62,15 @@ public class OrganizationDaoImpl implements OrganizationDao{
     @Override
     public Organization loadById(Long id) {
         return em.find(Organization.class, id);
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void save (Organization organization) {
+    public void save(Organization organization) {
         em.persist(organization);
     }
 

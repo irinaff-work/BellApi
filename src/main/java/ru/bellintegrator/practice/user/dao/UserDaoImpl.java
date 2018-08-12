@@ -31,17 +31,19 @@ public class UserDaoImpl implements UserDao {
     /**
      * {@inheritDoc}
      */
-    public Set<User> all () {
+    public Set<User> all() {
         TypedQuery<User> query = em.createQuery("SELECT p FROM User p", User.class);
         return query.getResultList().stream().collect(Collectors.toSet());
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<User> loadByFilter (Office office, Country country, DocType docType, String firstName, String lastName,
-                                   String middleName, String position) {
+    public Set<User> loadByFilter(Office office, Country country, DocType docType, String firstName, String lastName,
+                                  String middleName, String position) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<User> criteriaQuery = criteriaBuilder.createQuery(User.class);
@@ -55,7 +57,7 @@ public class UserDaoImpl implements UserDao {
         }
 
         if (docType != null) {
-            Join <User, Document> docs = userRoot.join("document", JoinType.LEFT);
+            Join<User, Document> docs = userRoot.join("document", JoinType.LEFT);
             criteriaQuery.select(userRoot);
             criteriaQuery.where(docs.get("docType").in(docType));
         }
@@ -82,7 +84,9 @@ public class UserDaoImpl implements UserDao {
 
         return query.getResultList().stream().collect(Collectors.toSet());
 
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
@@ -106,14 +110,16 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User loadById(Long id) {
         return em.find(User.class, id);
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void save (User user) {
-            em.persist(user);
+    public void save(User user) {
+        em.persist(user);
     }
 
     /**

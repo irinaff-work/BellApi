@@ -436,7 +436,7 @@ public class UserServiceImpl implements UserService {
             throw new RequestValidationException("Поле <DocNumber> должно быть заполнено");
         }
         Pattern pattern = Pattern.compile("[0-9]{10}");
-        if (! Strings.isNullOrEmpty(docNumber) && !pattern.matcher(docNumber).matches()) {
+        if (!Strings.isNullOrEmpty(docNumber) && !pattern.matcher(docNumber).matches()) {
             throw new RequestValidationException("Поле <DocNumber> должно содержать 10 цифровых символов");
         }
         return true;
@@ -472,10 +472,10 @@ public class UserServiceImpl implements UserService {
         if (isNotNull && Strings.isNullOrEmpty(сitizenshipCode)) {
             throw new RequestValidationException("Поле <сitizenshipCode> должно быть заполнено");
         }
-            Pattern pattern = Pattern.compile("[0-9]{3}");
-            if (!Strings.isNullOrEmpty(сitizenshipCode) && !pattern.matcher(сitizenshipCode).matches()) {
-                throw new RequestValidationException("Поле <сitizenshipCode> должно содержать 3 цифровых символа");
-            }
+        Pattern pattern = Pattern.compile("[0-9]{3}");
+        if (!Strings.isNullOrEmpty(сitizenshipCode) && !pattern.matcher(сitizenshipCode).matches()) {
+            throw new RequestValidationException("Поле <сitizenshipCode> должно содержать 3 цифровых символа");
+        }
         return true;
     }
 

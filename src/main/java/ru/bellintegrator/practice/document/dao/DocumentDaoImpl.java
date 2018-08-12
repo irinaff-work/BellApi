@@ -48,13 +48,15 @@ public class DocumentDaoImpl implements DocumentDao {
 
         TypedQuery<Document> query = em.createQuery(criteriaQuery);
         return query.getSingleResult();
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void save (Document document) {
+    public void save(Document document) {
         em.persist(document);
     }
 

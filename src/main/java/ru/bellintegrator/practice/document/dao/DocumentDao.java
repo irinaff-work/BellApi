@@ -2,6 +2,7 @@ package ru.bellintegrator.practice.document.dao;
 
 import ru.bellintegrator.practice.dictionary.model.DocType;
 import ru.bellintegrator.practice.document.model.Document;
+
 /**
  * DAO для работы с документами
  */
@@ -22,7 +23,7 @@ public interface DocumentDao {
      *
      * @param document
      */
-    public void save (Document document);
+    public void save(Document document);
 
     /*
      * Удалить документ по Id

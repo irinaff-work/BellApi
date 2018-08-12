@@ -36,7 +36,7 @@ public class OfficeController {
     @ApiOperation(value = "Поиск офиса по id организации", nickname = "filteredOrgId", httpMethod = "POST")
     @PostMapping("office/list/")
     public @ResponseBody
-    Set<OfficeView> filteredOrgId(@RequestBody OfficeView view ) {
+    Set<OfficeView> filteredOrgId(@RequestBody OfficeView view) {
         return officeService.loadByOrgId(view);
     }
 
@@ -45,7 +45,7 @@ public class OfficeController {
     public @ResponseBody
     OfficeViewSave filteredId(
             @PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
-            return officeService.loadById(id);
+        return officeService.loadById(id);
     }
 
     @ApiOperation(value = "Изменить информацию об офисе", nickname = "update", httpMethod = "POST")
@@ -56,13 +56,13 @@ public class OfficeController {
 
     @ApiOperation(value = "Добавить информацию об офисе", nickname = "createOffice", httpMethod = "POST")
     @PostMapping("office/add")
-    public void createOffice (@RequestBody OfficeViewSave viewSave) {
+    public void createOffice(@RequestBody OfficeViewSave viewSave) {
         officeService.add(viewSave);
     }
 
     @ApiOperation(value = "Удалить офис по Id", nickname = "deleteOffice", httpMethod = "POST")
     @PostMapping("office/delete{id}")
-    public void deleteOffice (@PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
+    public void deleteOffice(@PathVariable("id") @ApiParam(value = "Идентификатор офиса") Long id) {
         officeService.delete(id);
     }
 }

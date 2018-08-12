@@ -31,16 +31,18 @@ public class OfficeDaoImpl implements OfficeDao {
      * {@inheritDoc}
      */
     @Override
-    public Set<Office> all () {
+    public Set<Office> all() {
         TypedQuery<Office> query = em.createQuery("SELECT p FROM Office p", Office.class);
         return query.getResultList().stream().collect(Collectors.toSet());
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Set<Office> loadByOrgId (Organization organization, String name, String phone) {
+    public Set<Office> loadByOrgId(Organization organization, String name, String phone) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<Office> criteriaQuery = criteriaBuilder.createQuery(Office.class);
@@ -64,7 +66,9 @@ public class OfficeDaoImpl implements OfficeDao {
         return query.getResultList().stream().collect(Collectors.toSet());
 
 
-    };
+    }
+
+    ;
 
     /**
      * {@inheritDoc}
@@ -72,14 +76,16 @@ public class OfficeDaoImpl implements OfficeDao {
     @Override
     public Office loadById(Long id) {
         return em.find(Office.class, id);
-    };
+    }
+
+    ;
 
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void save (Office office) {
+    public void save(Office office) {
         em.persist(office);
     }
 

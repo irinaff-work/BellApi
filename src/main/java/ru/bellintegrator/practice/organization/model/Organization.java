@@ -61,10 +61,11 @@ public class Organization {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public Organization () {}
+    public Organization() {
+    }
 
     public Organization(String name, String fullName,
-                         String inn, String kpp, String phone,
+                        String inn, String kpp, String phone,
                         String address, boolean isActive) {
         this.name = name;
         this.fullName = fullName;
@@ -141,7 +142,7 @@ public class Organization {
 
     @Override
     public String toString() {
-        return "{id:" + id + ";name:" + name + ";fullName" + fullName + ";inn:" + inn + ";kpp:" + kpp +";phone:" +
+        return "{id:" + id + ";name:" + name + ";fullName" + fullName + ";inn:" + inn + ";kpp:" + kpp + ";phone:" +
                 phone + ";address:" + address + ";isActive:" + isActive + "}";
     }
 }
